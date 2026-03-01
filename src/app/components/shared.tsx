@@ -221,7 +221,7 @@ export function SecondaryBtn({ children, onClick, style: s }: { children: ReactN
 }
 
 // ═══ UNIFIED CONTACT MODAL ═══
-const APPS_SCRIPT_URL = "https://script.google.com/a/macros/walnutt.co/s/AKfycbwjE5JYU3DOgUsv3HLHnM2DZAvmly1BOo4aEeq38xlzRCAz4VnAHd7T0pw7F3lnN5wAAQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVt4vxzIrtetYEnowr1YBQxIDJ9H0t-tWmb3G_RZ7H4puSW4l-dbJa2OxYk0L21AvKOA/exec";
 
 export function ContactModal({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState("");
