@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
-import { Upload, X, CheckCircle } from "lucide-react";
+import { X, CheckCircle } from "lucide-react";
 
 // ═══ DESIGN TOKENS ═══
 export const C = {
@@ -221,10 +221,18 @@ export function SecondaryBtn({ children, onClick, style: s }: { children: ReactN
 }
 
 // ═══ UNIFIED CONTACT MODAL ═══
+const APPS_SCRIPT_URL = "https://script.google.com/a/macros/walnutt.co/s/AKfycbwjE5JYU3DOgUsv3HLHnM2DZAvmly1BOo4aEeq38xlzRCAz4VnAHd7T0pw7F3lnN5wAAQ/exec";
+
 export function ContactModal({ onClose }: { onClose: () => void }) {
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [company, setCompany] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "10px 14px", borderRadius: 10,
@@ -235,6 +243,24 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   const labelStyle: React.CSSProperties = {
     display: "block", fontSize: 13, fontWeight: 600, marginBottom: 6, color: C.black,
   };
+
+  async function handleSubmit() {
+    if (loading) return;
+    setError(null);
+    setLoading(true);
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({ name, email, mobile, company, designation, message }),
+      });
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again or email us directly.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (submitted) {
     return (
@@ -286,11 +312,11 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label style={labelStyle}>Full Name <span style={{ color: C.gray400 }}>*</span></label>
-              <input style={inputStyle} placeholder="Jane Doe" />
+              <input style={inputStyle} placeholder="Rahul Sharma" value={name} onChange={e => setName(e.target.value)} />
             </div>
             <div>
               <label style={labelStyle}>Work Email <span style={{ color: C.gray400 }}>*</span></label>
-              <input type="email" style={inputStyle} placeholder="jane@company.com" />
+              <input type="email" style={inputStyle} placeholder="rahul@company.com" value={email} onChange={e => setEmail(e.target.value)} />
             </div>
           </div>
 
@@ -298,58 +324,49 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label style={labelStyle}>Mobile Number</label>
-              <input type="tel" style={inputStyle} placeholder="+91 98765 43210" />
+              <input type="tel" style={inputStyle} placeholder="+91 98765 43210" value={mobile} onChange={e => setMobile(e.target.value)} />
             </div>
             <div>
               <label style={labelStyle}>Company <span style={{ color: C.gray400 }}>*</span></label>
-              <input style={inputStyle} placeholder="Acme Inc." />
+              <input style={inputStyle} placeholder="Your company name" value={company} onChange={e => setCompany(e.target.value)} />
             </div>
+          </div>
+
+          {/* Designation */}
+          <div>
+            <label style={labelStyle}>Designation <span style={{ color: C.gray400 }}>*</span></label>
+            <select
+              style={{ ...inputStyle, cursor: "pointer" }}
+              value={designation}
+              onChange={e => setDesignation(e.target.value)}
+            >
+              <option value="" disabled>Select your role</option>
+              <option>Founder / Co-Founder</option>
+              <option>CTO / VP Engineering</option>
+              <option>Engineering Manager</option>
+              <option>HR / Talent Acquisition</option>
+              <option>Technical Recruiter</option>
+              <option>Hiring Manager</option>
+              <option>Other</option>
+            </select>
           </div>
 
           {/* Message */}
           <div>
             <label style={labelStyle}>Message / Requirement <span style={{ color: C.gray400 }}>*</span></label>
             <textarea rows={3} style={{ ...inputStyle, resize: "none" }}
-              placeholder="Tell us what you're hiring for, or ask us anything..." />
+              placeholder="Tell us what you're hiring for, or ask us anything..."
+              value={message} onChange={e => setMessage(e.target.value)} />
           </div>
 
-          {/* File upload */}
-          <div>
-            <label style={labelStyle}>Attach a JD or file <span style={{ fontSize: 12, fontWeight: 400, color: C.gray400 }}>(optional)</span></label>
-            <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.txt" style={{ display: "none" }}
-              onChange={e => setFileName(e.target.files?.[0]?.name || null)} />
-            {fileName ? (
-              <div style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
-                borderRadius: 10, border: `1.5px solid ${C.sage}`, background: C.sageLight,
-              }}>
-                <Upload size={14} color={C.sage} />
-                <span style={{ fontSize: 13, color: C.sageDark, fontWeight: 500, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{fileName}</span>
-                <button onClick={() => { setFileName(null); if (fileRef.current) fileRef.current.value = ""; }}
-                  style={{ border: "none", background: "none", cursor: "pointer", padding: 0, display: "flex" }}>
-                  <X size={14} color={C.gray500} />
-                </button>
-              </div>
-            ) : (
-              <button onClick={() => fileRef.current?.click()} style={{
-                width: "100%", padding: "12px 14px", borderRadius: 10,
-                border: `1.5px dashed ${C.gray300}`, background: "#FAFBFA",
-                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                fontSize: 13, color: C.gray500, fontWeight: 500,
-                transition: "border-color 180ms, background 180ms",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = C.sage; (e.currentTarget as HTMLElement).style.background = C.sageLight; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = C.gray300; (e.currentTarget as HTMLElement).style.background = "#FAFBFA"; }}
-              >
-                <Upload size={14} />
-                Choose file: PDF, DOC, or TXT
-              </button>
-            )}
-          </div>
+          {/* Error */}
+          {error && (
+            <p style={{ fontSize: 13, color: "#DC2626", margin: 0, textAlign: "center" }}>{error}</p>
+          )}
 
           {/* Submit */}
-          <PrimaryBtn onClick={() => setSubmitted(true)} style={{ width: "100%", marginTop: 4, textAlign: "center" }}>
-            Submit
+          <PrimaryBtn onClick={handleSubmit} style={{ width: "100%", marginTop: 4, textAlign: "center", opacity: loading ? 0.7 : 1 }}>
+            {loading ? "Submitting…" : "Submit"}
           </PrimaryBtn>
 
           <p style={{ fontSize: 12, color: C.gray400, textAlign: "center", margin: 0, lineHeight: 1.5 }}>
