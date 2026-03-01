@@ -119,7 +119,7 @@ export function PrivacyPolicy() {
         <ul style={{ ...s.ul, margin: 0 }}>
           <li style={s.li}>AI-generated scores and evaluations are based on your responses and publicly available information you have linked (such as GitHub profiles). We do not use data from external sources you have not provided or linked.</li>
           <li style={s.li}>Our AI models may be updated and improved over time. When we make significant changes to how AI processes your data, we will update this policy.</li>
-          <li style={{ ...s.li, marginBottom: 0 }}>You may request a human review of any AI-generated assessment or evaluation by contacting us at <a href="mailto:privacy@walnutt.com" style={s.email}>privacy@walnutt.com</a>.</li>
+          <li style={{ ...s.li, marginBottom: 0 }}>You may request a human review of any AI-generated assessment or evaluation by contacting us at <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a>.</li>
         </ul>
       </div>
 
@@ -194,7 +194,7 @@ export function PrivacyPolicy() {
         <li style={s.li}><strong style={s.strong}>Right to Grievance Redressal:</strong> Raise a complaint about our data practices.</li>
         <li style={s.li}><strong style={s.strong}>Right to Nominate:</strong> Nominate another individual to exercise your rights in the event of your death or incapacity.</li>
       </ul>
-      <p style={s.p}>To exercise any of these rights, contact us at <a href="mailto:privacy@walnutt.com" style={s.email}>privacy@walnutt.com</a>.</p>
+      <p style={s.p}>To exercise any of these rights, contact us at <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a>.</p>
       <p style={s.p}>We will respond to your request within 30 days.</p>
 
       <hr style={s.divider} />
@@ -225,8 +225,8 @@ export function PrivacyPolicy() {
         border: `1px solid rgba(58,107,76,0.12)`,
       }}>
         <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>Walnutt</p>
-        <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:privacy@walnutt.com" style={s.email}>privacy@walnutt.com</a></p>
-        <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: walnutt.com</p>
+        <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a></p>
+        <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: www.walnutt.co</p>
       </div>
 
       <p style={{ ...s.p, marginTop: 32, fontStyle: "italic", color: C.gray500 }}>

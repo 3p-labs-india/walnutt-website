@@ -49,7 +49,7 @@ export function TermsConditions() {
       <ul style={s.ul}>
         <li style={s.li}>You are responsible for maintaining the confidentiality of your account credentials.</li>
         <li style={s.li}>You are responsible for all activity that occurs under your account.</li>
-        <li style={s.li}>You must notify us immediately at <a href="mailto:support@walnutt.com" style={s.email}>support@walnutt.com</a> if you suspect any unauthorised access to your account.</li>
+        <li style={s.li}>You must notify us immediately at <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a> if you suspect any unauthorised access to your account.</li>
         <li style={s.li}>We reserve the right to suspend or terminate accounts that violate these Terms.</li>
       </ul>
 
@@ -204,7 +204,7 @@ export function TermsConditions() {
       {/* 12 */}
       <h2 style={s.h2}>12. Termination</h2>
       <ul style={s.ul}>
-        <li style={s.li}>You may terminate your account at any time by contacting <a href="mailto:support@walnutt.com" style={s.email}>support@walnutt.com</a> or through your account settings.</li>
+        <li style={s.li}>You may terminate your account at any time by contacting <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a> or through your account settings.</li>
         <li style={s.li}>We may suspend or terminate your account at any time if you violate these Terms, with or without prior notice.</li>
         <li style={s.li}>Upon termination, your right to use the Platform ceases immediately. Data deletion will follow the timeline described in our Privacy Policy.</li>
         <li style={s.li}>Provisions that by their nature should survive termination (including Sections 7, 8, 9, 10, 11, and 13) will continue to apply.</li>
@@ -252,8 +252,8 @@ export function TermsConditions() {
         border: `1px solid rgba(58,107,76,0.12)`,
       }}>
         <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>Walnutt</p>
-        <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:support@walnutt.com" style={s.email}>support@walnutt.com</a></p>
-        <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: walnutt.com</p>
+        <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:hello@walnutt.co" style={s.email}>hello@walnutt.co</a></p>
+        <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: www.walnutt.co</p>
       </div>
 
       <p style={{ ...s.p, marginTop: 32, fontStyle: "italic", color: C.gray500 }}>

@@ -69,7 +69,7 @@ export function HomePage() {
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <WalnuttLogo size={18} />
             <span style={{ fontWeight: 800, fontSize: 14, color: C.black }}>Walnutt</span>
-            <span style={{ fontSize: 12, color: C.gray400, marginLeft: 4 }}>by 3P Labs Private Limited</span>
+            <span style={{ fontSize: 12, color: C.gray400, marginLeft: 4 }}>© 2026 Walnutt</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <a href="/privacy" style={{ fontSize: 12, color: C.gray400, textDecoration: "none", transition: "color 150ms" }}
@@ -82,7 +82,7 @@ export function HomePage() {
               onMouseLeave={e => (e.currentTarget.style.color = C.gray400)}>
               Terms & Conditions
             </a>
-            <span style={{ fontSize: 12, color: C.gray400 }}>© 2026 3P Labs Private Limited</span>
+            <span style={{ fontSize: 12, color: C.gray400 }}>hello@walnutt.co</span>
           </div>
         </div>
       </footer>
