@@ -47,7 +47,11 @@ export function HomePage() {
 
           {/* CTA — hidden on mobile */}
           <div className="hidden md:block">
-            <PrimaryBtn onClick={() => isE ? undefined : setShowModal(true)} style={{ padding: "8px 20px", fontSize: 13 }}>
+            <PrimaryBtn
+              href={isE ? "https://app.walnutt.co" : undefined}
+              onClick={isE ? undefined : () => setShowModal(true)}
+              style={{ padding: "8px 20px", fontSize: 13 }}
+            >
               {isE ? "Take the Assessment" : "Post a Role"}
             </PrimaryBtn>
           </div>

@@ -186,17 +186,23 @@ export function ModeSwitch({ mode, onChange }: { mode: "engineers" | "companies"
 }
 
 // ═══ PRIMARY BUTTON ═══
-export function PrimaryBtn({ children, onClick, style: s }: { children: ReactNode; onClick?: () => void; style?: React.CSSProperties }) {
+export function PrimaryBtn({ children, onClick, style: s, href }: { children: ReactNode; onClick?: () => void; style?: React.CSSProperties; href?: string }) {
   const [hover, setHover] = useState(false);
+  const styles: React.CSSProperties = {
+    display: "inline-block", padding: "14px 28px", borderRadius: 10, border: "none", cursor: "pointer",
+    fontSize: 15, fontWeight: 600, fontFamily: "'Inter', sans-serif",
+    background: hover ? C.sageDark : C.sage, color: C.white, textDecoration: "none",
+    transform: hover ? "translateY(-1px)" : "translateY(0)",
+    boxShadow: hover ? "0 4px 12px rgba(58,107,76,0.25)" : "none",
+    transition: "all 180ms ease-out", ...s,
+  };
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={styles}>{children}</a>
+    );
+  }
   return (
-    <button onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{
-      padding: "14px 28px", borderRadius: 10, border: "none", cursor: "pointer",
-      fontSize: 15, fontWeight: 600, fontFamily: "'Inter', sans-serif",
-      background: hover ? C.sageDark : C.sage, color: C.white,
-      transform: hover ? "translateY(-1px)" : "translateY(0)",
-      boxShadow: hover ? "0 4px 12px rgba(58,107,76,0.25)" : "none",
-      transition: "all 180ms ease-out", ...s,
-    }}>{children}</button>
+    <button onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={styles}>{children}</button>
   );
 }
 
