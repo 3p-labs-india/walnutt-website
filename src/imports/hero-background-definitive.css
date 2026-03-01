@@ -1,0 +1,146 @@
+# Walnutt — Hero Background (Definitive Version)
+### Delete everything you have. Start fresh with this.
+
+---
+
+## THE PROBLEM WITH THE CURRENT HERO
+
+The current version has thin, flat, lifeless lines floating on an empty white background. It looks like a wireframe, not a finished product. Here's what's missing:
+
+1. **No depth** — everything is on one flat plane
+2. **No glow** — the lines have no light, no energy
+3. **No color richness** — just one shade of pale sage on white
+4. **No layering** — one layer of lines with nothing behind or in front
+5. **The background is still 90% empty white space**
+
+---
+
+## THE FIX — THREE LAYERS WORKING TOGETHER
+
+Think of this like compositing. Three layers stacked, each doing a different job:
+
+---
+
+### LAYER 1 (Bottom) — GRADIENT MESH BASE
+
+A rich, animated gradient mesh that covers the ENTIRE viewport. This is not subtle. This replaces your plain #FAFBF9 background within the hero section.
+
+The mesh is built from 5 overlapping radial gradients, each animating their position slowly:
+
+```
+Gradient 1: radial-gradient(circle 800px at 20% 30%, rgba(58,107,76,0.15), transparent)
+Gradient 2: radial-gradient(circle 600px at 80% 20%, rgba(14,165,165,0.12), transparent)
+Gradient 3: radial-gradient(circle 700px at 50% 80%, rgba(94,234,212,0.10), transparent)
+Gradient 4: radial-gradient(circle 500px at 10% 70%, rgba(58,107,76,0.08), transparent)
+Gradient 5: radial-gradient(circle 900px at 70% 60%, rgba(14,165,165,0.10), transparent)
+```
+
+Each gradient position animates on a different cycle (15s, 20s, 25s, 30s, 18s) — drifting 10-20% in each direction, ease-in-out, infinite, alternating. The combined effect: a slowly shifting, living color field in sage green and teal that never looks the same twice.
+
+The base underneath all gradients: a very light warm tint — `linear-gradient(135deg, #FAFBF9 0%, #F0F7F4 50%, #F5FAFA 100%)`. This gives the "white" areas a slight warmth instead of being dead flat.
+
+---
+
+### LAYER 2 (Middle) — FLOWING ENERGY LINES
+
+3-4 animated SVG paths that sweep across the full viewport as smooth flowing curves. These are the "Turing energy streaks" adapted for light theme. They must have GLOW.
+
+**Line construction:**
+Each line is an SVG `<path>` with a smooth cubic bezier curve spanning the full viewport width (edge to edge, no margins). The curves have gentle wave undulation — amplitude 80-150px, frequency roughly 1.5 waves across the viewport width.
+
+**Line styling — THIS IS WHAT MAKES IT LOOK GOOD:**
+Each line is actually rendered THREE TIMES, stacked:
+1. **Glow layer (bottom):** Same path, stroke-width 20px, color at 8% opacity, Gaussian blur 12px
+2. **Mid glow (middle):** Same path, stroke-width 8px, color at 15% opacity, Gaussian blur 4px  
+3. **Core line (top):** Same path, stroke-width 1.5px, color at 40% opacity, no blur
+
+This triple rendering creates the "light beam" effect — a bright core with a soft glow spreading outward. This is exactly what makes Turing's lines look like energy and yours look like clip art.
+
+**The 4 lines:**
+
+Line 1 — Sage green (#3A6B4C):
+- Position: sweeps from left edge to right edge, centered roughly at 25% from top
+- Wave amplitude: 100px
+- Animation: the entire path slowly shifts vertically ±30px over 18s, ease-in-out, infinite
+- Additionally: a bright dot (4px, #3A6B4C at 60% with 8px blur glow) travels along the path from left to right over 8s, linear, infinite — like a pulse of data moving through the line
+
+Line 2 — Teal (#0EA5A5):
+- Position: right edge to left edge (reverse direction), centered at 45% from top
+- Wave amplitude: 120px
+- Vertical shift: ±25px over 22s
+- Traveling dot: right to left, 10s
+
+Line 3 — Light teal (#5EEAD4):
+- Position: left to right, centered at 70% from top
+- Wave amplitude: 80px
+- Vertical shift: ±20px over 15s
+- Traveling dot: 12s
+
+Line 4 — Sage green (#3A6B4C) at lower opacity:
+- Position: right to left, centered at 15% from top (upper area)
+- Wave amplitude: 60px
+- Vertical shift: ±15px over 25s
+- No traveling dot (keep it subtle)
+
+**Where lines cross:** At intersection points, add a small static glow node — a 6px circle with the blended color at 20% opacity and 10px blur. This creates "connection points" that feel like network nodes.
+
+---
+
+### LAYER 3 (Top, behind text) — TEXT READABILITY ZONE
+
+A soft radial gradient centered on the text content area:
+
+```
+radial-gradient(ellipse 700px 500px at 50% 45%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%)
+```
+
+This creates a soft bright clearing behind the headline and subheadline. It should NOT look like a card or box — just a gentle brightening that lets the dark text pop against the animated background. The edges are completely feathered and invisible.
+
+---
+
+## ANIMATION TIMING TABLE
+
+| Element | Duration | Easing | Notes |
+|---------|----------|--------|-------|
+| Gradient mesh 1 | 15s | ease-in-out | Position drift, infinite alternate |
+| Gradient mesh 2 | 20s | ease-in-out | Position drift, infinite alternate |
+| Gradient mesh 3 | 25s | ease-in-out | Position drift, infinite alternate |
+| Gradient mesh 4 | 30s | ease-in-out | Position drift, infinite alternate |
+| Gradient mesh 5 | 18s | ease-in-out | Position drift, infinite alternate |
+| Line 1 vertical shift | 18s | ease-in-out | ±30px, infinite alternate |
+| Line 2 vertical shift | 22s | ease-in-out | ±25px, infinite alternate |
+| Line 3 vertical shift | 15s | ease-in-out | ±20px, infinite alternate |
+| Line 4 vertical shift | 25s | ease-in-out | ±15px, infinite alternate |
+| Line 1 traveling dot | 8s | linear | Left→right, infinite loop |
+| Line 2 traveling dot | 10s | linear | Right→left, infinite loop |
+| Line 3 traveling dot | 12s | linear | Left→right, infinite loop |
+
+**Critical:** No two elements share the same duration. This prevents the animation from ever "syncing up" and looking repetitive.
+
+---
+
+## FIGMA MAKE PROMPT (copy-paste this)
+
+> Replace the hero background on both the Engineers and Companies pages with a three-layer animated background. 
+>
+> Layer 1 (base): An animated gradient mesh covering the full viewport. Five overlapping radial gradients in sage green (#3A6B4C at 12-15% opacity) and teal (#0EA5A5 at 10-12% opacity), each gradient 500-900px in diameter. Each gradient slowly drifts position by 10-20% over different cycles (15s to 30s, ease-in-out, infinite, alternating direction). Underneath: a subtle warm base gradient from #FAFBF9 to #F0F7F4 to #F5FAFA at 135 degrees. The combined effect is a slowly shifting, living color field — not static, not subtle, clearly visible movement of sage and teal tones across the entire hero.
+>
+> Layer 2 (middle): 4 flowing energy lines spanning the full viewport width, edge to edge. Each line is a smooth SVG bezier curve with gentle wave undulation (amplitude 60-120px). Each line has a GLOW effect — rendered as three stacked strokes: a 20px wide blurred glow at 8% opacity (blur 12px), an 8px mid-glow at 15% opacity (blur 4px), and a 1.5px sharp core at 40% opacity. Line colors: two in sage green (#3A6B4C), two in teal (#0EA5A5 and #5EEAD4). Lines are positioned at roughly 15%, 25%, 45%, and 70% from the top of the viewport. Each line slowly undulates vertically (±15-30px over 15-25s, ease-in-out, infinite). On three of the lines, a small bright dot (4px with glow) travels along the path like a data pulse (8-12s, linear, infinite loop). Where lines cross near each other, show a small glowing node point (6px, blended color at 20% opacity, 10px blur).
+>
+> Layer 3 (top, behind text): A soft radial gradient centered on the text area — white at 55% opacity in the center, fading to transparent over a 700×500px ellipse. This creates a soft bright zone behind the headline for readability. No hard edges, completely feathered.
+>
+> All hero text content (overline, H1, subheadline, CTA, micro-copy) sits on top of all three layers. Text colors unchanged (#1A1A1A for headline, #3A6B4C for "TECH TALENT", #374151 for subheadline). Both pages get identical background treatment. On mobile: reduce to 3 gradient blobs + 2 lines. Respect prefers-reduced-motion: show static gradient mesh, no animation, no lines.
+
+---
+
+## IMPLEMENTATION NOTES (if building in code instead of Figma)
+
+The gradient mesh (Layer 1) is pure CSS — stacked radial-gradients with animated `background-position`. Reference: Aceternity's Background Gradient Animation component.
+
+The flowing lines (Layer 2) are best done as animated SVGs or a lightweight canvas. Reference: Aceternity's Background Lines component. The triple-stroke glow technique uses SVG filters (`<feGaussianBlur>`) or CSS `filter: blur()` on duplicate path elements.
+
+The traveling dots use SVG `<animateMotion>` along the path, or CSS `offset-path` animation.
+
+The readability zone (Layer 3) is a single CSS `radial-gradient` on a positioned div.
+
+Total performance budget: all animations should use `transform`, `opacity`, and `background-position` only — all GPU-composited, 60fps capable.

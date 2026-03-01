@@ -1,0 +1,102 @@
+# Walnutt — Figma Make Prompts
+### 5 prompts · Copy paste ready · Both pages
+
+---
+
+## PROMPT 1 — OVERALL SITE STRUCTURE
+
+Create a two-page marketing website for "Walnutt" — a career accelerator platform for tech engineers. Confident, peer-level tone — think developer tool, not job board. Sage green (#3A6B4C) primary accent on warm off-white (#FAFBF9) background.
+
+Font system: Inter for all text. Weight 800 for H1 (56px), weight 700 for H2 (40px), weight 600 for H3 (24px), weight 400 for body (17px). JetBrains Mono 13px only inside browser mockup illustrations for URLs.
+
+**Page 1 — For Engineers.** Three sections: 1) Hero — large all-caps headline "CAREER ACCELERATOR FOR TECH TALENT" with a cycling overline above showing different roles, subheadline, primary CTA button, and micro-copy. 2) "How It Works" — overline label, H2, three horizontal tab pills (01 Assess, 02 Build, 03 Stand Out), each tab shows left-side text (H3 + body paragraph) and right-side browser mockup card. 3) "Built For Every Stage" — overline, H2, body text, a horizontal row of role tags as pills, then a 2×3 grid of skill dimension cards (icon + title + one-line description), ending with a CTA button.
+
+**Page 2 — For Companies.** Three sections: 1) Hero — large all-caps headline "YOUR NEXT ENGINEER IS ALREADY VERIFIED" with subheadline, primary and secondary CTA buttons. 2) "How It Works" — same tab structure as engineers page (01 Post, 02 Review, 03 Hire) with left text and right browser mockup. 3) "We Handle The Hard Parts" — overline, H2, body paragraph, three side-by-side value columns (Assessed / Interviewed / Matched) each with a title and description, a subtle pricing line below, and two CTA buttons.
+
+Both pages share: sticky top nav with Walnutt logo left, a pill-shaped "For Engineers" / "For Companies" toggle center (active state: #3A6B4C background white text, inactive: white background #6B7280 text, 1px #D1D5DB border), and "Take the Assessment" CTA button right in #3A6B4C. Minimal footer: Walnutt logo, "by 3P Labs Private Limited", © 2026 3P Labs Private Limited.
+
+Max content width 1120px centered on 1440px canvas. 96px vertical gap between every section on desktop, 64px on mobile. All cards 14px border-radius with layered shadow. Fully responsive: single-column stack on mobile (375px), 8-column grid on tablet (768px), 12-column on desktop. Nav becomes hamburger on mobile. Every element fades up on scroll entry (opacity 0→1, translateY 16px→0, 350ms ease-out, children staggered 80ms).
+
+---
+
+## PROMPT 2 — HERO SECTIONS (Both Pages)
+
+**Engineers Hero.** Full-viewport height, content vertically centered. Above the headline: a cycling overline that rotates text every 3 seconds with a fade-up transition (300ms ease-out). The cycle is: "For Backend Engineers" → "For Full-stack Engineers" → "For Applied AI Engineers" → "For DevOps Engineers" → "For SDE 1, 2 & 3". Style: Inter 12px weight 500 uppercase, letter-spacing 0.1em, color #6B7280. Only the role text swaps — "For" stays static.
+
+H1: "CAREER ACCELERATOR FOR TECH TALENT" in Inter 56px weight 800, color #1A1A1A, line-height 1.05, letter-spacing -0.02em, all uppercase. The words "TECH TALENT" colored #3A6B4C. Center-aligned on desktop. On mobile: 36px, left-aligned.
+
+Subheadline: "Assess your real skills. See where you actually stand. Build a profile that gives your ability the stage it deserves." in Inter 17px weight 400, color #374151, line-height 1.6, max-width 580px, center-aligned, margin-top 20px.
+
+Primary CTA: "Take the Free Assessment →" — #3A6B4C background, white text, Inter 15px weight 600, padding 14px 28px, border-radius 10px, margin-top 28px. Hover: darken to #2D5A3D, translateY(-1px), box-shadow 0 4px 12px rgba(58,107,76,0.25), transition 180ms ease-out.
+
+Micro-copy below button: "Adaptive assessment · Tailored to your target role" in Inter 13px weight 400, color #9CA3AF, margin-top 10px.
+
+Background: warm off-white #FAFBF9 with a very subtle radial gradient of sage green at 10-12% opacity in the center, fading to transparent at edges — same feel as the current site but slightly more visible.
+
+**Companies Hero.** Same layout and background treatment. No cycling overline. H1: "YOUR NEXT ENGINEER IS ALREADY VERIFIED" — same style, words "VERIFIED" colored #3A6B4C. Subheadline: "Deep skill assessment. GitHub verified. Portfolio reviewed. Matched to your JD." Two buttons side-by-side with 16px gap: Primary "Post a Role →" (same sage button spec), Secondary "Talk to Our Team" (white background, 1.5px #D1D5DB border, Inter 15px/600 #1A1A1A text, 10px radius, hover: border turns #3A6B4C, background #E8F0EB, 180ms ease-out). On mobile: buttons stack vertically, full width.
+
+---
+
+## PROMPT 3 — INTERACTIVE MODULES
+
+**Tab System (used on both pages).** Centered below the section H2. Three horizontal pill-shaped tabs with 8px gap between them. Active tab: #3A6B4C background, white text, Inter 14px weight 600, border-radius 100px, padding 10px 20px. Inactive tabs: white background, 1px solid #D1D5DB border, Inter 14px weight 500, color #6B7280, border-radius 100px. Inactive hover: border color transitions to rgba(58,107,76,0.4) over 180ms. Active state transition: background and text color cross-fade over 250ms cubic-bezier(0.65, 0, 0.35, 1).
+
+Content panel below tabs, margin-top 48px. Two-column layout: left column (50%) has H3 in Inter 24px/600 #1A1A1A + body paragraph in Inter 17px/400 #374151 with 16px gap between them. Right column (50%) has a browser mockup card. On mobile: stack vertically — text first, mockup below, tabs become horizontally scrollable.
+
+**Browser Mockup Card.** White background #FFFFFF. Border: 1px solid rgba(0,0,0,0.06). Border-radius: 14px. Shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04). Top bar: 12px padding, three dots (8px circles with 6px gap — #FF5F57, #FFBD2E, #27C93F), URL text in JetBrains Mono 13px #9CA3AF (e.g., "walnutt.com/assess"). Content area: 24px padding, shows assessment question text in Inter 15px/600 #1A1A1A, skill tags below in pill shapes (#E8F0EB background, #2D5A3D text, Inter 13px/500, 5px 10px padding, 6px radius), and a progress bar at bottom (#3A6B4C filled portion, #E5E7EB track, 4px height, 100px radius).
+
+Tab content transitions: outgoing content fades to opacity 0 over 150ms, incoming content fades to opacity 1 over 200ms. Simple cross-fade, no sliding.
+
+**Cycling Overline Component (Engineers hero).** A fixed-height container (20px) with overflow hidden. Text slides up and fades simultaneously: outgoing text moves translateY(0) → translateY(-100%) with opacity 1→0, incoming text moves translateY(100%) → translateY(0) with opacity 0→1. Duration: 300ms ease-out. Holds each role for 3000ms before cycling. Loops infinitely.
+
+**Role Tag Pills (Engineers Section 3).** Horizontal row, center-aligned, flex-wrap on mobile. Each pill: #E8F0EB background, #2D5A3D text, Inter 13px weight 500, padding 6px 14px, border-radius 100px, 8px gap between pills.
+
+**Skill Dimension Cards (Engineers Section 3).** 2×3 grid on desktop (24px gap), single column on mobile. Each card: white #FFFFFF background, 1px solid #E5E7EB border, 12px border-radius, 24px padding. Contents: a small abstract icon placeholder (24px, #3A6B4C color), dimension name in Inter 17px/600 #1A1A1A (margin-top 12px), one-line description in Inter 15px/400 #6B7280 (margin-top 6px). Hover: translateY(-2px), shadow transitions to 0 8px 24px rgba(0,0,0,0.06) over 200ms ease-out.
+
+**Value Columns (Companies Section 3).** Three columns side-by-side on desktop (24px gap), single column on mobile. Each column: no visible card border, just content. Title in Inter 20px/600 #1A1A1A, description in Inter 16px/400 #374151 with margin-top 8px. Subtle top border: 2px solid #3A6B4C, width 32px, above each column title as a visual anchor.
+
+---
+
+## PROMPT 4 — BRAND & VISUAL SYSTEM
+
+Apply this exact design system across the entire Walnutt site:
+
+**Colors** — Primary sage #3A6B4C: used only on primary CTA buttons, active tab pills, the accent words in hero headlines ("TECH TALENT" and "VERIFIED"), progress bars inside mockups, and top-border accents on value columns. Maximum 3 sage elements visible per viewport. Sage dark #2D5A3D: hover states for sage buttons and text color inside sage-light tags. Sage light #E8F0EB: skill tag pill backgrounds and role tag pill backgrounds only. Black #1A1A1A: all headlines (H1, H2, H3). Gray-800 #374151: body text. Gray-500 #6B7280: secondary text, overlines, inactive tab text, dimension card descriptions. Gray-400 #9CA3AF: placeholder text, micro-copy. Gray-300 #D1D5DB: borders, dividers, inactive tab borders. Gray-100 #F3F4F6: not used as section background — keep all sections on #FAFBF9 for simplicity. White #FFFFFF: cards, inputs, browser mockups. Off-white #FAFBF9: page background for both pages.
+
+**Typography** — Inter everywhere. H1: 56px weight 800, line-height 1.05, tracking -0.02em, uppercase (hero only, one per page). H2: 40px weight 700, line-height 1.1, tracking -0.01em, sentence case. H3: 24px weight 600, line-height 1.3. Body: 17px weight 400, line-height 1.6. Small/micro-copy: 13px weight 400. Overlines: 12px weight 500, uppercase, tracking 0.1em. Button labels: 15px weight 600. JetBrains Mono 13px only inside browser mockup top bars.
+
+**Spacing** — 8px base grid. 96px between all major sections (64px mobile). 48px between sub-blocks within a section. 24px between heading and body text. 32px card internal padding (24px mobile). 16px gap between side-by-side buttons. 8px gap between tab pills and between role tag pills.
+
+**Components** — Primary button: #3A6B4C bg, white text, 15px/600, 14px 28px padding, 10px radius. Hover: #2D5A3D, translateY(-1px), shadow 0 4px 12px rgba(58,107,76,0.25), 180ms ease-out. Secondary button: white bg, 1.5px #D1D5DB border, #1A1A1A text, same padding and radius. Hover: border #3A6B4C, bg #E8F0EB, 180ms. Tab pill active: #3A6B4C bg, white text, 100px radius, 10px 20px padding. Tab pill inactive: white bg, 1px #D1D5DB border, #6B7280 text, same shape. Browser mockup: white bg, 1px rgba(0,0,0,0.06) border, 14px radius, shadow 0 8px 32px rgba(0,0,0,0.08) and 0 2px 8px rgba(0,0,0,0.04). Skill tag: #E8F0EB bg, #2D5A3D text, 13px/500, 5px 10px padding, 6px radius. Dimension card: white bg, 1px #E5E7EB border, 12px radius, 24px padding, hover lifts 2px with shadow.
+
+**Motion** — Scroll entrance: every element fades up (opacity 0→1, translateY 16px→0) at 350ms ease-out, IntersectionObserver threshold 0.15, stagger children 80ms. Tab content: 200ms cross-fade. Button hover: 180ms ease-out. Cycling overline: 300ms slide-up with fade, 3s hold per item. No complex hero animations, no parallax, no mesh gradient animation. Respect prefers-reduced-motion: disable all animation.
+
+---
+
+## PROMPT 5 — COPY & CONTENT POPULATION
+
+Populate the Walnutt website with this exact copy on both pages:
+
+**PAGE 1 — FOR ENGINEERS**
+
+Nav: Logo "Walnutt" left. Toggle center: "For Engineers" (active) | "For Companies" (inactive). CTA right: "Take the Assessment".
+
+Hero cycling overline (rotates every 3s): "For Backend Engineers" → "For Full-stack Engineers" → "For Applied AI Engineers" → "For DevOps Engineers" → "For SDE 1, 2 & 3". H1: "CAREER ACCELERATOR FOR TECH TALENT" (words "TECH TALENT" in #3A6B4C). Sub: "Assess your real skills. See where you actually stand. Build a profile that gives your ability the stage it deserves." CTA: "Take the Free Assessment →". Micro-copy: "Adaptive assessment · Tailored to your target role".
+
+How It Works: Overline "HOW IT WORKS". H2: "From self-doubt to job-ready". Tab 1 "01 Assess" — H3: "See yourself clearly." Body: "Pick your target role. Take an adaptive assessment that evaluates how you think through real engineering problems — system design, architecture decisions, debugging instincts, and more. Get a readiness score across 10+ dimensions that's honest, not flattering." Mockup URL: "walnutt.com/assess". Tab 2 "02 Build" — H3: "Close the gaps that matter." Body: "Your score shows exactly where you're strong and where you're not. Each gap maps to a focused learning path — curated resources, practice problems, and projects ranked by how much they move the needle on your readiness." Mockup URL: "walnutt.com/learn". Tab 3 "03 Stand Out" — H3: "Let your profile do the talking." Body: "Your Walnutt profile is a verified skill map that shows what you can actually do. When you're ready, companies that value engineering depth find you. No cold applications. No keyword games." Mockup URL: "walnutt.com/profile".
+
+Built For Every Stage: Overline "WHO IT'S FOR". H2: "One assessment. Every dimension that matters." Body: "Whether you're preparing for your first role or levelling up to senior — Walnutt adapts to where you are and shows you what's next." Role tags: "SDE 1" · "SDE 2" · "SDE 3" · "Backend" · "Full-stack" · "Applied AI" · "DevOps". Dimension cards: "System Design — Architect for scale and reliability", "Code Quality — Clean, tested, maintainable code", "Trade-off Analysis — Reason through real constraints", "Debugging — Navigate the unknown systematically", "API Design — Think about your consumers", "Communication — Explain your decisions clearly". CTA: "Start Your Assessment →".
+
+Footer: "Walnutt" logo. "by 3P Labs Private Limited". "© 2026 3P Labs Private Limited".
+
+**PAGE 2 — FOR COMPANIES**
+
+Nav: Same, with "For Companies" toggle active.
+
+Hero: H1: "YOUR NEXT ENGINEER IS ALREADY VERIFIED" (word "VERIFIED" in #3A6B4C). Sub: "Deep skill assessment. GitHub verified. Portfolio reviewed. Matched to your JD." Primary CTA: "Post a Role →". Secondary CTA: "Talk to Our Team".
+
+How It Works: Overline "HOW IT WORKS". H2: "From JD to hire". Tab 1 "01 Post" — H3: "Describe your ideal hire." Body: "Share a JD or describe your ideal engineer in plain English. Our AI extracts the skills, experience level, and must-haves — then matches against verified talent." Mockup URL: "walnutt.com/company/post". Tab 2 "02 Review" — H3: "See proof, not promises." Body: "Every candidate comes with a verified skill profile — assessment scores across 10+ dimensions, GitHub activity analysis, and a readiness match percentage. Filter by skill, experience, and availability." Mockup URL: "walnutt.com/company/review". Tab 3 "03 Hire" — H3: "Interview with confidence." Body: "Request an intro when you find a match. Candidates are pre-assessed and AI-interviewed, so your conversations focus on culture and fit — not whether they can build." Mockup URL: "walnutt.com/company/hire".
+
+We Handle The Hard Parts: Overline "WHY WALNUTT". H2: "We handle the hard parts. You make the final call." Body: "Walnutt runs the entire top-of-funnel — skill assessments, AI-powered interviews, and candidate matching — so your team only spends time on engineers worth talking to." Three columns — Column 1 title: "Assessed", body: "Every candidate completes a deep adaptive assessment across 10+ engineering dimensions. No self-reported skills. No guesswork." Column 2 title: "Interviewed", body: "Our AI conducts structured technical interviews calibrated to your role requirements. You get the scorecard, not the scheduling headache." Column 3 title: "Matched", body: "Candidates are ranked by fit against your JD. You review verified profiles, pick who to meet, and move straight to final rounds." Pricing line: "8–10% CTC on successful hire. You pay only when you've found the right engineer." Primary CTA: "Post a Role →". Secondary CTA: "Talk to Our Team".
+
+Footer: Same as engineers page.

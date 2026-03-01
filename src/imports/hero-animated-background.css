@@ -1,0 +1,75 @@
+# Walnutt — Figma Make Prompt (Hero Background Only)
+
+---
+
+Replace the current plain gradient hero background on both pages with a bold, animated aurora flow combined with flowing wave lines. This should feel like the Turing.com hero energy — dramatic, alive, techy — but adapted for a light theme using sage green and teal/cyan.
+
+## The Effect
+
+Full-viewport animated background behind all hero content (text, CTA, overline all sit on top). The background has two layers working together:
+
+**Layer 1 — Aurora Glow (base layer):**
+Large, soft, luminous color blobs that slowly drift and morph across the entire viewport. Think northern lights but in sage green and teal on a light background.
+
+- Blob 1: Sage green (#3A6B4C) at 35% opacity, ~600px wide, organic soft shape, positioned center-left. Slowly drifts right and morphs shape over 25s, ease-in-out, infinite loop, reverses direction each cycle.
+- Blob 2: Teal/cyan (#0EA5A5) at 25% opacity, ~500px wide, positioned upper-right. Drifts down-left over 30s, same easing and loop.
+- Blob 3: Light teal (#5EEAD4) at 20% opacity, ~450px wide, positioned lower-center. Drifts up-right over 20s.
+- Blob 4: Sage green (#3A6B4C) at 15% opacity, ~350px wide, positioned upper-left. Drifts down over 35s.
+- All blobs: Gaussian blur 120px+, completely soft edges, no hard boundaries. They should blend into each other where they overlap, creating richer combined colors. The overall luminosity should be bold enough to clearly see the color movement (40-50% presence) but not so dark that it hurts text readability.
+
+**Layer 2 — Flowing Wave Lines (on top of aurora, behind text):**
+3-4 smooth, flowing curved lines that sweep across the entire viewport like energy streams or data flowing through a system. These are the Turing-style light streaks adapted for light theme.
+
+- Line 1: Sage green (#3A6B4C) at 30% opacity, 2px thick with a 8px soft glow (same color at 15% opacity). Flows in a smooth sine wave from left edge to right edge, positioned roughly at 30% from top. The wave undulates slowly — the entire path shifts vertically with a 15s animation cycle, ease-in-out, infinite.
+- Line 2: Teal (#0EA5A5) at 25% opacity, 1.5px thick with 6px glow. Flows from right to left at ~55% from top. 20s cycle, slightly different wave frequency so lines don't move in sync.
+- Line 3: Light teal (#5EEAD4) at 20% opacity, 1px thick with 4px glow. Flows left to right at ~75% from top. 25s cycle.
+- Optional Line 4: Sage (#3A6B4C) at 15% opacity, 1px thick, subtle. Upper area ~15% from top. 30s cycle.
+- Lines should be smooth bezier curves, not straight. They gently wave and breathe — amplitude shifts between 20px and 60px over the animation cycle. The wave pattern itself slowly travels along the line (like a pulse moving through a wire) at a different speed than the vertical shift.
+- Where lines cross over aurora blobs, they should appear slightly brighter (the glow picks up the underlying aurora color).
+
+**Layer 0 — Base (underneath everything):**
+The page background remains #FAFBF9 (warm off-white). The aurora and lines sit on top of this. This ensures that even where there's no aurora blob, the background is clean and warm — not stark white.
+
+## Text Readability
+
+All hero text sits on top of both layers. To ensure readability:
+- A very subtle white radial gradient overlay (white at 40% opacity, 500px radius) sits directly behind the text content block — centered on the headline. This creates a soft "clearing" in the aurora so text stays crisp without killing the background energy.
+- This overlay should be barely perceptible — just enough to lift contrast. It should NOT look like a white box or card behind the text.
+
+## Animation Summary
+
+| Element | Duration | Easing | Behavior |
+|---------|----------|--------|----------|
+| Aurora blob 1 | 25s | ease-in-out | Drift right + morph, reverse, infinite |
+| Aurora blob 2 | 30s | ease-in-out | Drift down-left, reverse, infinite |
+| Aurora blob 3 | 20s | ease-in-out | Drift up-right, reverse, infinite |
+| Aurora blob 4 | 35s | ease-in-out | Drift down, reverse, infinite |
+| Wave line 1 | 15s | ease-in-out | Vertical undulation + pulse travel |
+| Wave line 2 | 20s | ease-in-out | Vertical undulation + pulse travel |
+| Wave line 3 | 25s | ease-in-out | Vertical undulation + pulse travel |
+| Wave line 4 | 30s | ease-in-out | Vertical undulation + pulse travel |
+
+All animations should have different durations so nothing syncs up — the overall effect should feel organic and non-repeating even though each element loops. Total GPU-friendly: use CSS transforms and opacity only for 60fps performance.
+
+## Responsive
+
+- On desktop (1440px): full effect, all 4 blobs + 3-4 lines
+- On tablet (768px): reduce to 3 blobs + 2 lines, slightly less opacity
+- On mobile (375px): reduce to 2 blobs + 1 line, animation slowed to reduce battery drain
+- Respect prefers-reduced-motion: show a static version with aurora blobs at fixed positions, no animation, no lines
+
+## Apply to both pages
+
+Use the exact same background treatment on the Engineers hero and Companies hero for brand consistency. The hero content (headline, subheadline, CTAs) changes per page, but the background is identical.
+
+## What NOT to do
+
+- Don't make it dark. This is a light-theme site. The background base stays #FAFBF9.
+- Don't make the aurora blobs opaque enough to make text hard to read.
+- Don't make the lines sharp or geometric — they should feel organic and flowing, like energy or light, not like a circuit diagram.
+- Don't add particles, dots, or any other elements. Just aurora blobs + flowing lines.
+- Don't animate anything faster than 15s per cycle. Everything should feel slow, ambient, and atmospheric.
+
+## Reference
+
+The energy and drama should feel like Turing.com's hero (flowing light streaks, multiple colors interweaving, sense of motion and technology) — but translated to a light background with sage green and teal/cyan instead of blue and gold on black.
