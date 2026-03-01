@@ -91,18 +91,27 @@ export function BrowserFrame({ url, children }: { url: string; children: ReactNo
 
 // ═══ TYPEWRITER ═══
 export function TypeWriter({ text, speed = 25, delay = 0, active }: { text: string; speed?: number; delay?: number; active: boolean }) {
-  const [shown, setShown] = useState("");
+  const spanRef = useRef<HTMLSpanElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    if (!active) { setShown(""); return; }
-    setShown("");
+    const span = spanRef.current;
+    const cursor = cursorRef.current;
+    if (!span) return;
+    if (!active) { span.textContent = ""; if (cursor) cursor.style.opacity = "0"; return; }
+    span.textContent = "";
+    if (cursor) cursor.style.opacity = "0.5";
+    let i = 0;
     let iv: ReturnType<typeof setInterval>;
     const timer = setTimeout(() => {
-      let i = 0;
-      iv = setInterval(() => { i++; setShown(text.slice(0, i)); if (i >= text.length) clearInterval(iv); }, speed);
+      iv = setInterval(() => {
+        i++;
+        span.textContent = text.slice(0, i);
+        if (i >= text.length) { clearInterval(iv); if (cursor) cursor.style.opacity = "0"; }
+      }, speed);
     }, delay);
     return () => { clearTimeout(timer); clearInterval(iv); };
   }, [active, text, speed, delay]);
-  return <span>{shown}{shown.length < text.length && active && <span style={{ opacity: 0.5 }}>|</span>}</span>;
+  return <span><span ref={spanRef} /><span ref={cursorRef} style={{ opacity: 0 }}>|</span></span>;
 }
 
 // ═══ FADE-IN WRAPPER ═══
@@ -117,23 +126,37 @@ export function FI({ children, delay = 0, active = true }: { children: ReactNode
 
 // ═══ SCORE RING ═══
 export function ScoreRing({ score, size = 48, sw = 3, delay = 0 }: { score: number; size?: number; sw?: number; delay?: number }) {
-  const [p, setP] = useState(0);
+  const circleRef = useRef<SVGCircleElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const r = (size - sw * 2) / 2;
+  const circ = 2 * Math.PI * r;
   useEffect(() => {
-    setP(0);
+    const circle = circleRef.current;
+    const label = labelRef.current;
+    if (!circle) return;
+    circle.style.strokeDashoffset = String(circ);
+    if (label) label.textContent = "0%";
     let iv: ReturnType<typeof setInterval>;
-    const t = setTimeout(() => { let c = 0; iv = setInterval(() => { c++; if (c >= score) { setP(score); clearInterval(iv); } else setP(c); }, 12); }, delay);
+    const t = setTimeout(() => {
+      let c = 0;
+      iv = setInterval(() => {
+        c++;
+        circle.style.strokeDashoffset = String(circ - (c / 100) * circ);
+        if (label) label.textContent = `${c}%`;
+        if (c >= score) clearInterval(iv);
+      }, 12);
+    }, delay);
     return () => { clearTimeout(t); clearInterval(iv); };
-  }, [score, delay]);
-  const r = (size - sw * 2) / 2, circ = 2 * Math.PI * r, off = circ - (p / 100) * circ;
+  }, [score, delay, circ]);
   return (
     <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E5E7EB" strokeWidth={sw} />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.sage} strokeWidth={sw}
-          strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.12s ease" }} />
+        <circle ref={circleRef} cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.sage} strokeWidth={sw}
+          strokeDasharray={circ} strokeDashoffset={circ} strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.12s ease" }} />
       </svg>
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontWeight: 700, fontSize: size * 0.24, color: C.black }}>{p}%</span>
+        <span ref={labelRef} style={{ fontWeight: 700, fontSize: size * 0.24, color: C.black }}>0%</span>
       </div>
     </div>
   );

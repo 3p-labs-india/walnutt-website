@@ -33,7 +33,7 @@ export function HomePage() {
           </a>
 
           {/* Mode Switch */}
-          <ModeSwitch mode={mode} onChange={m => { setMode(m); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
+          <ModeSwitch mode={mode} onChange={m => { setMode(m); window.scrollTo({ top: 0, behavior: "instant" }); }} />
 
           {/* CTA — hidden on mobile */}
           <div className="hidden md:block">
