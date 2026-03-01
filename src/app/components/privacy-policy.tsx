@@ -7,13 +7,13 @@ export function PrivacyPolicy() {
       <div style={s.badge}>Legal</div>
       <h1 style={s.pageTitle}>Privacy Policy</h1>
       <p style={s.meta}>
-        <strong style={s.strong}>Walnutt</strong> · Operated by 3P Labs Private Limited<br />
+        <strong style={s.strong}>Walnutt</strong><br />
         <strong style={s.strong}>Effective Date:</strong> 1 March 2026<br />
         <strong style={s.strong}>Last Updated:</strong> 28 February 2026
       </p>
 
       <p style={s.intro}>
-        This Privacy Policy explains how 3P Labs Private Limited ("Walnutt," "we," "us," or "our") collects, uses, stores, and protects your information when you use the Walnutt platform, website (walnutt.com), and related services (collectively, the "Platform"). This policy applies to all users of the Platform, including engineers ("Candidates") and hiring companies ("Companies").
+        This Privacy Policy explains how Walnutt ("we," "us," or "our") collects, uses, stores, and protects your information when you use the Walnutt platform, website (walnutt.co), and related services (collectively, the "Platform"). This policy applies to all users of the Platform, including engineers ("Candidates") and hiring companies ("Companies").
       </p>
       <p style={s.p}>
         By accessing or using the Platform, you agree to the practices described in this Privacy Policy. If you do not agree, please do not use the Platform.
@@ -224,7 +224,7 @@ export function PrivacyPolicy() {
         padding: 20, borderRadius: 12, background: C.sageLight,
         border: `1px solid rgba(58,107,76,0.12)`,
       }}>
-        <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>3P Labs Private Limited</p>
+        <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>Walnutt</p>
         <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:privacy@walnutt.com" style={s.email}>privacy@walnutt.com</a></p>
         <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: walnutt.com</p>
       </div>

@@ -335,20 +335,25 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
           {/* Designation */}
           <div>
             <label style={labelStyle}>Designation <span style={{ color: C.gray400 }}>*</span></label>
-            <select
-              style={{ ...inputStyle, cursor: "pointer" }}
-              value={designation}
-              onChange={e => setDesignation(e.target.value)}
-            >
-              <option value="" disabled>Select your role</option>
-              <option>Founder / Co-Founder</option>
-              <option>CTO / VP Engineering</option>
-              <option>Engineering Manager</option>
-              <option>HR / Talent Acquisition</option>
-              <option>Technical Recruiter</option>
-              <option>Hiring Manager</option>
-              <option>Other</option>
-            </select>
+            <div style={{ position: "relative" }}>
+              <select
+                style={{ ...inputStyle, cursor: "pointer", appearance: "none", WebkitAppearance: "none", paddingRight: 40 }}
+                value={designation}
+                onChange={e => setDesignation(e.target.value)}
+              >
+                <option value="" disabled>Select your role</option>
+                <option>Founder / Co-Founder</option>
+                <option>CTO / VP Engineering</option>
+                <option>Engineering Manager</option>
+                <option>HR / Talent Acquisition</option>
+                <option>Technical Recruiter</option>
+                <option>Hiring Manager</option>
+                <option>Other</option>
+              </select>
+              <svg style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M3 5L7 9L11 5" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
 
           {/* Message */}

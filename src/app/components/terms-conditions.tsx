@@ -7,13 +7,13 @@ export function TermsConditions() {
       <div style={s.badge}>Legal</div>
       <h1 style={s.pageTitle}>Terms & Conditions</h1>
       <p style={s.meta}>
-        <strong style={s.strong}>Walnutt</strong> · Operated by 3P Labs Private Limited<br />
+        <strong style={s.strong}>Walnutt</strong><br />
         <strong style={s.strong}>Effective Date:</strong> 1 March 2026<br />
         <strong style={s.strong}>Last Updated:</strong> 28 February 2026
       </p>
 
       <p style={s.intro}>
-        These Terms and Conditions ("Terms") govern your access to and use of the Walnutt platform, website (walnutt.com), and related services (collectively, the "Platform") operated by 3P Labs Private Limited ("Walnutt," "we," "us," or "our"), a company incorporated under the laws of India.
+        These Terms and Conditions ("Terms") govern your access to and use of the Walnutt platform, website (walnutt.co), and related services (collectively, the "Platform") operated by Walnutt ("we," "us," or "our").
       </p>
       <p style={s.p}>
         By accessing or using the Platform, you agree to be bound by these Terms. If you do not agree, do not use the Platform.
@@ -134,7 +134,7 @@ export function TermsConditions() {
       <h2 style={s.h2}>7. Intellectual Property</h2>
 
       <h3 style={s.h3}>7.1 Walnutt's IP</h3>
-      <p style={s.p}>The Platform, including its design, code, AI models, assessment content, algorithms, branding, and all associated intellectual property, is owned by 3P Labs Private Limited. You may not copy, modify, distribute, sell, or create derivative works from any part of the Platform without our prior written consent.</p>
+      <p style={s.p}>The Platform, including its design, code, AI models, assessment content, algorithms, branding, and all associated intellectual property, is owned by Walnutt. You may not copy, modify, distribute, sell, or create derivative works from any part of the Platform without our prior written consent.</p>
 
       <h3 style={s.h3}>7.2 Your Content</h3>
       <ul style={s.ul}>
@@ -191,7 +191,7 @@ export function TermsConditions() {
 
       {/* 11 */}
       <h2 style={s.h2}>11. Indemnification</h2>
-      <p style={s.p}>You agree to indemnify and hold harmless 3P Labs Private Limited, its directors, officers, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising out of:</p>
+      <p style={s.p}>You agree to indemnify and hold harmless Walnutt, its directors, officers, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising out of:</p>
       <ul style={s.ul}>
         <li style={s.li}>Your violation of these Terms</li>
         <li style={s.li}>Your use of the Platform</li>
@@ -251,7 +251,7 @@ export function TermsConditions() {
         padding: 20, borderRadius: 12, background: C.sageLight,
         border: `1px solid rgba(58,107,76,0.12)`,
       }}>
-        <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>3P Labs Private Limited</p>
+        <p style={{ fontSize: 15, fontWeight: 600, color: C.black, margin: "0 0 4px" }}>Walnutt</p>
         <p style={{ fontSize: 14, color: C.gray800, margin: "0 0 2px" }}>Email: <a href="mailto:support@walnutt.com" style={s.email}>support@walnutt.com</a></p>
         <p style={{ fontSize: 14, color: C.gray800, margin: 0 }}>Website: walnutt.com</p>
       </div>
