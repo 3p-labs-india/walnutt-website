@@ -95,11 +95,12 @@ export function TypeWriter({ text, speed = 25, delay = 0, active }: { text: stri
   useEffect(() => {
     if (!active) { setShown(""); return; }
     setShown("");
+    let iv: ReturnType<typeof setInterval>;
     const timer = setTimeout(() => {
       let i = 0;
-      const iv = setInterval(() => { i++; setShown(text.slice(0, i)); if (i >= text.length) clearInterval(iv); }, speed);
+      iv = setInterval(() => { i++; setShown(text.slice(0, i)); if (i >= text.length) clearInterval(iv); }, speed);
     }, delay);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); clearInterval(iv); };
   }, [active, text, speed, delay]);
   return <span>{shown}{shown.length < text.length && active && <span style={{ opacity: 0.5 }}>|</span>}</span>;
 }
@@ -119,8 +120,9 @@ export function ScoreRing({ score, size = 48, sw = 3, delay = 0 }: { score: numb
   const [p, setP] = useState(0);
   useEffect(() => {
     setP(0);
-    const t = setTimeout(() => { let c = 0; const iv = setInterval(() => { c++; if (c >= score) { setP(score); clearInterval(iv); } else setP(c); }, 12); }, delay);
-    return () => clearTimeout(t);
+    let iv: ReturnType<typeof setInterval>;
+    const t = setTimeout(() => { let c = 0; iv = setInterval(() => { c++; if (c >= score) { setP(score); clearInterval(iv); } else setP(c); }, 12); }, delay);
+    return () => { clearTimeout(t); clearInterval(iv); };
   }, [score, delay]);
   const r = (size - sw * 2) / 2, circ = 2 * Math.PI * r, off = circ - (p / 100) * circ;
   return (
@@ -517,7 +519,7 @@ function FunnelCanvas() {
 
     // Initialize particles
     particlesRef.current = [];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 25; i++) {
       const p = spawnParticle();
       p.x = Math.random() * w * 0.7;
       particlesRef.current.push(p);
@@ -1418,8 +1420,31 @@ function GrowthCurveCanvas() {
 
     animRef.current = requestAnimationFrame(draw);
 
+    // Pause RAF when canvas scrolls off-screen or tab is hidden
+    const handleVisChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = 0;
+      } else if (!prefersReduced && !animRef.current) {
+        animRef.current = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisChange);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = 0;
+      } else if (!prefersReduced && !animRef.current) {
+        animRef.current = requestAnimationFrame(draw);
+      }
+    }, { threshold: 0 });
+    observer.observe(canvas);
+
     return () => {
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisChange);
+      observer.disconnect();
       cancelAnimationFrame(animRef.current);
     };
   }, []);

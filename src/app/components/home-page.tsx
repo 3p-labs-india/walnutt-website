@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { C, WalnuttLogo, ContactModal, PrimaryBtn, ModeSwitch, globalKeyframes } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
@@ -6,22 +6,12 @@ import { CompaniesPage } from "./companies-page";
 export function HomePage() {
   const [mode, setMode] = useState<"engineers" | "companies">("engineers");
   const [showModal, setShowModal] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const isE = mode === "engineers";
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap";
-    document.head.appendChild(link);
-    setTimeout(() => setLoaded(true), 100);
-  }, []);
 
   return (
     <div style={{
       background: C.bg, minHeight: "100vh",
       fontFamily: "'Inter', sans-serif",
-      opacity: loaded ? 1 : 0, transition: "opacity 0.3s",
     }}>
       <style>{globalKeyframes}</style>
 
@@ -43,7 +33,7 @@ export function HomePage() {
           </a>
 
           {/* Mode Switch */}
-          <ModeSwitch mode={mode} onChange={setMode} />
+          <ModeSwitch mode={mode} onChange={m => { setMode(m); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
 
           {/* CTA — hidden on mobile */}
           <div className="hidden md:block">
