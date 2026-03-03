@@ -228,7 +228,7 @@ export function EngineersPage() {
   const steps = [
     { label: "Assess", num: "01", title: "See yourself clearly.", desc: "Pick your target role. Our AI adapts in real-time, adjusting depth, difficulty, and focus based on how you respond. It doesn't just score you. It understands how you think through system design, architecture, debugging, and more. Get a readiness score across 10+ dimensions that's deeply personal, not one-size-fits-all.", mock: MockAssess },
     { label: "Build", num: "02", title: "Close the gaps with your AI mentor.", desc: "Your assessment unlocks a personal AI mentor that knows exactly where you stand. Submit your GitHub projects, explain your approach, and get targeted coaching. It builds a learning path around your weak spots: curated resources, practice problems, and projects that adapt as you improve.", mock: MockBuild },
-    { label: "Stand Out", num: "03", title: "Let your profile do the talking.", desc: "Your Walnutt profile is a verified skill map that shows what you can actually do. When you're ready, companies that value engineering depth find you. No cold applications. No keyword games.", mock: MockStandOut },
+    { label: "Stand Out", num: "03", title: "Let your profile do the talking.", desc: "Your Walnutt profile is a verified skill map that shows what you can actually do. When you're ready, companies that value engineering depth find you. No cold applications. No keyword games. If you're placed, Walnutt charges just 1% of your accepted salary. That's it.", mock: MockStandOut },
   ];
 
   const roleTags = ["SDE 1", "SDE 2", "SDE 3", "Backend", "Full-stack", "Applied AI"];

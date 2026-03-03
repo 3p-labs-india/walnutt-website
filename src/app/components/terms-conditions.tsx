@@ -9,7 +9,7 @@ export function TermsConditions() {
       <p style={s.meta}>
         <strong style={s.strong}>Walnutt</strong><br />
         <strong style={s.strong}>Effective Date:</strong> 1 March 2026<br />
-        <strong style={s.strong}>Last Updated:</strong> 28 February 2026
+        <strong style={s.strong}>Last Updated:</strong> 1 March 2026
       </p>
 
       <p style={s.intro}>
@@ -93,12 +93,13 @@ export function TermsConditions() {
       <h3 style={s.h3}>5.1 For Candidates</h3>
       <ul style={s.ul}>
         <li style={s.li}>The first assessment is free.</li>
+        <li style={s.li}>If you receive and accept a job offer facilitated through the Walnutt Platform, a placement fee of <strong style={s.strong}>1% of your accepted annual CTC (Fixed component)</strong> is charged to you. This fee is only applicable upon a confirmed, successful placement.</li>
         <li style={s.li}>Additional services or premium features may be offered at a cost. Pricing will be clearly communicated before any charges apply.</li>
       </ul>
 
       <h3 style={s.h3}>5.2 For Companies</h3>
       <ul style={s.ul}>
-        <li style={s.li}>Walnutt charges a success-based fee of <strong style={s.strong}>8–10% of the hired candidate's annual CTC</strong> (Cost to Company), payable upon successful hire through the Platform.</li>
+        <li style={s.li}>Walnutt charges a success-based placement fee upon a successful hire through the Platform. The exact fee structure is determined by a separate agreement between Walnutt and the Company.</li>
         <li style={s.li}>A "successful hire" means a candidate sourced or matched through the Walnutt Platform who accepts an offer of employment from the Company.</li>
         <li style={s.li}>Payment terms, invoicing, and any additional fees will be specified in a separate agreement or order form between Walnutt and the Company.</li>
         <li style={s.li}>If a hired candidate leaves the Company within 90 days of joining for reasons not attributable to the Company, Walnutt will provide one replacement search at no additional fee, subject to availability.</li>
