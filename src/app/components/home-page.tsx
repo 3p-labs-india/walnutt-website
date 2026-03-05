@@ -40,6 +40,7 @@ export function HomePage() {
             <PrimaryBtn
               href={isE ? "https://app.walnutt.co" : undefined}
               onClick={isE ? undefined : () => setShowModal(true)}
+              eventName={isE ? "cta_clicked_nav" : undefined}
               style={{ padding: "8px 20px", fontSize: 13 }}
             >
               {isE ? "Take the Assessment" : "Post a Role"}
