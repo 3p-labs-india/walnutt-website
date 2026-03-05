@@ -252,7 +252,7 @@ export function EngineersPage() {
               Assess your real skills. Build with an AI mentor.<br />
               <span style={{ color: C.sage, fontWeight: 600 }}>Stand out to companies that matter.</span>
             </p>
-            <PrimaryBtn href="https://app.walnutt.co">Take the Free Assessment →</PrimaryBtn>
+            <PrimaryBtn href="https://app.walnutt.co" eventName="cta_clicked_hero">Take the Free Assessment →</PrimaryBtn>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 16 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.sage }} />
@@ -361,7 +361,7 @@ export function EngineersPage() {
 
           <FadeSection className="text-center mt-12">
             <div style={{ textAlign: "center", marginTop: 48 }}>
-              <PrimaryBtn href="https://app.walnutt.co">Start Your Assessment →</PrimaryBtn>
+              <PrimaryBtn href="https://app.walnutt.co" eventName="cta_clicked_bottom">Start Your Assessment →</PrimaryBtn>
             </div>
           </FadeSection>
         </div>
