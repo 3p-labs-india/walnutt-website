@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
+import { buildAppUrl, trackEvent } from "../../lib/analytics";
 import { X, CheckCircle } from "lucide-react";
 
 // ═══ DESIGN TOKENS ═══
@@ -211,7 +212,7 @@ export function ModeSwitch({ mode, onChange }: { mode: "engineers" | "companies"
 }
 
 // ═══ PRIMARY BUTTON ═══
-export function PrimaryBtn({ children, onClick, style: s, href }: { children: ReactNode; onClick?: () => void; style?: React.CSSProperties; href?: string }) {
+export function PrimaryBtn({ children, onClick, style: s, href, eventName }: { children: ReactNode; onClick?: () => void; style?: React.CSSProperties; href?: string; eventName?: string }) {
   const [hover, setHover] = useState(false);
   const styles: React.CSSProperties = {
     display: "inline-block", padding: "14px 28px", borderRadius: 10, border: "none", cursor: "pointer",
@@ -221,13 +222,26 @@ export function PrimaryBtn({ children, onClick, style: s, href }: { children: Re
     boxShadow: hover ? "0 4px 12px rgba(58,107,76,0.25)" : "none",
     transition: "all 180ms ease-out", ...s,
   };
-  if (href) {
+
+  // Build final href — forward UTM params when linking to app.walnutt.co
+  const isAppLink = href?.includes("app.walnutt.co");
+  const resolvedHref = isAppLink ? buildAppUrl() : href;
+
+  function handleClick() {
+    if (eventName) trackEvent(eventName, { href: resolvedHref });
+    onClick?.();
+  }
+
+  if (resolvedHref) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={styles}>{children}</a>
+      <a href={resolvedHref} target="_blank" rel="noopener noreferrer"
+        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+        onClick={() => { if (eventName) trackEvent(eventName, { href: resolvedHref }); }}
+        style={styles}>{children}</a>
     );
   }
   return (
-    <button onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={styles}>{children}</button>
+    <button onClick={handleClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={styles}>{children}</button>
   );
 }
 
