@@ -1,0 +1,44 @@
+# Walnutt
+
+> Walnutt is a career accelerator for software engineering students in India. We help students become job-ready in an AI world — with clarity, mentorship, and real work to show.
+
+## What We Do
+
+Walnutt gives software engineering students a structured path from college to career. Instead of generic preparation, we start with where the student wants to go — and build the curriculum, mentorship, and portfolio from there.
+
+### How It Works
+
+1. **Assess** — Students take a 30-minute free assessment to see themselves clearly: their strengths, gaps, and realistic career options.
+2. **Build** — An AI-powered mentor that never clocks out guides students through a personalized learning path focused on building over consuming.
+3. **Prove** — Students finish with real, demonstrable work — not just certificates — that shows up in interviews and job applications.
+
+## Who We Serve
+
+- Software engineering students across Indian colleges
+- Students who want clarity about their career direction, not just more content to consume
+- Engineers preparing for their first job in an AI-first world
+
+## Our Belief
+
+- Destination before curriculum
+- Building over consuming
+- Engineering in an AI-first world
+
+## Tagline
+
+"Tell us where you want to go. We build the path from there."
+
+## Get Started
+
+Free 30-minute assessment at https://walnutt.co
+
+## Company
+
+Walnutt is a product by 3P Labs Private Limited.
+Contact: hello@walnutt.co
+
+## Pages
+
+- Homepage: https://walnutt.co/
+- Privacy Policy: https://walnutt.co/privacy
+- Terms & Conditions: https://walnutt.co/terms
