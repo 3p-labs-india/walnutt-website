@@ -92,9 +92,8 @@ export function TermsConditions() {
 
       <h3 style={s.h3}>5.1 For Candidates</h3>
       <ul style={s.ul}>
-        <li style={s.li}>The first assessment is free.</li>
-        <li style={s.li}>If you receive and accept a job offer facilitated through the Walnutt Platform, a placement fee of <strong style={s.strong}>1% of your accepted annual CTC (Fixed component)</strong> is charged to you. This fee is only applicable upon a confirmed, successful placement.</li>
-        <li style={s.li}>Additional services or premium features may be offered at a cost. Pricing will be clearly communicated before any charges apply.</li>
+        <li style={s.li}>Walnutt is <strong style={s.strong}>completely free for candidates</strong>. There are no placement fees, no success fees, and no hidden charges at any stage.</li>
+        <li style={s.li}>Additional services or premium features may be offered at a cost in the future. Pricing will be clearly communicated before any charges apply.</li>
       </ul>
 
       <h3 style={s.h3}>5.2 For Companies</h3>
