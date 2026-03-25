@@ -41,7 +41,7 @@ Contact: hello@walnutt.co
 ## Pages
 
 - Homepage (Engineers): https://walnutt.co/
-- Homepage (Companies): https://walnutt.co/ (toggle to Companies)
+- Homepage (Companies): https://walnutt.co/companies
 - Privacy Policy: https://walnutt.co/privacy
 - Terms & Conditions: https://walnutt.co/terms
 - Engineer Assessment: https://app.walnutt.co/

@@ -39,10 +39,8 @@ function WalnuttWordmark({ color = "#3A6B4C", size = 0.75 }: { color?: string; s
   );
 }
 
-export function HomePage() {
-  const [mode, setMode] = useState<"engineers" | "companies">(() => {
-    try { return (localStorage.getItem("walnutt_mode") as "engineers" | "companies") || "engineers"; } catch { return "engineers"; }
-  });
+function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers" | "companies" }) {
+  const [mode, setMode] = useState<"engineers" | "companies">(initialMode);
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const isE = mode === "engineers";
@@ -50,7 +48,11 @@ export function HomePage() {
   const handleToggle = (newMode: "engineers" | "companies") => {
     setMode(newMode);
     setMenuOpen(false);
-    try { localStorage.setItem("walnutt_mode", newMode); } catch {}
+    // Update URL when toggling
+    const targetPath = newMode === "companies" ? "/companies" : "/";
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(null, "", targetPath);
+    }
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
@@ -76,7 +78,7 @@ export function HomePage() {
           ? "You've applied everywhere. Now let companies apply to you."
           : "No upfront fees. We earn our place on your team the same way your engineer does. One month at a time."
         } />
-        <link rel="canonical" href="https://walnutt.co/" />
+        <link rel="canonical" href={isE ? "https://walnutt.co/" : "https://walnutt.co/companies"} />
       </Helmet>
       <style>{globalKeyframes}</style>
 
@@ -117,15 +119,25 @@ export function HomePage() {
               }}>Companies</span>
             </div>
 
-            {/* Hamburger */}
-            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
+            {/* CTA - Desktop */}
+            <a className="hidden md:block" href={isE ? buildAppUrl("/") : undefined} target={isE ? "_blank" : undefined} rel={isE ? "noopener noreferrer" : undefined} onClick={isE ? undefined : () => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setShowModal(true); }} style={{
+              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+              background: "none", padding: 0, border: "none",
+              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
+              textDecoration: "none", display: "inline-block",
+            }}>
+              {isE ? "Start your conversation →" : "Connect with us →"}
+            </a>
+
+            {/* Hamburger - Mobile */}
+            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          {/* Dropdown menu */}
+          {/* Mobile menu */}
           {menuOpen && (
-            <div style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+            <div className="md:hidden" style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
               {isE ? (
                 <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
                   width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
@@ -177,14 +189,23 @@ export function HomePage() {
               }}>Companies</span>
             </div>
 
-            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
+            <a className="hidden md:block" onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setShowModal(true); }} style={{
+              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+              background: "none", padding: 0, border: "none",
+              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
+              textDecoration: "none", display: "inline-block",
+            }}>
+              Connect with us →
+            </a>
+
+            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
           {menuOpen && (
-            <div style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
-              <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setMenuOpen(false); setShowModal(true); }} style={{
+            <div className="md:hidden" style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav_mobile" }); setMenuOpen(false); setShowModal(true); }} style={{
                 width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
                 background: "none", padding: "12px 0", border: "none", cursor: "pointer",
                 textDecoration: "none", display: "block", textAlign: "center",
@@ -300,3 +321,7 @@ function FooterLink({ label, href, onClick }: { label: string; href?: string; on
   if (onClick) return <button style={s} onClick={onClick} onMouseEnter={onEnter} onMouseLeave={onLeave}>{label}</button>;
   return <a href={href} style={s} onMouseEnter={onEnter} onMouseLeave={onLeave}>{label}</a>;
 }
+
+// Route exports
+export function HomePage() { return <HomePageInner initialMode="engineers" />; }
+export function CompaniesHomePage() { return <HomePageInner initialMode="companies" />; }
