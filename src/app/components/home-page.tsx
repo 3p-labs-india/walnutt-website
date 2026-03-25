@@ -96,8 +96,8 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
               <WalnuttWordmark color={V.sage} size={0.9} />
             </div>
 
-            {/* Center - Toggle (always visible) */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Center - Toggle (desktop only) */}
+            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
               <span onClick={() => handleToggle("engineers")} style={{
                 fontFamily: font.body, fontSize: 13, fontWeight: 600,
                 color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
@@ -138,6 +138,16 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
           {/* Mobile menu */}
           {menuOpen && (
             <div className="md:hidden" style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, paddingBottom: 16, borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
+                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+                }}>
+                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
+                </div>
+                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
+              </div>
               {isE ? (
                 <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
                   width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
@@ -167,7 +177,7 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
               <WalnuttWordmark color={V.sage} size={0.9} />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
               <span onClick={() => handleToggle("engineers")} style={{
                 fontFamily: font.body, fontSize: 13, fontWeight: 600,
                 color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
@@ -205,6 +215,16 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
 
           {menuOpen && (
             <div className="md:hidden" style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, paddingBottom: 16, borderBottom: "1px solid rgba(0,0,0,0.04)" }}>
+                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
+                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+                }}>
+                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
+                </div>
+                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
+              </div>
               <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav_mobile" }); setMenuOpen(false); setShowModal(true); }} style={{
                 width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
                 background: "none", padding: "12px 0", border: "none", cursor: "pointer",
