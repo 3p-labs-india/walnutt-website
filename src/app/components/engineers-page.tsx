@@ -710,7 +710,7 @@ function WhoItsFor() {
 
         <FadeIn delay={300}>
           <div style={{ textAlign: "center", marginTop: 36 }}>
-            <SageBtn href="https://app.walnutt.co" eventName="cta_clicked_whosfor">Have a Conversation →</SageBtn>
+            <SageBtn href="/" eventName="cta_clicked_whosfor">Have a Conversation →</SageBtn>
           </div>
         </FadeIn>
       </div>
@@ -796,7 +796,7 @@ export function EngineersPage() {
         {/* CTA with breathing glow */}
         <div style={{ position: "relative", ...animStyle(400) }}>
           <div style={{ position: "absolute", inset: -10, borderRadius: 38, animation: "ctaGlow 3s ease-in-out infinite", pointerEvents: "none" }} />
-          <SageBtn href="https://app.walnutt.co" eventName="cta_clicked_hero">Have a Conversation →</SageBtn>
+          <SageBtn href="/" eventName="cta_clicked_hero">Have a Conversation →</SageBtn>
         </div>
 
         {/* Single italic line */}
@@ -855,12 +855,12 @@ export function EngineersPage() {
 
         <div style={{ maxWidth: 640, margin: "0 auto", position: "relative" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "white", letterSpacing: "-0.03em", marginBottom: 12, lineHeight: 1.15 }}>
+            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "white", letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
               You've been ready.{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>The right companies just don't know it yet.</span>
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
-            <SageBtn href="https://app.walnutt.co" eventName="cta_clicked_closing" variant="white">Have a Conversation →</SageBtn>
+            <SageBtn href="/" eventName="cta_clicked_closing" variant="white">Have a Conversation →</SageBtn>
           </FadeIn>
         </div>
       </section>

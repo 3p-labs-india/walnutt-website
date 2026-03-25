@@ -104,7 +104,7 @@ export function HomePage() {
             </div>
 
             {/* CTA - Desktop */}
-            <a className="hidden md:block" href={isE ? "https://app.walnutt.co" : undefined} target={isE ? "_blank" : undefined} rel={isE ? "noopener noreferrer" : undefined} onClick={isE ? undefined : scrollToCTA} style={{
+            <a className="hidden md:block" href={isE ? buildAppUrl("/") : undefined} target={isE ? "_blank" : undefined} rel={isE ? "noopener noreferrer" : undefined} onClick={isE ? undefined : scrollToCTA} style={{
               fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
               background: "none", padding: 0, border: "none",
               cursor: "pointer", transition: "all 200ms", flexShrink: 0,
@@ -136,7 +136,7 @@ export function HomePage() {
                 <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
               </div>
               {isE ? (
-                <a href="https://app.walnutt.co" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
+                <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
                   width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
                   background: "none", padding: "12px 0", border: "none", cursor: "pointer",
                   textDecoration: "none", display: "block", textAlign: "center",
