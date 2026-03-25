@@ -273,53 +273,74 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const sage = "#3A6B4C";
+  const fBody = "'DM Sans', sans-serif";
+  const fSerif = "'Fraunces', serif";
+  const fMono = "'JetBrains Mono', monospace";
+
   const inputStyle: React.CSSProperties = {
-    width: "100%", padding: "10px 14px", borderRadius: 10,
-    border: `1.5px solid ${C.gray300}`, fontSize: 14, fontFamily: "'Inter', sans-serif",
-    color: C.black, outline: "none", boxSizing: "border-box", background: C.white,
+    width: "100%", padding: "12px 16px", borderRadius: 10,
+    border: "1px solid rgba(58,107,76,0.12)", fontSize: 14, fontFamily: fBody,
+    color: "#1A2420", outline: "none", boxSizing: "border-box",
+    background: "rgba(255,255,255,0.6)", transition: "border-color 200ms, box-shadow 200ms",
   };
 
   const labelStyle: React.CSSProperties = {
-    display: "block", fontSize: 13, fontWeight: 600, marginBottom: 6, color: C.black,
+    display: "block", fontSize: 12, fontWeight: 500, marginBottom: 6,
+    color: "rgba(26,36,32,0.5)", fontFamily: fBody,
   };
 
-  async function handleSubmit() {
+  const focusInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    e.currentTarget.style.borderColor = sage;
+    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(58,107,76,0.1)";
+  };
+  const blurInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    e.currentTarget.style.borderColor = "rgba(58,107,76,0.12)";
+    e.currentTarget.style.boxShadow = "none";
+  };
+
+  function handleSubmit() {
     if (loading) return;
-    setError(null);
     setLoading(true);
-    try {
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({ name, email, mobile, company, designation, message }),
-      });
-      setSubmitted(true);
-    } catch {
-      setError("Something went wrong. Please try again or email us directly.");
-    } finally {
-      setLoading(false);
-    }
+    trackEvent("form_submitted_connect", { company, designation });
+    // Fire and forget — show success immediately
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({ name, email, mobile, company, designation, message }),
+    }).catch(() => {});
+    setSubmitted(true);
+    setLoading(false);
   }
 
   if (submitted) {
     return (
       <div onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-        style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)" }}>
+        style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.3)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
         <div style={{
-          width: "100%", maxWidth: 420, borderRadius: 20, padding: 48, background: C.white,
-          boxShadow: "0 24px 80px rgba(0,0,0,0.12)", textAlign: "center",
+          width: "100%", maxWidth: 420, borderRadius: 24, padding: 48,
+          background: "rgba(237,244,239,0.72)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset",
+          textAlign: "center",
         }}>
           <div style={{
-            width: 64, height: 64, borderRadius: "50%", background: C.sageLight,
+            width: 52, height: 52, borderRadius: "50%", background: "rgba(58,107,76,0.1)",
             display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
           }}>
-            <CheckCircle size={32} color={C.sage} />
+            <CheckCircle size={26} color={sage} />
           </div>
-          <h3 style={{ fontSize: 22, fontWeight: 700, color: C.black, margin: "0 0 8px" }}>We've got it!</h3>
-          <p style={{ fontSize: 15, color: C.gray500, lineHeight: 1.6, margin: "0 0 24px" }}>
-            Thanks for reaching out. Our team will review your details and get back to you within 24 hours.
+          <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: "#1A2420", margin: "0 0 8px" }}>We've got it.</h3>
+          <p style={{ fontFamily: fBody, fontSize: 15, color: "rgba(26,36,32,0.5)", lineHeight: 1.6, margin: "0 0 28px" }}>
+            Our team will review your details and get back to you within 24 hours.
           </p>
-          <PrimaryBtn onClick={onClose} style={{ width: "100%" }}>Close</PrimaryBtn>
+          <button onClick={onClose} style={{
+            fontFamily: fBody, fontSize: 14, fontWeight: 600, color: "#fff",
+            background: "#1A2420", padding: "12px 32px", borderRadius: 30, border: "none",
+            cursor: "pointer", transition: "all 200ms", width: "100%",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = sage; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#1A2420"; }}
+          >Close</button>
         </div>
       </div>
     );
@@ -327,58 +348,63 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-      style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", overflowY: "auto" }}>
+      style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.3)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", overflowY: "auto" }}>
       <div style={{
-        width: "100%", maxWidth: 460, borderRadius: 20, padding: 32, background: C.white,
-        boxShadow: "0 24px 80px rgba(0,0,0,0.12)", margin: "auto",
+        width: "100%", maxWidth: 480, borderRadius: 24, padding: "36px 32px",
+        background: "rgba(237,244,239,0.72)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+        boxShadow: "0 32px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset",
+        margin: "auto",
       }}>
         {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 8 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 4 }}>
           <div>
-            <h3 style={{ fontSize: 22, fontWeight: 700, color: C.black, margin: 0 }}>Get in touch</h3>
-            <p style={{ fontSize: 14, color: C.gray500, margin: "6px 0 0", lineHeight: 1.5 }}>
-              Tell us what you're looking for and we'll reach out within 24 hours.
+            <p style={{ fontFamily: fMono, fontSize: 10, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: sage, marginBottom: 8, opacity: 0.6 }}>CONNECT WITH US</p>
+            <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: "#1A2420", margin: 0 }}>Let's talk.</h3>
+            <p style={{ fontFamily: fBody, fontSize: 14, color: "rgba(26,36,32,0.45)", margin: "8px 0 0", lineHeight: 1.5 }}>
+              Tell us who you need. We'll get back within 24 hours.
             </p>
           </div>
-          <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", fontSize: 18, color: C.gray400, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <X size={18} />
+          <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: 8, border: "none", background: "rgba(0,0,0,0.05)", cursor: "pointer", color: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 200ms" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(0,0,0,0.1)"; e.currentTarget.style.color = "rgba(0,0,0,0.6)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(0,0,0,0.05)"; e.currentTarget.style.color = "rgba(0,0,0,0.3)"; }}
+          >
+            <X size={16} />
           </button>
         </div>
 
         {/* Form */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 20 }}>
-          {/* Name + Email row */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 24 }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label style={labelStyle}>Full Name <span style={{ color: C.gray400 }}>*</span></label>
-              <input style={inputStyle} placeholder="Rahul Sharma" value={name} onChange={e => setName(e.target.value)} />
+              <label style={labelStyle}>Full Name *</label>
+              <input style={inputStyle} placeholder="Rahul Sharma" value={name} onChange={e => setName(e.target.value)} onFocus={focusInput} onBlur={blurInput} />
             </div>
             <div>
-              <label style={labelStyle}>Work Email <span style={{ color: C.gray400 }}>*</span></label>
-              <input type="email" style={inputStyle} placeholder="rahul@company.com" value={email} onChange={e => setEmail(e.target.value)} />
+              <label style={labelStyle}>Work Email *</label>
+              <input type="email" style={inputStyle} placeholder="rahul@company.com" value={email} onChange={e => setEmail(e.target.value)} onFocus={focusInput} onBlur={blurInput} />
             </div>
           </div>
 
-          {/* Mobile + Company row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label style={labelStyle}>Mobile Number</label>
-              <input type="tel" style={inputStyle} placeholder="+91 98765 43210" value={mobile} onChange={e => setMobile(e.target.value)} />
+              <input type="tel" style={inputStyle} placeholder="+91 98765 43210" value={mobile} onChange={e => setMobile(e.target.value)} onFocus={focusInput} onBlur={blurInput} />
             </div>
             <div>
-              <label style={labelStyle}>Company <span style={{ color: C.gray400 }}>*</span></label>
-              <input style={inputStyle} placeholder="Your company name" value={company} onChange={e => setCompany(e.target.value)} />
+              <label style={labelStyle}>Company *</label>
+              <input style={inputStyle} placeholder="Your company name" value={company} onChange={e => setCompany(e.target.value)} onFocus={focusInput} onBlur={blurInput} />
             </div>
           </div>
 
-          {/* Designation */}
           <div>
-            <label style={labelStyle}>Designation <span style={{ color: C.gray400 }}>*</span></label>
+            <label style={labelStyle}>Your Role *</label>
             <div style={{ position: "relative" }}>
               <select
                 style={{ ...inputStyle, cursor: "pointer", appearance: "none", WebkitAppearance: "none", paddingRight: 40 }}
                 value={designation}
                 onChange={e => setDesignation(e.target.value)}
+                onFocus={focusInput as any}
+                onBlur={blurInput as any}
               >
                 <option value="" disabled>Select your role</option>
                 <option>Founder / Co-Founder</option>
@@ -390,31 +416,37 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
                 <option>Other</option>
               </select>
               <svg style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M3 5L7 9L11 5" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 5L7 9L11 5" stroke="rgba(0,0,0,0.25)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
           </div>
 
-          {/* Message */}
           <div>
-            <label style={labelStyle}>Message / Requirement <span style={{ color: C.gray400 }}>*</span></label>
+            <label style={labelStyle}>What are you looking for? *</label>
             <textarea rows={3} style={{ ...inputStyle, resize: "none" }}
-              placeholder="Tell us what you're hiring for, or ask us anything..."
-              value={message} onChange={e => setMessage(e.target.value)} />
+              placeholder="Tell us about the role, your team, or just say hello..."
+              value={message} onChange={e => setMessage(e.target.value)}
+              onFocus={focusInput as any} onBlur={blurInput as any} />
           </div>
 
-          {/* Error */}
           {error && (
             <p style={{ fontSize: 13, color: "#DC2626", margin: 0, textAlign: "center" }}>{error}</p>
           )}
 
-          {/* Submit */}
-          <PrimaryBtn onClick={handleSubmit} style={{ width: "100%", marginTop: 4, textAlign: "center", opacity: loading ? 0.7 : 1 }}>
-            {loading ? "Submitting…" : "Submit"}
-          </PrimaryBtn>
+          <button onClick={handleSubmit} style={{
+            width: "100%", fontFamily: fBody, fontSize: 15, fontWeight: 600, color: "#fff",
+            background: "#1A2420", padding: "14px 24px", borderRadius: 30, border: "none",
+            cursor: "pointer", transition: "all 200ms", marginTop: 4,
+            opacity: loading ? 0.7 : 1,
+          }}
+            onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = sage; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#1A2420"; e.currentTarget.style.transform = "translateY(0)"; }}
+          >
+            {loading ? "Sending..." : "Connect with us →"}
+          </button>
 
-          <p style={{ fontSize: 12, color: C.gray400, textAlign: "center", margin: 0, lineHeight: 1.5 }}>
-            We'll review your details and connect you with the right person on our team.
+          <p style={{ fontFamily: fBody, fontSize: 12, color: "rgba(26,36,32,0.3)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
+            No pitch deck. Just a real conversation.
           </p>
         </div>
       </div>

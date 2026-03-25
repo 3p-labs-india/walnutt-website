@@ -1,53 +1,230 @@
 import { useState } from "react";
-import { C, WalnuttLogo, ContactModal, PrimaryBtn, ModeSwitch, globalKeyframes } from "./shared";
+import { Menu, X } from "lucide-react";
+import { C, WalnuttLogo, ContactModal, globalKeyframes } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
+import { buildAppUrl, trackEvent } from "../../lib/analytics";
+
+// V2 tokens
+const V = {
+  bg: "#F4F8F5",
+  sage: "#3A6B4C",
+  sageHover: "#2E5540",
+  sageTint: "#DFF0E5",
+  sageMid: "#5A8F6E",
+  ink: "#1A2420",
+  subtitle: "#6B7D74",
+  muted: "#A8B8B0",
+  border: "#D8E6DC",
+  dark: "#1A2420",
+};
+const font = {
+  body: "'DM Sans', sans-serif",
+  heading: "'Bricolage Grotesque', sans-serif",
+  serif: "'Fraunces', serif",
+};
+
+// ═══ V1-STYLE WALNUTT LOGO (hexagon + chevrons + text) ═══
+function WalnuttWordmark({ color = "#3A6B4C", size = 0.75 }: { color?: string; size?: number }) {
+  const w = Math.round(140 * size);
+  const h = Math.round(36 * size);
+  return (
+    <svg width={w} height={h} viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z" stroke={color} strokeWidth="4" fill="none" strokeLinejoin="round" />
+      <path d="M34 24 L20 40 L34 56" stroke={color} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M46 24 L60 40 L46 56" stroke={color} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <text x="88" y="53" fontFamily="'DM Sans',sans-serif" fontWeight="800" fontSize="36" fill={color} letterSpacing="-0.8">Walnutt</text>
+    </svg>
+  );
+}
 
 export function HomePage() {
-  const [mode, setMode] = useState<"engineers" | "companies">("engineers");
+  const [mode, setMode] = useState<"engineers" | "companies">(() => {
+    return window.location.hash === "#companies" ? "companies" : "engineers";
+  });
   const [showModal, setShowModal] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const isE = mode === "engineers";
+
+  const handleToggle = (newMode: "engineers" | "companies") => {
+    setMode(newMode);
+    setMenuOpen(false);
+    window.location.hash = newMode === "companies" ? "companies" : "";
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const scrollToCTA = () => {
+    const id = isE ? "engineer-cta" : "company-cta";
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div style={{
-      background: C.bg, minHeight: "100vh",
-      fontFamily: "'Inter', sans-serif",
+      background: isE ? V.bg : C.bg, minHeight: "100vh",
+      fontFamily: isE ? font.body : "'Inter', sans-serif",
     }}>
       <style>{globalKeyframes}</style>
 
       {/* ═══ STICKY NAV ═══ */}
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        padding: "12px 24px",
-        background: "rgba(250,251,249,0.92)",
-        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
-      }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          {/* Logo */}
-          <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <WalnuttLogo size={24} />
-            <span style={{ fontWeight: 800, fontSize: 17, color: C.black, letterSpacing: "-0.02em" }}>
-              Walnutt
-            </span>
-          </a>
+      {isE ? (
+        <nav style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+          background: "rgba(244,248,245,0.85)",
+          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(0,0,0,0.04)",
+        }}>
+          <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }} className="md:px-12">
+            {/* Logo */}
+            <div style={{ cursor: "pointer", flexShrink: 0 }} onClick={() => handleToggle("engineers")}>
+              <WalnuttWordmark color={V.sage} size={0.9} />
+            </div>
 
-          {/* Mode Switch */}
-          <ModeSwitch mode={mode} onChange={m => { setMode(m); window.scrollTo({ top: 0, behavior: "instant" }); }} />
+            {/* Center - Toggle */}
+            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
+              <span onClick={() => handleToggle("engineers")} style={{
+                fontFamily: font.body, fontSize: 13, fontWeight: 600,
+                color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
+              }}>Engineers</span>
+              <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                width: 44, height: 24, borderRadius: 12,
+                background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+              }}>
+                <div style={{
+                  width: 18, height: 18, borderRadius: "50%", background: "white",
+                  position: "absolute", top: 3, left: !isE ? 23 : 3,
+                  transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+                }} />
+              </div>
+              <span onClick={() => handleToggle("companies")} style={{
+                fontFamily: font.body, fontSize: 13, fontWeight: 600,
+                color: !isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
+              }}>Companies</span>
+            </div>
 
-          {/* CTA — hidden on mobile */}
-          <div className="hidden md:block">
-            <PrimaryBtn
-              href={isE ? "https://app.walnutt.co" : undefined}
-              onClick={isE ? undefined : () => setShowModal(true)}
-              eventName={isE ? "cta_clicked_nav" : undefined}
-              style={{ padding: "8px 20px", fontSize: 13 }}
+            {/* CTA - Desktop */}
+            <a className="hidden md:block" href={isE ? "https://app.walnutt.co" : undefined} target={isE ? "_blank" : undefined} rel={isE ? "noopener noreferrer" : undefined} onClick={isE ? undefined : scrollToCTA} style={{
+              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+              background: "none", padding: 0, border: "none",
+              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
+              textDecoration: "none", display: "inline-block",
+            }}
+              onMouseEnter={e => { (e.currentTarget.querySelector('.nav-arrow') as HTMLElement).style.transform = "translateX(4px)"; }}
+              onMouseLeave={e => { (e.currentTarget.querySelector('.nav-arrow') as HTMLElement).style.transform = "translateX(0)"; }}
             >
-              {isE ? "Take the Assessment" : "Post a Role"}
-            </PrimaryBtn>
+              {isE ? <>Start your conversation <span className="nav-arrow" style={{ display: "inline-block", transition: "transform 200ms" }}>→</span></> : "Tell Us Who You Need"}
+            </a>
+
+            {/* Hamburger - Mobile */}
+            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink }}>
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
-        </div>
-      </nav>
+
+          {/* Mobile menu */}
+          {menuOpen && (
+            <div className="md:hidden" style={{ padding: "16px 24px 24px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, padding: "8px 0" }}>
+                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
+                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+                }}>
+                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
+                </div>
+                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
+              </div>
+              {isE ? (
+                <a href="https://app.walnutt.co" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
+                  width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+                  background: "none", padding: "12px 0", border: "none", cursor: "pointer",
+                  textDecoration: "none", display: "block", textAlign: "center",
+                }}>Start your conversation →</a>
+              ) : (
+                <button onClick={() => { setMenuOpen(false); scrollToCTA(); }} style={{
+                  width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: "white",
+                  background: V.ink, padding: "12px 22px", borderRadius: 30, border: "none", cursor: "pointer",
+                }}>Tell Us Who You Need</button>
+              )}
+            </div>
+          )}
+        </nav>
+      ) : (
+        /* Companies mode — same nav style */
+        <nav style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+          background: "rgba(244,248,245,0.85)",
+          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(0,0,0,0.04)",
+        }}>
+          <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }} className="md:px-12">
+            {/* Logo */}
+            <div style={{ cursor: "pointer", flexShrink: 0 }} onClick={() => handleToggle("companies")}>
+              <WalnuttWordmark color={V.sage} size={0.9} />
+            </div>
+
+            {/* Center - Toggle */}
+            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
+              <span onClick={() => handleToggle("engineers")} style={{
+                fontFamily: font.body, fontSize: 13, fontWeight: 600,
+                color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
+              }}>Engineers</span>
+              <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                width: 44, height: 24, borderRadius: 12,
+                background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+              }}>
+                <div style={{
+                  width: 18, height: 18, borderRadius: "50%", background: "white",
+                  position: "absolute", top: 3, left: !isE ? 23 : 3,
+                  transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+                }} />
+              </div>
+              <span onClick={() => handleToggle("companies")} style={{
+                fontFamily: font.body, fontSize: 13, fontWeight: 600,
+                color: !isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
+              }}>Companies</span>
+            </div>
+
+            {/* CTA - Desktop */}
+            <a className="hidden md:block" onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setShowModal(true); }} style={{
+              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+              background: "none", padding: 0, border: "none",
+              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
+              textDecoration: "none", display: "inline-block",
+            }}>
+              Connect with us →
+            </a>
+
+            {/* Hamburger - Mobile */}
+            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink }}>
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile menu */}
+          {menuOpen && (
+            <div className="md:hidden" style={{ padding: "16px 24px 24px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, padding: "8px 0" }}>
+                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
+                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
+                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
+                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
+                }}>
+                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
+                </div>
+                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
+              </div>
+              <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav_mobile" }); setMenuOpen(false); setShowModal(true); }} style={{
+                width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+                background: "none", padding: "12px 0", border: "none", cursor: "pointer",
+                textDecoration: "none", display: "block", textAlign: "center",
+              }}>Connect with us →</a>
+            </div>
+          )}
+        </nav>
+      )}
 
       {/* ═══ PAGE CONTENT ═══ */}
       <main>
@@ -55,31 +232,103 @@ export function HomePage() {
       </main>
 
       {/* ═══ FOOTER ═══ */}
-      <footer style={{ padding: "28px 24px", borderTop: `1px solid ${C.gray300}` }}>
-        <div className="max-w-[1120px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <WalnuttLogo size={18} />
-            <span style={{ fontWeight: 800, fontSize: 14, color: C.black }}>Walnutt</span>
-            <span style={{ fontSize: 12, color: C.gray400, marginLeft: 4 }}>© 2026 Walnutt</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <a href="/privacy" style={{ fontSize: 12, color: C.gray400, textDecoration: "none", transition: "color 150ms" }}
-              onMouseEnter={e => (e.currentTarget.style.color = C.sage)}
-              onMouseLeave={e => (e.currentTarget.style.color = C.gray400)}>
-              Privacy Policy
-            </a>
-            <a href="/terms" style={{ fontSize: 12, color: C.gray400, textDecoration: "none", transition: "color 150ms" }}
-              onMouseEnter={e => (e.currentTarget.style.color = C.sage)}
-              onMouseLeave={e => (e.currentTarget.style.color = C.gray400)}>
-              Terms & Conditions
-            </a>
-            <span style={{ fontSize: 12, color: C.gray400 }}>hello@walnutt.co</span>
-          </div>
-        </div>
-      </footer>
+      {isE ? (
+        <footer style={{ background: V.dark, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px" }} className="md:px-12">
+            {/* Top row */}
+            <div className="flex flex-col md:flex-row justify-between gap-10 mb-12">
+              <WalnuttWordmark color="white" size={0.75} />
+              <div className="grid grid-cols-2 md:flex gap-10 md:gap-16">
+                <div>
+                  <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 12 }}>Product</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <FooterLink label="For Engineers" onClick={() => handleToggle("engineers")} />
+                    <FooterLink label="For Companies" onClick={() => handleToggle("companies")} />
+                    <FooterLink label="The Conversation" href="#" />
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 12 }}>Legal</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <FooterLink label="Privacy Policy" href="/privacy" />
+                    <FooterLink label="Terms" href="/terms" />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      {/* ═══ UNIFIED CONTACT MODAL ═══ */}
+            {/* Contact */}
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 20, marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.35)" }}>Contact us:</span>
+              <a href="mailto:hello@walnutt.co" style={{ fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 200ms" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.8)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}>
+                hello@walnutt.co
+              </a>
+            </div>
+
+            {/* Bottom */}
+            <div className="flex flex-col md:flex-row justify-between gap-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24 }}>
+              <span style={{ fontFamily: font.body, fontSize: 12, color: "rgba(255,255,255,0.2)" }}>© 2026 3P Labs Private Limited</span>
+              <span style={{ fontFamily: font.body, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.35)" }}>
+                One conversation. Every signal that matters.
+              </span>
+            </div>
+          </div>
+        </footer>
+      ) : (
+        <footer style={{ background: V.dark, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px" }} className="md:px-12">
+            <div className="flex flex-col md:flex-row justify-between gap-10 mb-12">
+              <WalnuttWordmark color="white" size={0.75} />
+              <div className="grid grid-cols-2 md:flex gap-10 md:gap-16">
+                <div>
+                  <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 12 }}>Product</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <FooterLink label="For Engineers" onClick={() => handleToggle("engineers")} />
+                    <FooterLink label="For Companies" onClick={() => handleToggle("companies")} />
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 12 }}>Legal</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <FooterLink label="Privacy Policy" href="/privacy" />
+                    <FooterLink label="Terms" href="/terms" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 20, marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.35)" }}>Contact us:</span>
+              <a href="mailto:hello@walnutt.co" style={{ fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 200ms" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.8)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}>
+                hello@walnutt.co
+              </a>
+            </div>
+            <div className="flex flex-col md:flex-row justify-between gap-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24 }}>
+              <span style={{ fontFamily: font.body, fontSize: 12, color: "rgba(255,255,255,0.2)" }}>© 2026 3P Labs Private Limited</span>
+              <span style={{ fontFamily: font.body, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.35)" }}>
+                Hire now. Pay later.
+              </span>
+            </div>
+          </div>
+        </footer>
+      )}
+
       {showModal && <ContactModal onClose={() => setShowModal(false)} />}
     </div>
   );
+}
+
+function FooterLink({ label, href, onClick }: { label: string; href?: string; onClick?: () => void }) {
+  const s: React.CSSProperties = {
+    fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)",
+    textDecoration: "none", transition: "color 200ms", cursor: "pointer", background: "none", border: "none", padding: 0, textAlign: "left",
+  };
+  const onEnter = (e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)");
+  const onLeave = (e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)");
+
+  if (onClick) return <button style={s} onClick={onClick} onMouseEnter={onEnter} onMouseLeave={onLeave}>{label}</button>;
+  return <a href={href} style={s} onMouseEnter={onEnter} onMouseLeave={onLeave}>{label}</a>;
 }
