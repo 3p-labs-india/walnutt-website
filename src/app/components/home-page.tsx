@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { C, WalnuttLogo, ContactModal, globalKeyframes } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
@@ -40,7 +41,7 @@ function WalnuttWordmark({ color = "#3A6B4C", size = 0.75 }: { color?: string; s
 
 export function HomePage() {
   const [mode, setMode] = useState<"engineers" | "companies">(() => {
-    return window.location.hash === "#companies" ? "companies" : "engineers";
+    try { return (localStorage.getItem("walnutt_mode") as "engineers" | "companies") || "engineers"; } catch { return "engineers"; }
   });
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +50,7 @@ export function HomePage() {
   const handleToggle = (newMode: "engineers" | "companies") => {
     setMode(newMode);
     setMenuOpen(false);
-    window.location.hash = newMode === "companies" ? "companies" : "";
+    try { localStorage.setItem("walnutt_mode", newMode); } catch {}
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
@@ -64,6 +65,19 @@ export function HomePage() {
       background: isE ? V.bg : C.bg, minHeight: "100vh",
       fontFamily: isE ? font.body : "'Inter', sans-serif",
     }}>
+      <Helmet>
+        <title>{isE ? "Walnutt — One conversation. The right companies find you." : "Walnutt — Hire now. Pay later."}</title>
+        <meta name="description" content={isE
+          ? "You've applied everywhere. Now let companies apply to you. One conversation, a verified skill profile, and companies that hire for depth find you."
+          : "No upfront fees. We earn our place on your team the same way your engineer does. One month at a time."
+        } />
+        <meta property="og:title" content={isE ? "Walnutt — One conversation. The right companies find you." : "Walnutt — Hire now. Pay later."} />
+        <meta property="og:description" content={isE
+          ? "You've applied everywhere. Now let companies apply to you."
+          : "No upfront fees. We earn our place on your team the same way your engineer does. One month at a time."
+        } />
+        <link rel="canonical" href="https://walnutt.co/" />
+      </Helmet>
       <style>{globalKeyframes}</style>
 
       {/* ═══ STICKY NAV ═══ */}
@@ -80,8 +94,8 @@ export function HomePage() {
               <WalnuttWordmark color={V.sage} size={0.9} />
             </div>
 
-            {/* Center - Toggle */}
-            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
+            {/* Center - Toggle (always visible) */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span onClick={() => handleToggle("engineers")} style={{
                 fontFamily: font.body, fontSize: 13, fontWeight: 600,
                 color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
@@ -103,55 +117,33 @@ export function HomePage() {
               }}>Companies</span>
             </div>
 
-            {/* CTA - Desktop */}
-            <a className="hidden md:block" href={isE ? buildAppUrl("/") : undefined} target={isE ? "_blank" : undefined} rel={isE ? "noopener noreferrer" : undefined} onClick={isE ? undefined : scrollToCTA} style={{
-              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
-              background: "none", padding: 0, border: "none",
-              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
-              textDecoration: "none", display: "inline-block",
-            }}
-              onMouseEnter={e => { (e.currentTarget.querySelector('.nav-arrow') as HTMLElement).style.transform = "translateX(4px)"; }}
-              onMouseLeave={e => { (e.currentTarget.querySelector('.nav-arrow') as HTMLElement).style.transform = "translateX(0)"; }}
-            >
-              {isE ? <>Start your conversation <span className="nav-arrow" style={{ display: "inline-block", transition: "transform 200ms" }}>→</span></> : "Tell Us Who You Need"}
-            </a>
-
-            {/* Hamburger - Mobile */}
-            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink }}>
+            {/* Hamburger */}
+            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          {/* Mobile menu */}
+          {/* Dropdown menu */}
           {menuOpen && (
-            <div className="md:hidden" style={{ padding: "16px 24px 24px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, padding: "8px 0" }}>
-                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
-                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
-                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
-                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
-                }}>
-                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
-                </div>
-                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
-              </div>
+            <div style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
               {isE ? (
                 <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{
-                  width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+                  width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
                   background: "none", padding: "12px 0", border: "none", cursor: "pointer",
                   textDecoration: "none", display: "block", textAlign: "center",
                 }}>Start your conversation →</a>
               ) : (
-                <button onClick={() => { setMenuOpen(false); scrollToCTA(); }} style={{
-                  width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: "white",
-                  background: V.ink, padding: "12px 22px", borderRadius: 30, border: "none", cursor: "pointer",
-                }}>Tell Us Who You Need</button>
+                <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setMenuOpen(false); setShowModal(true); }} style={{
+                  width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
+                  background: "none", padding: "12px 0", border: "none", cursor: "pointer",
+                  textDecoration: "none", display: "block", textAlign: "center",
+                }}>Connect with us →</a>
               )}
             </div>
           )}
         </nav>
       ) : (
-        /* Companies mode — same nav style */
+        /* Companies mode — identical nav structure */
         <nav style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           background: "rgba(244,248,245,0.85)",
@@ -159,13 +151,11 @@ export function HomePage() {
           borderBottom: "1px solid rgba(0,0,0,0.04)",
         }}>
           <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }} className="md:px-12">
-            {/* Logo */}
             <div style={{ cursor: "pointer", flexShrink: 0 }} onClick={() => handleToggle("companies")}>
               <WalnuttWordmark color={V.sage} size={0.9} />
             </div>
 
-            {/* Center - Toggle */}
-            <div className="hidden md:flex" style={{ alignItems: "center", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span onClick={() => handleToggle("engineers")} style={{
                 fontFamily: font.body, fontSize: 13, fontWeight: 600,
                 color: isE ? V.ink : V.subtitle, transition: "color 250ms", cursor: "pointer", userSelect: "none",
@@ -187,37 +177,15 @@ export function HomePage() {
               }}>Companies</span>
             </div>
 
-            {/* CTA - Desktop */}
-            <a className="hidden md:block" onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setShowModal(true); }} style={{
-              fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
-              background: "none", padding: 0, border: "none",
-              cursor: "pointer", transition: "all 200ms", flexShrink: 0,
-              textDecoration: "none", display: "inline-block",
-            }}>
-              Connect with us →
-            </a>
-
-            {/* Hamburger - Mobile */}
-            <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink }}>
+            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: V.ink, flexShrink: 0 }}>
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          {/* Mobile menu */}
           {menuOpen && (
-            <div className="md:hidden" style={{ padding: "16px 24px 24px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16, padding: "8px 0" }}>
-                <span onClick={() => handleToggle("engineers")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Engineers</span>
-                <div onClick={() => handleToggle(isE ? "companies" : "engineers")} style={{
-                  width: 44, height: 24, borderRadius: 12, background: !isE ? V.sage : "rgba(26,36,32,0.15)",
-                  position: "relative", cursor: "pointer", transition: "background 300ms", flexShrink: 0,
-                }}>
-                  <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 3, left: !isE ? 23 : 3, transition: "left 300ms cubic-bezier(.4,0,.2,1)", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
-                </div>
-                <span onClick={() => handleToggle("companies")} style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600, color: !isE ? V.ink : V.subtitle, cursor: "pointer", userSelect: "none" }}>Companies</span>
-              </div>
-              <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav_mobile" }); setMenuOpen(false); setShowModal(true); }} style={{
-                width: "100%", fontFamily: font.body, fontSize: 14, fontWeight: 600, color: V.sage,
+            <div style={{ padding: "16px 24px 20px", background: "rgba(244,248,245,0.95)", borderTop: "1px solid rgba(0,0,0,0.04)" }}>
+              <a onClick={() => { trackEvent("cta_clicked_nav_connect", { location: "companies_nav" }); setMenuOpen(false); setShowModal(true); }} style={{
+                width: "100%", fontFamily: font.body, fontSize: 15, fontWeight: 600, color: V.sage,
                 background: "none", padding: "12px 0", border: "none", cursor: "pointer",
                 textDecoration: "none", display: "block", textAlign: "center",
               }}>Connect with us →</a>

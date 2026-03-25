@@ -1,36 +1,37 @@
 # Walnutt
 
-> Walnutt is a career accelerator for software engineering students in India. We help students become job-ready in an AI world — with clarity, mentorship, and real work to show.
+> Walnutt is a two-sided platform that connects deeply assessed engineers with companies that hire for depth. For engineers: one conversation, a verified skill profile, and the right companies find you. For companies: hire now, pay later.
 
-## What We Do
+## For Engineers
 
-Walnutt gives software engineering students a structured path from college to career. Instead of generic preparation, we start with where the student wants to go — and build the curriculum, mentorship, and portfolio from there.
+Walnutt replaces the broken application cycle. Engineers have one adaptive AI-powered conversation (under 30 minutes, five rounds: your story, system design, debugging, situational thinking, culture fit) and receive a detailed skill profile. Companies that hire for depth find them. No applications. No resume filters. Free, always.
 
 ### How It Works
 
-1. **Assess** — Students take a 30-minute free assessment to see themselves clearly: their strengths, gaps, and realistic career options.
-2. **Build** — An AI-powered mentor that never clocks out guides students through a personalized learning path focused on building over consuming.
-3. **Prove** — Students finish with real, demonstrable work — not just certificates — that shows up in interviews and job applications.
+1. **Have a Conversation** — Five adaptive rounds that explore how you think, not just what you know. Every follow-up is personalized to your answers.
+2. **Get Your Profile** — A full narrative of your engineering strengths, growth areas, and what to sharpen next.
+3. **Get Found** — Your verified profile goes to companies matched to your skills, style, and career goals. You decide who sees your data.
+
+## For Companies
+
+Walnutt is the hiring partner with skin in the game. No upfront fees. Companies pay in monthly installments over 12 months, starting only after the engineer has been in the seat for 30 days. If the hire doesn't work out, Walnutt stops getting paid.
+
+### The Model
+
+- Zero upfront cost
+- Monthly payments over 12 months
+- First payment after Day 30
+- Revenue tied to retention, not placement
+- Replacement at Walnutt's cost if the match doesn't hold
+
+### What Makes It Different
+
+Walnutt maps the team's technical DNA and culture, then matches against deeply assessed engineers. Not resume-to-JD matching. Human-to-team matching.
 
 ## Who We Serve
 
-- Software engineering students across Indian colleges
-- Students who want clarity about their career direction, not just more content to consume
-- Engineers preparing for their first job in an AI-first world
-
-## Our Belief
-
-- Destination before curriculum
-- Building over consuming
-- Engineering in an AI-first world
-
-## Tagline
-
-"Tell us where you want to go. We build the path from there."
-
-## Get Started
-
-Free 30-minute assessment at https://walnutt.co
+- **Engineers**: Backend, Full-Stack, Applied AI. Freshers to experienced. Anyone who'd rather show what they can do than list it on a resume.
+- **Companies**: Founders, CTOs, engineering managers, and talent leaders building teams that last. From first engineering hire to IPO and beyond.
 
 ## Company
 
@@ -39,6 +40,8 @@ Contact: hello@walnutt.co
 
 ## Pages
 
-- Homepage: https://walnutt.co/
+- Homepage (Engineers): https://walnutt.co/
+- Homepage (Companies): https://walnutt.co/ (toggle to Companies)
 - Privacy Policy: https://walnutt.co/privacy
 - Terms & Conditions: https://walnutt.co/terms
+- Engineer Assessment: https://app.walnutt.co/
