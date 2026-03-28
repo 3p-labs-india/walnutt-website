@@ -68,15 +68,15 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
       fontFamily: isE ? font.body : "'Inter', sans-serif",
     }}>
       <Helmet>
-        <title>{isE ? "Walnutt — One conversation. The right companies find you." : "Walnutt — Hire now. Pay later."}</title>
+        <title>{isE ? "Walnutt | One conversation. The right companies find you." : "Walnutt | The hiring infrastructure your engineering team deserves"}</title>
         <meta name="description" content={isE
           ? "You've applied everywhere. Now let companies apply to you. One conversation, a verified skill profile, and companies that hire for depth find you."
-          : "No upfront fees. We earn our place on your team the same way your engineer does. One month at a time."
+          : "Stop running a hiring process. Start meeting engineers who are ready to build with you. We evaluate how they code, think, debug, and build with AI."
         } />
-        <meta property="og:title" content={isE ? "Walnutt — One conversation. The right companies find you." : "Walnutt — Hire now. Pay later."} />
+        <meta property="og:title" content={isE ? "Walnutt | One conversation. The right companies find you." : "Walnutt | The hiring infrastructure your engineering team deserves"} />
         <meta property="og:description" content={isE
           ? "You've applied everywhere. Now let companies apply to you."
-          : "No upfront fees. We earn our place on your team the same way your engineer does. One month at a time."
+          : "Stop running a hiring process. Start meeting engineers who are ready to build with you. Deep evaluation on real work, real thinking, real judgment."
         } />
         <link rel="canonical" href={isE ? "https://walnutt.co/" : "https://walnutt.co/companies"} />
       </Helmet>

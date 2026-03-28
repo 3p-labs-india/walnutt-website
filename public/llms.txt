@@ -1,6 +1,6 @@
 # Walnutt
 
-> Walnutt is a two-sided platform that connects deeply assessed engineers with companies that hire for depth. For engineers: one conversation, a verified skill profile, and the right companies find you. For companies: hire now, pay later.
+> Walnutt is a two-sided platform that connects deeply assessed engineers with companies that hire for depth. For engineers: one conversation, a verified skill profile, and the right companies find you. For companies: the hiring infrastructure your engineering team deserves.
 
 ## For Engineers
 
@@ -14,19 +14,24 @@ Walnutt replaces the broken application cycle. Engineers have one adaptive AI-po
 
 ## For Companies
 
-Walnutt is the hiring partner with skin in the game. No upfront fees. Companies pay in monthly installments over 12 months, starting only after the engineer has been in the seat for 30 days. If the hire doesn't work out, Walnutt stops getting paid.
+Walnutt is the hiring infrastructure your engineering team deserves. We evaluate engineers on real work: what they've built, how they think, how they debug, how they code with AI, how they'd act on your team, and their culture and mindset. Companies stop running a hiring process and start meeting engineers who are ready to build with them.
 
-### The Model
+### The Walnutt Experience
 
-- Zero upfront cost
+We go deep across six dimensions:
+1. What they've built: projects, commits, architectural choices over time
+2. How they think: system design problems with no right answer
+3. How they debug: how they narrow the search space
+4. How they code with AI: whether they use AI as a lever or a crutch
+5. How they'd act on your team: real engineering scenarios like conflicting PRs, production bugs, pushing back on decisions
+6. Culture and mindset: how they collaborate, take feedback, and fit into a team's rhythm
+
+### Skin in the Game
+
+- Zero upfront fees
 - Monthly payments over 12 months
-- First payment after Day 30
-- Revenue tied to retention, not placement
-- Replacement at Walnutt's cost if the match doesn't hold
-
-### What Makes It Different
-
-Walnutt maps the team's technical DNA and culture, then matches against deeply assessed engineers. Not resume-to-JD matching. Human-to-team matching.
+- First payment after 30 days in the seat
+- If the hire doesn't work out, Walnutt stops earning
 
 ## Who We Serve
 

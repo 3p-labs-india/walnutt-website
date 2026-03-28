@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { buildAppUrl, trackEvent } from "../../lib/analytics";
-import { AudioLines, ShieldCheck, Radar, SlidersHorizontal, Sparkles, Heart, Briefcase, PenLine, User } from "lucide-react";
+import { Briefcase, PenLine, User } from "lucide-react";
 
 // ═══ V2 DESIGN TOKENS ═══
 const V = {
@@ -87,7 +87,7 @@ function DarkStripTypewriter() {
 
   return (
     <div ref={ref} style={{ background: V.dark, padding: "44px 48px", textAlign: "center" }}>
-      <p style={{ fontFamily: font.serif, fontWeight: 400, fontSize: "clamp(17px, 2vw, 21px)", letterSpacing: "-0.01em", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
+      <p style={{ fontFamily: font.heading, fontWeight: 400, fontSize: "clamp(17px, 2vw, 21px)", letterSpacing: "-0.01em", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
         <span style={{ color: "rgba(255,255,255,0.55)" }}>{shown.slice(0, part1End)}</span>
         <span style={{ color: "#fff", fontWeight: 700 }}>{shown.slice(part1End, part2End)}</span>
         <span style={{ color: "rgba(255,255,255,0.35)" }}>{shown.slice(part2End)}</span>
@@ -252,14 +252,14 @@ function ConversationMockup({ active }: { active: boolean }) {
                 strokeDasharray={`${circumference}`} strokeDashoffset={`${circumference * (1 - timerFraction)}`}
                 strokeLinecap="round" transform="rotate(-90 14 14)" style={{ transition: "stroke-dashoffset 1s linear" }} />
               <text x="14" y="14.5" textAnchor="middle" dominantBaseline="middle"
-                style={{ fontFamily: font.mono, fontSize: 7, fill: "white", fontWeight: 500 }}>{timerSecs}</text>
+                style={{ fontFamily: font.mono, fontSize: 7, fill: "white", fontWeight: 500 }}>{mins}:{secs.toString().padStart(2, "0")}</text>
             </svg>
             <span style={{ fontFamily: font.body, fontSize: 13, fontWeight: 600 }}>{mins}:{secs.toString().padStart(2, "0")} remaining</span>
           </div>
         </div>
 
         {/* Question */}
-        <h3 style={{ fontFamily: font.serif, fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 800, color: V.ink, lineHeight: 1.25, margin: "0 0 10px", letterSpacing: "-0.02em" }}>
+        <h3 style={{ fontFamily: font.heading, fontSize: "clamp(20px, 2.5vw, 28px)", fontWeight: 800, color: V.ink, lineHeight: 1.25, margin: "0 0 10px", letterSpacing: "-0.02em" }}>
           Tell us about the most interesting engineering problem you tackled recently.
         </h3>
         <p style={{ fontFamily: font.body, fontSize: 14, color: V.subtitle, margin: "0 0 24px", lineHeight: 1.5 }}>
@@ -316,7 +316,7 @@ function ReportMockup({ active }: { active: boolean }) {
 
       <div style={{ maxHeight: 460, overflow: "hidden", position: "relative" }}>
         <div style={{ transform: `translateY(-${scrollY}px)`, transition: "transform 25ms linear", padding: "32px 28px 40px" }}>
-          <h3 style={{ fontFamily: font.serif, fontSize: 24, fontWeight: 800, color: V.ink, textAlign: "center", margin: "0 0 16px" }}>Here's what stood out.</h3>
+          <h3 style={{ fontFamily: font.heading, fontSize: 24, fontWeight: 800, color: V.ink, textAlign: "center", margin: "0 0 16px" }}>Here's what stood out.</h3>
           <p style={{ fontFamily: font.body, fontSize: 14, color: V.subtitle, lineHeight: 1.7, textAlign: "center", maxWidth: 480, margin: "0 auto 32px" }}>
             Your <em style={{ color: V.sage, fontStyle: "italic" }}>Redis migration story</em> revealed someone who thinks in systems before solutions. You instinctively mapped failure modes before writing the first line. When the whiteboard pushed you toward scale, your <em style={{ color: V.sage, fontStyle: "italic", textDecoration: "underline" }}>CRDT reasoning</em> showed genuine depth.
           </p>
@@ -416,15 +416,15 @@ function MatchMockup({ active }: { active: boolean }) {
             <div style={{
               width: 44, height: 44, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center",
               background: `linear-gradient(135deg, ${V.sage}, ${V.sageMid})`, color: "#fff",
-              fontFamily: font.serif, fontSize: 20, fontWeight: 700,
+              fontFamily: font.heading, fontSize: 20, fontWeight: 700,
             }}>R</div>
             <div>
-              <p style={{ fontFamily: font.serif, fontSize: 20, fontWeight: 700, color: V.ink, margin: 0 }}>Razorpay</p>
+              <p style={{ fontFamily: font.heading, fontSize: 20, fontWeight: 700, color: V.ink, margin: 0 }}>Razorpay</p>
               <p style={{ fontFamily: font.body, fontSize: 12, color: V.muted, margin: 0 }}>Series D · Bangalore · 400+ engineers</p>
             </div>
           </div>
 
-          <p style={{ fontFamily: font.serif, fontSize: 18, fontWeight: 800, color: V.ink, margin: "0 0 2px" }}>Backend Engineer</p>
+          <p style={{ fontFamily: font.heading, fontSize: 18, fontWeight: 800, color: V.ink, margin: "0 0 2px" }}>Backend Engineer</p>
           <p style={{ fontFamily: font.body, fontSize: 13, color: V.subtitle, margin: "0 0 20px" }}>Payments Infrastructure</p>
 
           <p style={{ fontFamily: font.mono, fontSize: 10, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: V.muted, margin: "0 0 10px" }}>WHY YOU MATCHED</p>
@@ -521,8 +521,8 @@ function HowItWorks() {
         <FadeIn>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <div style={{ fontFamily: font.body, fontSize: 12, fontWeight: 600, letterSpacing: 2.5, color: V.sage, textTransform: "uppercase", marginBottom: 12 }}>HOW IT WORKS</div>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(30px, 4vw, 48px)", color: V.ink, letterSpacing: "-0.03em" }}>
-              From invisible to{" "}<span style={{ fontStyle: "italic", color: V.sage }}>undeniable</span>.
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(30px, 4vw, 48px)", color: V.ink, letterSpacing: "-0.03em" }}>
+              From invisible to{" "}<span style={{ fontStyle: "italic", color: V.sage }}>undeniable</span>
             </h2>
           </div>
         </FadeIn>
@@ -539,7 +539,7 @@ function HowItWorks() {
                   }}>
                     <div style={{ fontFamily: font.mono, fontSize: 11, color: i === activeStep ? V.sage : V.muted, marginBottom: 4 }}>{step.number}</div>
                     <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.5, color: i === activeStep ? V.sage : V.muted, marginBottom: 6 }}>{step.label}</div>
-                    <div style={{ fontFamily: font.serif, fontWeight: 700, fontSize: 20, color: i === activeStep ? V.ink : V.muted, letterSpacing: "-0.01em", marginBottom: i === activeStep ? 10 : 0 }}>{step.title}</div>
+                    <div style={{ fontFamily: font.heading, fontWeight: 700, fontSize: 20, color: i === activeStep ? V.ink : V.muted, letterSpacing: "-0.01em", marginBottom: i === activeStep ? 10 : 0 }}>{step.title}</div>
                     <div style={{ fontFamily: font.body, fontSize: 14, color: i === activeStep ? V.subtitle : V.muted, lineHeight: 1.6, maxHeight: i === activeStep ? 200 : 0, overflow: "hidden", transition: "max-height 400ms, color 400ms" }}>{step.description}</div>
                     {/* Progress bar */}
                     {i === activeStep && (
@@ -559,7 +559,7 @@ function HowItWorks() {
                   }}>
                     <div style={{ fontFamily: font.mono, fontSize: 11, color: i === activeStep ? V.sage : V.muted }}>{step.number}</div>
                     <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.5, color: i === activeStep ? V.sage : V.muted, marginBottom: 4 }}>{step.label}</div>
-                    <div style={{ fontFamily: font.serif, fontWeight: 700, fontSize: 17, color: i === activeStep ? V.ink : V.muted, letterSpacing: "-0.01em" }}>{step.title}</div>
+                    <div style={{ fontFamily: font.heading, fontWeight: 700, fontSize: 17, color: i === activeStep ? V.ink : V.muted, letterSpacing: "-0.01em" }}>{step.title}</div>
                   </div>
                 ))}
               </div>
@@ -579,14 +579,132 @@ function HowItWorks() {
   );
 }
 
-// ═══ WHY WALNUTT — 6 VALUE PROPS ═══
+// ═══ WHY WALNUTT — 6 VALUE PROPS (SVG illustrations) ═══
+
+function ConversationSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Chat bubbles — adaptive conversation */}
+      <rect x="20" y="10" width="90" height="24" rx="12" stroke={V.sageMid} strokeWidth="1.2" opacity="0.3" />
+      <line x1="32" y1="22" x2="80" y2="22" stroke={V.sageMid} strokeWidth="1.5" opacity="0.2" />
+      <rect x="90" y="40" width="90" height="24" rx="12" stroke={V.sageMid} strokeWidth="1.2" opacity="0.4" />
+      <line x1="102" y1="52" x2="155" y2="52" stroke={V.sageMid} strokeWidth="1.5" opacity="0.25" />
+      {/* Follow-up arrow curving to next bubble */}
+      <path d="M65 34 Q75 38 90 40" stroke={V.sageMid} strokeWidth="1" opacity="0.3" fill="none" strokeDasharray="3 3" />
+      <rect x="30" y="70" width="110" height="14" rx="7" stroke={V.sageMid} strokeWidth="1.2" opacity="0.5" />
+      <line x1="42" y1="77" x2="120" y2="77" stroke={V.sageMid} strokeWidth="1.5" opacity="0.3" />
+      {/* Adaptive dot */}
+      <circle cx="135" cy="52" r="3" fill={V.sageMid} opacity="0.5" />
+      <path d="M138 52 Q145 60 140 70" stroke={V.sageMid} strokeWidth="1" opacity="0.3" fill="none" strokeDasharray="3 3" />
+    </svg>
+  );
+}
+
+function GitHubSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Contribution grid */}
+      {[0,1,2,3,4,5,6,7,8,9].map(col =>
+        [0,1,2,3,4].map(row => (
+          <rect key={`${col}-${row}`} x={25 + col * 16} y={10 + row * 16} width="11" height="11" rx="2"
+            fill={V.sageMid} opacity={[0.08, 0.15, 0.25, 0.4, 0.55][[3,1,0,2,4,1,3,0,2,4][col] % 5]} />
+        ))
+      )}
+      {/* Verified badge */}
+      <circle cx="185" cy="45" r="12" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
+      <path d="M180 45 L183 48 L190 41" stroke={V.sageMid} strokeWidth="1.8" opacity="0.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function FiveDimensionsSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Pentagon with 5 points — radar chart */}
+      <polygon points="100,12 145,38 130,78 70,78 55,38" stroke={V.sageMid} strokeWidth="1" opacity="0.15" fill="none" />
+      <polygon points="100,25 132,42 122,70 78,70 68,42" stroke={V.sageMid} strokeWidth="1" opacity="0.25" fill="none" />
+      {/* Filled shape (score) */}
+      <polygon points="100,20 140,40 125,75 72,68 60,38" fill={V.sageMid} opacity="0.08" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
+      {/* Dimension dots */}
+      <circle cx="100" cy="20" r="3" fill={V.sageMid} opacity="0.5" />
+      <circle cx="140" cy="40" r="3" fill={V.sageMid} opacity="0.5" />
+      <circle cx="125" cy="75" r="3" fill={V.sageMid} opacity="0.5" />
+      <circle cx="72" cy="68" r="3" fill={V.sageMid} opacity="0.5" />
+      <circle cx="60" cy="38" r="3" fill={V.sageMid} opacity="0.5" />
+      {/* Labels */}
+      <text x="100" y="8" fontFamily="'JetBrains Mono'" fontSize="6" fill="rgba(255,255,255,0.2)" textAnchor="middle">story</text>
+      <text x="152" y="40" fontFamily="'JetBrains Mono'" fontSize="6" fill="rgba(255,255,255,0.2)">design</text>
+      <text x="132" y="84" fontFamily="'JetBrains Mono'" fontSize="6" fill="rgba(255,255,255,0.2)">debug</text>
+      <text x="42" y="84" fontFamily="'JetBrains Mono'" fontSize="6" fill="rgba(255,255,255,0.2)">situational</text>
+      <text x="32" y="40" fontFamily="'JetBrains Mono'" fontSize="6" fill="rgba(255,255,255,0.2)">culture</text>
+    </svg>
+  );
+}
+
+function OneMatchSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Multiple candidates faded */}
+      <circle cx="40" cy="45" r="10" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+      <circle cx="70" cy="45" r="10" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+      <circle cx="100" cy="45" r="10" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+      {/* Arrow pointing to the one */}
+      <path d="M115 45 L140 45" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
+      <path d="M136 41 L140 45 L136 49" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
+      {/* The one match — highlighted */}
+      <circle cx="160" cy="45" r="14" stroke={V.sageMid} strokeWidth="2" opacity="0.6" />
+      <circle cx="160" cy="42" r="4" fill={V.sageMid} opacity="0.4" />
+      <path d="M153 52 Q160 57 167 52" stroke={V.sageMid} strokeWidth="1.2" opacity="0.4" fill="none" />
+      {/* Your choice indicator */}
+      <text x="160" y="72" fontFamily="'JetBrains Mono'" fontSize="7" fill={V.sageMid} opacity="0.4" textAnchor="middle">you decide</text>
+    </svg>
+  );
+}
+
+function ReportSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Document outline */}
+      <rect x="55" y="5" width="90" height="80" rx="8" stroke={V.sageMid} strokeWidth="1.2" opacity="0.25" />
+      {/* Content lines */}
+      <line x1="68" y1="20" x2="110" y2="20" stroke={V.sageMid} strokeWidth="2" opacity="0.3" />
+      <line x1="68" y1="32" x2="130" y2="32" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+      <line x1="68" y1="40" x2="125" y2="40" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+      {/* Strength bar */}
+      <rect x="68" y="52" width="60" height="5" rx="2.5" fill={V.sageMid} opacity="0.3" />
+      <rect x="68" y="52" width="45" height="5" rx="2.5" fill={V.sageMid} opacity="0.5" />
+      {/* Growth bar */}
+      <rect x="68" y="62" width="60" height="5" rx="2.5" fill={V.sageMid} opacity="0.15" />
+      <rect x="68" y="62" width="30" height="5" rx="2.5" fill="#D4803A" opacity="0.4" />
+      {/* Sparkle */}
+      <path d="M130 15 L132 11 L134 15 L138 17 L134 19 L132 23 L130 19 L126 17 Z" fill={V.sageMid} opacity="0.3" />
+    </svg>
+  );
+}
+
+function FreeSVG() {
+  return (
+    <svg width="100%" height="90" viewBox="0 0 200 90" fill="none">
+      {/* Price tag crossed out */}
+      <rect x="40" y="30" width="50" height="30" rx="6" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
+      <text x="65" y="50" fontFamily="'JetBrains Mono'" fontSize="12" fill="rgba(255,255,255,0.15)" textAnchor="middle">$$$</text>
+      <line x1="38" y1="62" x2="92" y2="28" stroke="rgba(255,100,100,0.3)" strokeWidth="1.5" />
+      {/* Free / heart */}
+      <circle cx="140" cy="45" r="18" stroke={V.sageMid} strokeWidth="1.5" opacity="0.35" />
+      <path d="M132 42 C132 36 140 34 140 40 C140 34 148 36 148 42 C148 50 140 54 140 54 C140 54 132 50 132 42Z" fill={V.sageMid} opacity="0.3" />
+      {/* Zero line */}
+      <text x="140" y="72" fontFamily="'JetBrains Mono'" fontSize="7" fill={V.sageMid} opacity="0.4" textAnchor="middle">always free</text>
+    </svg>
+  );
+}
+
 const whyItems = [
-  { icon: AudioLines, title: "Real conversation, not a quiz", desc: "Adaptive follow-ups based on your actual answers. No multiple choice. No trick questions." },
-  { icon: ShieldCheck, title: "GitHub verified", desc: "We see your actual work. Commits, contributions, and the projects you've shipped." },
-  { icon: Radar, title: "Five dimensions, one conversation", desc: "System design, debugging, situational thinking, culture, and your story. All in under 30 minutes." },
-  { icon: SlidersHorizontal, title: "One match at a time. You decide", desc: "No spam. No mass applications. You see the company, the role, and why you matched before anything is shared." },
-  { icon: Sparkles, title: "A report worth reading", desc: "A full narrative of your strengths, growth areas, and what to sharpen next. Valuable even if you're not job hunting." },
-  { icon: Heart, title: "Completely free for engineers", desc: "No placement fees. No hidden charges. No catch. Just have a conversation." },
+  { visual: <ConversationSVG />, title: "Real conversation, not a quiz", desc: "Adaptive follow-ups based on your actual answers. No multiple choice. No trick questions." },
+  { visual: <GitHubSVG />, title: "GitHub verified", desc: "We see your actual work. Commits, contributions, and the projects you've shipped." },
+  { visual: <FiveDimensionsSVG />, title: "Five dimensions, one conversation", desc: "System design, debugging, situational thinking, culture, and your story. All in under 30 minutes." },
+  { visual: <OneMatchSVG />, title: "One match at a time. You decide", desc: "No spam. No mass applications. You see the company, the role, and why you matched before anything is shared." },
+  { visual: <ReportSVG />, title: "A report worth reading", desc: "A full narrative of your strengths, growth areas, and what to sharpen next. Valuable even if you're not job hunting." },
+  { visual: <FreeSVG />, title: "Completely free for engineers", desc: "No placement fees. No hidden charges. No catch. Just have a conversation." },
 ];
 
 function WhyWalnutt() {
@@ -596,17 +714,16 @@ function WhyWalnutt() {
         <FadeIn>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ fontFamily: font.body, fontSize: 12, fontWeight: 600, letterSpacing: 2.5, color: V.sageMid, textTransform: "uppercase", marginBottom: 12 }}>WHY WALNUTT</div>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(28px, 3.5vw, 42px)", color: "white", letterSpacing: "-0.03em", maxWidth: 680, margin: "0 auto", lineHeight: 1.15 }}>
-              A hiring system that actually{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>gets engineers</span>.
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 3.5vw, 42px)", color: "white", letterSpacing: "-0.03em", maxWidth: 680, margin: "0 auto", lineHeight: 1.15 }}>
+              A hiring system that actually{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>understands engineers</span>
             </h2>
           </div>
         </FadeIn>
         <FadeIn delay={200}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ maxWidth: 960, margin: "0 auto" }}>
-            {whyItems.map((item, i) => {
-              const Icon = item.icon;
-              return <WhyCard key={i} icon={<Icon size={20} strokeWidth={1.8} />} title={item.title} desc={item.desc} />;
-            })}
+            {whyItems.map((item, i) => (
+              <WhyCard key={i} visual={item.visual} title={item.title} desc={item.desc} />
+            ))}
           </div>
         </FadeIn>
       </div>
@@ -614,25 +731,30 @@ function WhyWalnutt() {
   );
 }
 
-function WhyCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
-  const [hover, setHover] = useState(false);
+function WhyCard({ visual, title, desc }: { visual: React.ReactNode; title: string; desc: string }) {
   return (
-    <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{
-      background: hover ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
-      borderRadius: 16, padding: "28px 28px",
-      border: `1px solid ${hover ? "rgba(90,143,110,0.4)" : "rgba(255,255,255,0.06)"}`,
-      transform: hover ? "translateY(-2px)" : "translateY(0)",
-      transition: "all 300ms cubic-bezier(0.16,1,0.3,1)", cursor: "default",
-    }}>
-      <div style={{
-        width: 40, height: 40, borderRadius: 10, marginBottom: 16,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: hover ? V.sage : "rgba(58,107,76,0.15)",
-        color: hover ? "#fff" : V.sageMid,
-        transition: "all 300ms cubic-bezier(0.16,1,0.3,1)",
-      }}>{icon}</div>
-      <p style={{ fontFamily: font.body, fontSize: 16, fontWeight: 600, color: "white", margin: "0 0 8px", lineHeight: 1.4 }}>{title}</p>
-      <p style={{ fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.45)", margin: 0, lineHeight: 1.6 }}>{desc}</p>
+    <div style={{
+      background: "rgba(255,255,255,0.03)",
+      borderRadius: 20, padding: "32px 28px 28px",
+      border: "1px solid rgba(255,255,255,0.06)",
+      transition: "all 400ms cubic-bezier(0.16,1,0.3,1)", cursor: "default",
+    }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = "rgba(90,143,110,0.25)";
+        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+        e.currentTarget.style.transform = "translateY(-4px)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
+      <div style={{ marginBottom: 20, height: 90, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {visual}
+      </div>
+      <p style={{ fontFamily: font.heading, fontSize: 17, fontWeight: 600, color: "white", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
+      <p style={{ fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.4)", margin: 0, lineHeight: 1.6 }}>{desc}</p>
     </div>
   );
 }
@@ -667,8 +789,8 @@ function WhoItsFor() {
         <FadeIn>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ fontFamily: font.body, fontSize: 12, fontWeight: 600, letterSpacing: 2.5, color: V.sage, textTransform: "uppercase", marginBottom: 12 }}>WHO IT'S FOR</div>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(28px, 3.5vw, 42px)", color: V.ink, letterSpacing: "-0.03em", marginBottom: 16 }}>
-              For engineers who'd rather{" "}<span style={{ fontStyle: "italic", color: V.sage }}>show it</span>{" "}than list it.
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 3.5vw, 42px)", color: V.ink, letterSpacing: "-0.03em", marginBottom: 16 }}>
+              For engineers who'd rather{" "}<span style={{ fontStyle: "italic", color: V.sage }}>show it</span>{" "}than list it
             </h2>
             <p style={{ fontFamily: font.body, fontSize: 17, color: V.subtitle, maxWidth: 560, margin: "0 auto", lineHeight: 1.6 }}>
               Fresher or 10-year veteran. Tier-1 or self-taught. The conversation doesn't care where you've been. It listens to how you think.
@@ -696,7 +818,7 @@ function WhoItsFor() {
             border: `1px solid ${V.border}`, maxWidth: 720, margin: "0 auto",
             animation: "fadeCard 400ms ease",
           }}>
-            <p style={{ fontFamily: font.serif, fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 700, color: V.ink, marginBottom: 16, letterSpacing: "-0.02em" }}>
+            <p style={{ fontFamily: font.heading, fontSize: "clamp(20px, 2.5vw, 26px)", fontWeight: 700, color: V.ink, marginBottom: 16, letterSpacing: "-0.02em" }}>
               "{roleCards[activeRole].tagline}"
             </p>
             <p style={{ fontFamily: font.body, fontSize: 15, color: V.subtitle, lineHeight: 1.7, marginBottom: 20 }}>
@@ -777,12 +899,12 @@ export function EngineersPage() {
 
         {/* H1 */}
         <h1 style={{
-          fontFamily: font.serif, fontWeight: 600, fontSize: "clamp(36px, 5vw, 64px)",
+          fontFamily: font.heading, fontWeight: 600, fontSize: "clamp(36px, 5vw, 64px)",
           letterSpacing: "-0.02em", lineHeight: 1.12, textAlign: "center", maxWidth: 860,
           color: "#fff", marginBottom: 24, position: "relative", ...animStyle(100),
         }}>
-          You've applied everywhere.<br />
-          Now let companies{" "}<span style={{ color: V.sageMid, fontStyle: "italic" }}>apply to you</span>.
+          You've applied everywhere<br />
+          Now let companies{" "}<span style={{ color: V.sageMid, fontStyle: "italic" }}>apply to you</span>
         </h1>
 
         {/* Subheadline */}
@@ -800,7 +922,7 @@ export function EngineersPage() {
         </div>
 
         {/* Single italic line */}
-        <p style={{ fontFamily: font.serif, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.3)", marginTop: 24, position: "relative", ...animStyle(500) }}>
+        <p style={{ fontFamily: font.heading, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.3)", marginTop: 24, position: "relative", ...animStyle(500) }}>
           Unlike any interview you've ever given.
         </p>
       </section>
@@ -821,8 +943,8 @@ export function EngineersPage() {
       <section style={{ background: V.sagePale, padding: "48px 24px" }} className="md:px-12">
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(24px, 3vw, 34px)", color: V.ink, letterSpacing: "-0.02em", marginBottom: 12 }}>
-              Walnutt is free. <span style={{ fontStyle: "italic", color: V.sage }}>Always.</span>
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(24px, 3vw, 34px)", color: V.ink, letterSpacing: "-0.02em", marginBottom: 12 }}>
+              Walnutt is free <span style={{ fontStyle: "italic", color: V.sage }}>Always</span>
             </h2>
             <p style={{ fontFamily: font.body, fontSize: 16, color: V.subtitle, lineHeight: 1.65, maxWidth: 480, margin: "0 auto" }}>
               No placement fees. No hidden charges. No catch. If Walnutt helped you see yourself clearly, just tell one friend. That's it.
@@ -835,7 +957,7 @@ export function EngineersPage() {
       <section style={{ background: "white", padding: "80px 24px" }} className="md:px-12">
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: 32, color: V.ink, textAlign: "center", marginBottom: 40, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: 32, color: V.ink, textAlign: "center", marginBottom: 40, letterSpacing: "-0.02em" }}>
               Questions you're probably asking
             </h2>
           </FadeIn>
@@ -855,8 +977,8 @@ export function EngineersPage() {
 
         <div style={{ maxWidth: 640, margin: "0 auto", position: "relative" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.serif, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "white", letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
-              You've been ready.{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>The right companies just don't know it yet.</span>
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "white", letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
+              You've been ready{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>The right companies just don't know it yet</span>
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
