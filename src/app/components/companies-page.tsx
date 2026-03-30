@@ -382,11 +382,11 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
         </div>
       </section>
 
-      {/* ═══ SECTION 3: SKIN IN THE GAME ═══ */}
+      {/* ═══ SECTION 3: HIRE NOW PAY LATER ═══ */}
       <section style={{ background: V.bg, padding: "100px 24px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
           <FadeSection>
-            <p style={{ ...eyebrow, color: V.sage }}>SKIN IN THE GAME</p>
+            <p style={{ ...eyebrow, color: V.sage }}>HIRE NOW PAY LATER</p>
             <h2 style={{
               fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
               letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink, margin: "0 0 28px",
