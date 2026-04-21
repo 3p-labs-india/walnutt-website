@@ -903,8 +903,8 @@ export function EngineersPage() {
           letterSpacing: "-0.02em", lineHeight: 1.12, textAlign: "center", maxWidth: 860,
           color: "#fff", marginBottom: 24, position: "relative", ...animStyle(100),
         }}>
-          You've applied everywhere<br />
-          Now let companies{" "}<span style={{ color: V.sageMid, fontStyle: "italic" }}>apply to you</span>
+          Outgrow the<br />
+          hiring <span style={{ color: V.sageMid, fontStyle: "italic" }}>audition.</span>
         </h1>
 
         {/* Subheadline */}
@@ -912,7 +912,7 @@ export function EngineersPage() {
           fontFamily: font.body, fontWeight: 300, fontSize: "clamp(16px, 1.8vw, 19px)",
           color: "rgba(255,255,255,0.5)", maxWidth: 720, lineHeight: 1.65, textAlign: "center", marginBottom: 44, position: "relative", ...animStyle(250),
         }}>
-          One conversation. The right companies find you.
+          No applications. No wasted hours. One real conversation, and the right companies start finding you.
         </p>
 
         {/* CTA with breathing glow */}
@@ -939,18 +939,45 @@ export function EngineersPage() {
       {/* ═══ WHO IT'S FOR ═══ */}
       <WhoItsFor />
 
-      {/* ═══ FREE BANNER ═══ */}
-      <section style={{ background: V.sagePale, padding: "48px 24px" }} className="md:px-12">
-        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+      {/* ═══ NUMBERS ═══ */}
+      <section style={{ background: V.bg, padding: "72px 24px", borderTop: `1px solid ${V.border}`, borderBottom: `1px solid ${V.border}` }} className="md:px-12">
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(24px, 3vw, 34px)", color: V.ink, letterSpacing: "-0.02em", marginBottom: 12 }}>
-              Walnutt is free <span style={{ fontStyle: "italic", color: V.sage }}>Always</span>
-            </h2>
-            <p style={{ fontFamily: font.body, fontSize: 16, color: V.subtitle, lineHeight: 1.65, maxWidth: 480, margin: "0 auto" }}>
-              No placement fees. No hidden charges. No catch. If Walnutt helped you see yourself clearly, just tell one friend. That's it.
-            </p>
+            <div className="numbers-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0 }}>
+              {[
+                { value: "30 min", label: "One conversation.\nThat's the starting commitment." },
+                { value: "71%", label: "Of candidates at final\ninterviews get offers." },
+                { value: "100%", label: "Get detailed feedback.\nEvery single engagement." },
+                { value: "0", label: "Applications to send.\nCompanies find you." },
+                { value: "Free", label: "Always. For engineers.\nNo catch." },
+              ].map((n, i, arr) => (
+                <div key={i} style={{
+                  textAlign: "center", padding: "28px 16px", position: "relative",
+                  borderRight: i < arr.length - 1 ? `1px solid ${V.border}` : "none",
+                }}>
+                  <div style={{
+                    fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 3.2vw, 36px)",
+                    color: V.ink, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 10,
+                  }}>
+                    {n.value}
+                  </div>
+                  <div style={{
+                    fontFamily: font.body, fontSize: 13, color: V.subtitle,
+                    lineHeight: 1.5, whiteSpace: "pre-line",
+                  }}>
+                    {n.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </FadeIn>
         </div>
+        <style>{`
+          @media (max-width: 900px) {
+            .numbers-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px 0 !important; }
+            .numbers-grid > div { border-right: none !important; border-bottom: 1px solid ${V.border}; padding-bottom: 24px !important; }
+          }
+        `}</style>
       </section>
 
       {/* ═══ FAQ ═══ */}

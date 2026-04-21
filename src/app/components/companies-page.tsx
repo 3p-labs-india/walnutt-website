@@ -16,6 +16,7 @@ const V = {
   subtitle: "#6B7D74",
   muted: "#A8B8B0",
   border: "#D8E6DC",
+  borderLight: "#E8F0EB",
   dark: "#1A2420",
 };
 
@@ -77,154 +78,132 @@ function HeroAurora() {
   );
 }
 
-// ═══ SVG VISUALS FOR EACH LENS ═══
-function CommitGraph() {
+// ═══ TIMELINE STEP (centered, animated dot + progressive connector) ═══
+function Step({
+  num, title, text, tag, isFinal = false, isLast = false,
+}: {
+  num: string; title: string; text: string; tag: string; isFinal?: boolean; isLast?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setActive(true); obs.disconnect(); }
+    }, { threshold: 0.35, rootMargin: "0px 0px -60px 0px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const DOT = 56;
+  const RAIL = 80;
+
   return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* Git commit line */}
-      <line x1="30" y1="50" x2="170" y2="50" stroke="rgba(90,143,110,0.15)" strokeWidth="1.5" />
-      {/* Commits */}
-      {[40, 75, 105, 130, 160].map((x, i) => (
-        <g key={i}>
-          <circle cx={x} cy="50" r={i === 2 ? 6 : 4} fill="none" stroke={V.sageMid} strokeWidth="1.5" opacity={0.4 + i * 0.12} />
-          {i === 2 && <circle cx={x} cy="50" r="2.5" fill={V.sageMid} opacity="0.8" />}
-        </g>
-      ))}
-      {/* Branch */}
-      <path d="M75 50 Q85 28 105 28" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" fill="none" />
-      <circle cx="105" cy="28" r="3" fill="none" stroke={V.sageMid} strokeWidth="1.5" opacity="0.35" />
-      <path d="M105 28 Q120 28 130 50" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" fill="none" />
-    </svg>
+    <div ref={ref} className="step-timeline" style={{
+      position: "relative",
+      display: "grid", gridTemplateColumns: `${RAIL}px 1fr`,
+      columnGap: 24,
+      paddingBottom: isLast ? 0 : 64,
+    }}>
+      {/* Rail column — dot + connector line below */}
+      <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+        {!isLast && (
+          <div style={{
+            position: "absolute", left: "50%", top: DOT,
+            transform: "translateX(-50%)",
+            width: 2, height: `calc(100% - ${DOT}px + 16px)`,
+            background: V.border, borderRadius: 2, overflow: "hidden",
+          }}>
+            <div style={{
+              position: "absolute", top: 0, left: 0, width: "100%",
+              height: active ? "100%" : "0%",
+              background: `linear-gradient(to bottom, ${V.sage}, ${V.sageMid})`,
+              transition: "height 1400ms cubic-bezier(0.16,1,0.3,1) 350ms",
+            }} />
+          </div>
+        )}
+
+        <div style={{
+          position: "relative", zIndex: 2,
+          width: DOT, height: DOT, borderRadius: "50%",
+          background: active ? V.sage : V.surface,
+          border: `2px solid ${active ? V.sage : V.border}`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: font.heading, fontSize: 18, fontWeight: 700,
+          color: active ? "#fff" : V.muted,
+          transition: "background 500ms cubic-bezier(0.16,1,0.3,1), border-color 500ms cubic-bezier(0.16,1,0.3,1), color 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)",
+          transform: active ? "scale(1)" : "scale(0.9)",
+          boxShadow: active ? "0 10px 28px rgba(58,107,76,0.25)" : "0 4px 12px rgba(26,36,32,0.04)",
+          flexShrink: 0,
+        }}>
+          {active && (
+            <>
+              <span style={{
+                position: "absolute", inset: -6, borderRadius: "50%",
+                border: `2px solid ${V.sage}`, opacity: 0,
+                animation: "pulseRing 1.6s cubic-bezier(0.16,1,0.3,1) 200ms 1",
+              }} />
+              <span style={{
+                position: "absolute", inset: -12, borderRadius: "50%",
+                border: `2px solid ${V.sageMid}`, opacity: 0,
+                animation: "pulseRing 1.6s cubic-bezier(0.16,1,0.3,1) 450ms 1",
+              }} />
+            </>
+          )}
+          {num}
+        </div>
+      </div>
+
+      {/* Content column (left-aligned, beside the rail) */}
+      <div style={{
+        paddingTop: 4, paddingBottom: 4,
+        opacity: active ? 1 : 0,
+        transform: active ? "translateY(0)" : "translateY(16px)",
+        transition: "opacity 800ms cubic-bezier(0.16,1,0.3,1) 250ms, transform 800ms cubic-bezier(0.16,1,0.3,1) 250ms",
+      }}>
+        {isFinal ? (
+          <div style={{
+            background: V.sagePale, borderRadius: 20,
+            padding: "28px 32px", border: `1px solid ${V.sageTint}`,
+            boxShadow: "0 12px 40px rgba(58,107,76,0.08)",
+          }}>
+            <p style={{ fontFamily: font.heading, fontSize: 22, fontWeight: 700, color: V.ink, letterSpacing: "-0.02em", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
+            <p style={{ fontFamily: font.body, fontSize: 14.5, color: V.body, lineHeight: 1.65, margin: "0 0 16px" }}>{text}</p>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: font.body, fontSize: 13, fontWeight: 600, color: V.sage,
+            }}>
+              <span style={{ display: "inline-block", width: 16, height: 2, background: V.sage, borderRadius: 1 }} />
+              {tag}
+            </span>
+          </div>
+        ) : (
+          <>
+            <p style={{ fontFamily: font.heading, fontSize: 20, fontWeight: 700, color: V.ink, letterSpacing: "-0.02em", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
+            <p style={{ fontFamily: font.body, fontSize: 14.5, color: V.body, lineHeight: 1.65, margin: "0 0 14px", maxWidth: 560 }}>{text}</p>
+            <span style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: font.body, fontSize: 13, fontWeight: 600, color: V.sage,
+            }}>
+              <span style={{ display: "inline-block", width: 16, height: 2, background: V.sage, borderRadius: 1 }} />
+              {tag}
+            </span>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
-function SystemNodes() {
-  return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* Central node */}
-      <rect x="80" y="30" width="40" height="40" rx="8" stroke={V.sageMid} strokeWidth="1.5" opacity="0.5" />
-      <rect x="88" y="38" width="24" height="24" rx="4" stroke={V.sageMid} strokeWidth="1" opacity="0.25" />
-      {/* Connected nodes */}
-      <line x1="80" y1="50" x2="35" y2="35" stroke="rgba(90,143,110,0.2)" strokeWidth="1" />
-      <circle cx="30" cy="32" r="8" stroke={V.sageMid} strokeWidth="1.5" opacity="0.3" />
-      <line x1="120" y1="50" x2="165" y2="35" stroke="rgba(90,143,110,0.2)" strokeWidth="1" />
-      <circle cx="170" cy="32" r="8" stroke={V.sageMid} strokeWidth="1.5" opacity="0.3" />
-      <line x1="100" y1="70" x2="100" y2="90" stroke="rgba(90,143,110,0.2)" strokeWidth="1" />
-      <circle cx="100" cy="95" r="5" stroke={V.sageMid} strokeWidth="1.5" opacity="0.3" />
-      {/* Decision arrow */}
-      <path d="M35 40 L30 35 L25 40" stroke={V.sageMid} strokeWidth="1" opacity="0.4" fill="none" />
-    </svg>
-  );
-}
-
-function DebugTrace() {
-  return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* Narrowing funnel lines */}
-      <path d="M20 20 L100 50" stroke="rgba(90,143,110,0.12)" strokeWidth="1" />
-      <path d="M180 15 L100 50" stroke="rgba(90,143,110,0.12)" strokeWidth="1" />
-      <path d="M15 80 L100 50" stroke="rgba(90,143,110,0.12)" strokeWidth="1" />
-      <path d="M185 85 L100 50" stroke="rgba(90,143,110,0.12)" strokeWidth="1" />
-      {/* Search rings */}
-      <circle cx="100" cy="50" r="24" stroke={V.sageMid} strokeWidth="1.5" opacity="0.2" />
-      <circle cx="100" cy="50" r="14" stroke={V.sageMid} strokeWidth="1.5" opacity="0.35" />
-      <circle cx="100" cy="50" r="5" fill={V.sageMid} opacity="0.5" />
-      {/* Cross markers on eliminated paths */}
-      <g opacity="0.2" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5">
-        <line x1="38" y1="28" x2="44" y2="34" /><line x1="44" y1="28" x2="38" y2="34" />
-        <line x1="158" y1="72" x2="164" y2="78" /><line x1="164" y1="72" x2="158" y2="78" />
-      </g>
-    </svg>
-  );
-}
-
-function AICollab() {
-  return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* Human bracket */}
-      <path d="M50 25 L35 25 L35 75 L50 75" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" strokeLinecap="round" />
-      <text x="42" y="54" fontFamily="'JetBrains Mono'" fontSize="9" fill={V.sageMid} opacity="0.5">you</text>
-      {/* AI bracket */}
-      <path d="M150 25 L165 25 L165 75 L150 75" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" strokeLinecap="round" />
-      <text x="148" y="54" fontFamily="'JetBrains Mono'" fontSize="9" fill={V.sageMid} opacity="0.5" textAnchor="end">ai</text>
-      {/* Connection / flow between */}
-      <line x1="65" y1="40" x2="135" y2="40" stroke="rgba(90,143,110,0.15)" strokeWidth="1" strokeDasharray="4 4" />
-      <line x1="65" y1="55" x2="135" y2="55" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" />
-      {/* Merge point */}
-      <circle cx="100" cy="55" r="4" fill={V.sageMid} opacity="0.45" />
-      <circle cx="100" cy="55" r="8" stroke={V.sageMid} strokeWidth="1" opacity="0.2" />
-    </svg>
-  );
-}
-
-function TeamScenario() {
-  return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* PR / merge conflict visual */}
-      {/* Your branch */}
-      <line x1="20" y1="35" x2="85" y2="35" stroke="rgba(90,143,110,0.3)" strokeWidth="1.5" />
-      <text x="20" y="28" fontFamily="'JetBrains Mono'" fontSize="7" fill="rgba(255,255,255,0.2)">your-branch</text>
-      {/* Their branch */}
-      <line x1="20" y1="65" x2="85" y2="65" stroke="rgba(90,143,110,0.3)" strokeWidth="1.5" />
-      <text x="20" y="58" fontFamily="'JetBrains Mono'" fontSize="7" fill="rgba(255,255,255,0.2)">teammate</text>
-      {/* Commits on each */}
-      <circle cx="45" cy="35" r="3" fill={V.sageMid} opacity="0.4" />
-      <circle cx="70" cy="35" r="3" fill={V.sageMid} opacity="0.5" />
-      <circle cx="55" cy="65" r="3" fill={V.sageMid} opacity="0.4" />
-      <circle cx="75" cy="65" r="3" fill={V.sageMid} opacity="0.5" />
-      {/* Conflict zone */}
-      <rect x="82" y="25" width="36" height="50" rx="6" stroke="rgba(255,180,100,0.3)" strokeWidth="1" strokeDasharray="3 3" fill="rgba(255,180,100,0.03)" />
-      <text x="100" y="52" fontFamily="'JetBrains Mono'" fontSize="7" fill="rgba(255,180,100,0.4)" textAnchor="middle">conflict</text>
-      {/* Resolution — merged line */}
-      <path d="M118 35 Q130 35 135 50 Q130 65 118 65" stroke="rgba(90,143,110,0.2)" strokeWidth="1" fill="none" />
-      <line x1="135" y1="50" x2="180" y2="50" stroke={V.sageMid} strokeWidth="1.5" opacity="0.5" />
-      <circle cx="180" cy="50" r="4" fill={V.sageMid} opacity="0.5" />
-      {/* Resolved checkmark */}
-      <path d="M176 49 L179 52 L184 47" stroke="#fff" strokeWidth="1.2" opacity="0.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CulturePulse() {
-  return (
-    <svg width="100%" height="100" viewBox="0 0 200 100" fill="none">
-      {/* Team members as nodes */}
-      <circle cx="60" cy="40" r="10" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
-      <circle cx="60" cy="37" r="3.5" fill={V.sageMid} opacity="0.3" />
-      <path d="M53 47 Q60 52 67 47" stroke={V.sageMid} strokeWidth="1" opacity="0.3" fill="none" />
-
-      <circle cx="140" cy="40" r="10" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
-      <circle cx="140" cy="37" r="3.5" fill={V.sageMid} opacity="0.3" />
-      <path d="M133 47 Q140 52 147 47" stroke={V.sageMid} strokeWidth="1" opacity="0.3" fill="none" />
-
-      <circle cx="100" cy="75" r="10" stroke={V.sageMid} strokeWidth="1.5" opacity="0.5" />
-      <circle cx="100" cy="72" r="3.5" fill={V.sageMid} opacity="0.4" />
-      <path d="M93 82 Q100 87 107 82" stroke={V.sageMid} strokeWidth="1" opacity="0.4" fill="none" />
-
-      {/* Bi-directional feedback arrows */}
-      <line x1="72" y1="44" x2="88" y2="68" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" />
-      <line x1="128" y1="44" x2="112" y2="68" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" />
-      <line x1="73" y1="38" x2="127" y2="38" stroke="rgba(90,143,110,0.25)" strokeWidth="1.5" />
-
-      {/* Feedback loop arrows */}
-      <path d="M76 36 L73 38 L76 40" stroke={V.sageMid} strokeWidth="1" opacity="0.4" fill="none" strokeLinecap="round" />
-      <path d="M124 36 L127 38 L124 40" stroke={V.sageMid} strokeWidth="1" opacity="0.4" fill="none" strokeLinecap="round" />
-
-      {/* Small signal dots showing active collaboration */}
-      <circle cx="85" cy="54" r="2" fill={V.sageMid} opacity="0.35" />
-      <circle cx="115" cy="54" r="2" fill={V.sageMid} opacity="0.35" />
-      <circle cx="100" cy="36" r="2" fill={V.sageMid} opacity="0.35" />
-    </svg>
-  );
-}
-
-// ═══ LENS CARD (glass + visual) ═══
-function LensCard({ num, title, desc, visual }: { num: string; title: string; desc: string; visual: React.ReactNode }) {
+// ═══ ENTRY CARD (glass, on dark bg) ═══
+function EntryCard({ scenario, response, product }: { scenario: string; response: string; product: string }) {
   return (
     <div style={{
       background: "rgba(255,255,255,0.03)",
       border: "1px solid rgba(255,255,255,0.06)",
-      borderRadius: 20, padding: "32px 28px 28px",
+      borderRadius: 20, padding: "36px 28px 28px",
       display: "flex", flexDirection: "column",
       transition: "border-color 400ms, background 400ms, transform 400ms",
       cursor: "default",
@@ -240,23 +219,34 @@ function LensCard({ num, title, desc, visual }: { num: string; title: string; de
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
-      {/* Visual */}
-      <div style={{ marginBottom: 24, height: 100, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {visual}
+      <p style={{
+        fontFamily: font.heading, fontSize: 17, fontWeight: 600, color: "#fff",
+        lineHeight: 1.4, margin: "0 0 20px", minHeight: 50,
+      }}>{scenario}</p>
+      <div style={{ width: 32, height: 2, background: V.sageMid, borderRadius: 1, marginBottom: 18 }} />
+      <p style={{
+        fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.5)",
+        lineHeight: 1.65, flex: 1, margin: "0 0 24px",
+      }}>{response}</p>
+      <div style={{
+        paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)",
+      }}>
+        <span className="product-tag">
+          <span className="product-dot" />
+          <span className="product-name">{product}</span>
+        </span>
       </div>
-      {/* Number */}
-      <span style={{
-        fontFamily: font.mono, fontSize: 11, fontWeight: 400, letterSpacing: "0.12em",
-        color: "rgba(255,255,255,0.2)", marginBottom: 12,
-      }}>{num}</span>
-      <p style={{ fontFamily: font.heading, fontSize: 17, fontWeight: 600, color: "#fff", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
-      <p style={{ fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.4)", margin: 0, lineHeight: 1.6 }}>{desc}</p>
     </div>
   );
 }
 
 // ═══ COMPANIES PAGE ═══
 export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
+  const scrollToHow = () => {
+    const el = document.getElementById("c-how-section");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div style={{ fontFamily: font.body, color: V.ink }}>
       <style>{`
@@ -264,6 +254,40 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
         @keyframes auroraC1 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(50px,-30px) scale(1.12); } }
         @keyframes auroraC2 { 0% { transform: translate(0,0) scale(1.1); } 100% { transform: translate(-60px,20px) scale(0.92); } }
         @keyframes auroraC3 { 0% { transform: translate(0,0) scale(0.95); } 100% { transform: translate(30px,-40px) scale(1.15); } }
+        @keyframes pulseRing {
+          0% { opacity: 0.9; transform: scale(0.85); }
+          100% { opacity: 0; transform: scale(1.55); }
+        }
+        @keyframes productPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(90,143,110,0.55), 0 0 14px rgba(90,143,110,0.35); transform: scale(1); }
+          50% { box-shadow: 0 0 0 7px rgba(90,143,110,0), 0 0 20px rgba(90,143,110,0.65); transform: scale(1.02); }
+        }
+        @keyframes productDot {
+          0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(90,143,110,0.6), 0 0 8px rgba(90,143,110,0.6); }
+          50% { opacity: 0.85; box-shadow: 0 0 0 6px rgba(90,143,110,0), 0 0 14px rgba(90,143,110,0.9); }
+        }
+        .product-tag {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 8px 14px; border-radius: 100px;
+          background: rgba(90,143,110,0.12);
+          border: 1px solid rgba(90,143,110,0.4);
+          animation: productPulse 2.4s ease-in-out infinite;
+        }
+        .product-tag .product-dot {
+          width: 7px; height: 7px; border-radius: 50%;
+          background: #7FBF94;
+          animation: productDot 1.6s ease-in-out infinite;
+        }
+        .product-tag .product-name {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 11px; font-weight: 600;
+          color: #B8E0C6; letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .tax-row:hover td { background: rgba(246,250,247,0.6); }
+        @media (max-width: 900px) {
+          .entry-grid { grid-template-columns: 1fr !important; }
+          .tax-table th, .tax-table td { padding: 14px 18px !important; font-size: 13px !important; }
+        }
       `}</style>
 
       {/* ═══ HERO ═══ */}
@@ -278,156 +302,207 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
             ...eyebrow, color: V.sageMid, marginBottom: 32,
             animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 100ms both",
           }}>
-            WALNUTT FOR COMPANIES
+            HIRING INFRASTRUCTURE FOR ENGINEERING TEAMS
           </p>
           <h1 style={{
             fontFamily: font.heading, fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)",
             letterSpacing: "-0.03em", lineHeight: 1.12, color: "#fff", margin: "0 0 28px",
             animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 200ms both",
           }}>
-            The hiring infrastructure<br />
-            your engineering team{" "}
-            <span style={{ color: V.sageMid, fontStyle: "italic" }}>deserves</span>
+            Outgrow the<br />
+            hiring <span style={{ color: V.sageMid, fontStyle: "italic" }}>cycle.</span>
           </h1>
           <p style={{
             fontFamily: font.body, fontWeight: 400, fontSize: "clamp(17px, 2vw, 20px)",
-            lineHeight: 1.7, color: "rgba(255,255,255,0.5)", maxWidth: 580, margin: "0 auto",
+            lineHeight: 1.7, color: "rgba(255,255,255,0.5)", maxWidth: 580, margin: "0 auto 40px",
             animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 400ms both",
           }}>
-            So you stop running a hiring process and start meeting engineers who are ready to build with you.
+            The hiring process that also onboards. Built around your actual context. Turning months into days.
           </p>
+          <div style={{ animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 500ms both" }}>
+            <button onClick={scrollToHow} style={{
+              fontFamily: font.body, fontSize: 15, fontWeight: 600, color: "#fff",
+              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
+              padding: "14px 28px", borderRadius: 30, cursor: "pointer",
+              display: "inline-flex", alignItems: "center", gap: 10, transition: "all 200ms",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(90,143,110,0.2)"; e.currentTarget.style.borderColor = V.sageMid; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
+            >
+              See how it works
+              <span style={{ fontSize: 16 }}>↓</span>
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* ═══ SECTION 1: WHAT YOU'RE REALLY LOOKING FOR ═══ */}
-      <section style={{ background: V.bg, padding: "100px 24px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
+      {/* ═══ HOW IT WORKS — CENTERED TIMELINE ═══ */}
+      <section id="c-how-section" style={{ background: V.bg, padding: "100px 24px 120px" }}>
+        <div style={{ maxWidth: 780, margin: "0 auto" }}>
           <FadeIn>
-            <p style={{ ...eyebrow, color: V.sage }}>WHAT YOU'RE REALLY LOOKING FOR</p>
+            <div style={{ textAlign: "center", marginBottom: 16 }}>
+              <p style={{ ...eyebrow, color: V.sage }}>THE PROCESS</p>
+            </div>
           </FadeIn>
           <FadeIn delay={100}>
             <h2 style={{
               fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-              letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink, margin: "0 0 28px",
+              letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink,
+              margin: "0 auto 72px", textAlign: "center", maxWidth: 560,
             }}>
-              You know the engineer you need{" "}
-              <span style={{ color: V.subtitle }}>Finding them is the{" "}
-                <span style={{ fontStyle: "italic", color: V.sage }}>hard part</span>
-              </span>
+              The best hires arrive ready.{" "}
+              <span style={{ fontStyle: "italic", color: V.sage }}>Here's how.</span>
             </h2>
           </FadeIn>
-          <FadeIn delay={200}>
-            <p style={{
-              fontFamily: font.body, fontSize: "clamp(17px, 2vw, 20px)", fontWeight: 400,
-              color: V.body, lineHeight: 1.7, maxWidth: 560, margin: "0 auto 20px",
+
+          <div style={{ position: "relative" }}>
+            <Step num="01" title="Build the candidate persona." text="A sharp picture of who you actually need — calibrated to market reality. Half the battle won before the search begins." tag="100x the JD." />
+            <Step num="02" title="Find the right people." text="From our pool, your pipeline, or sourced fresh. Matched on real depth — thinking, building, problem-solving. Your team only meets people worth their time." tag="Zero wasted interviews." />
+            <Step num="03" title="Assess through real work. Cross-reference everything." text="Challenges built on your actual stack and domain. Claims verified against real output. You see real thinking. They absorb your world. One step, both jobs." tag="Onboarding starts inside the hiring process itself." />
+            <Step num="04" title="Notice period. Ramp already running." text="They're learning your systems, conventions, and team dynamics. You see progress in real time. Connection builds before they've officially started." tag="Candidates are invested. Offer dropouts reduced." />
+            <Step num="05" title="Day one. They deliver." text={"Not orientation. Not “where’s the wiki.” Real contribution from the first morning."} tag="Day one feels like they were already here." isFinal isLast />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ENTRY POINTS ═══ */}
+      <section style={{ background: V.dark, padding: "100px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <FadeIn>
+            <div style={{ textAlign: "center", marginBottom: 20 }}>
+              <p style={{ ...eyebrow, color: V.sageMid }}>ENTRY POINTS</p>
+            </div>
+          </FadeIn>
+          <FadeIn delay={100}>
+            <h2 style={{
+              fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
+              letterSpacing: "-0.03em", lineHeight: 1.15, color: "#fff",
+              margin: "0 auto 56px", textAlign: "center", maxWidth: 520,
             }}>
-              You already know what great looks like. Thinks in systems. Debugs with instinct. Builds with AI. Elevates the team.{" "}
-              <span style={{ color: V.sage, fontWeight: 500 }}>That's who we find.</span>
-            </p>
+              One system.<br />
+              <span style={{ fontStyle: "italic", color: V.sageMid }}>Enter wherever you are.</span>
+            </h2>
+          </FadeIn>
+
+          <FadeIn delay={200}>
+            <div className="entry-grid" style={{
+              display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20,
+            }}>
+              <EntryCard
+                scenario={"“We need to hire but the role isn’t clear yet.”"}
+                response="Calibrated candidate persona built from real market intel. Who to look for, what the market can deliver, where expectations need adjusting. The search starts right."
+                product="Role Blueprint"
+              />
+              <EntryCard
+                scenario={"“We have candidates. Can’t tell who’s real.”"}
+                response="Deep conversations across your pipeline — thinking patterns, proof of work, domain depth, cultural wiring. Shortlist with clear reasoning for each. Engineering time protected."
+                product="Candidate Signal Layer"
+              />
+              <EntryCard
+                scenario={"“Find us someone great. Ready from day one.”"}
+                response="Full cycle — sourcing, deep matching, assessment built on your context, active ramp during notice period. Candidates arrive ready to contribute from week one."
+                product="Full Stack Engine"
+              />
+            </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* ═══ SECTION 2: THE WALNUTT EXPERIENCE ═══ */}
-      <section style={{ background: V.dark, padding: "100px 24px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+      {/* ═══ HIRING TAX ═══ */}
+      <section style={{ background: V.bg, padding: "100px 24px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <FadeIn>
-            <div style={{ textAlign: "center", marginBottom: 60 }}>
-              <p style={{ ...eyebrow, color: V.sageMid }}>HOW WE DO IT — THE WALNUTT EXPERIENCE</p>
+            <div style={{ textAlign: "center", marginBottom: 56 }}>
+              <p style={{ ...eyebrow, color: V.sage }}>THE HIRING TAX</p>
               <h2 style={{
                 fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-                letterSpacing: "-0.03em", lineHeight: 1.15, color: "#fff", margin: 0,
+                letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink, margin: "0 0 16px",
               }}>
-                More depth. More clarity.{" "}
-                <span style={{ fontStyle: "italic", color: V.sageMid }}>Better hires</span>
+                Stop <span style={{ fontStyle: "italic", color: V.sage }}>paying it.</span>
               </h2>
+              <p style={{
+                fontFamily: font.body, fontSize: 14, color: V.subtitle,
+                maxWidth: 420, lineHeight: 1.55, margin: "0 auto",
+              }}>
+                Every engineering hire carries a hidden cost. Here's what changes.
+              </p>
             </div>
           </FadeIn>
 
-          {/* Engineering Depth — 2x2 glass cards */}
           <FadeIn delay={100}>
-            <p style={{
-              fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em",
-              textTransform: "uppercase", color: V.sageMid, marginBottom: 24, textAlign: "center",
-            }}>
-              ENGINEERING DEPTH
-            </p>
             <div style={{
-              display: "grid", gridTemplateColumns: "repeat(2, 1fr)",
-              gap: 16,
+              background: V.surface, border: `1px solid ${V.border}`, borderRadius: 16,
+              overflow: "hidden", marginBottom: 56,
+              boxShadow: "0 4px 24px rgba(26,36,32,0.04)",
             }}>
-              <LensCard num="01" title="What they've built" desc="Their projects, their commits, their architectural choices over time." visual={<CommitGraph />} />
-              <LensCard num="02" title="How they think" desc="System design problems with no right answer. We see what they prioritize." visual={<SystemNodes />} />
-              <LensCard num="03" title="How they debug" desc="Something's broken. We watch how they narrow the search space." visual={<DebugTrace />} />
-              <LensCard num="04" title="How they code with AI" desc="Whether they use AI as a lever or a crutch." visual={<AICollab />} />
+              <table className="tax-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead style={{ background: V.sagePale }}>
+                  <tr>
+                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.subtitle }}></th>
+                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.muted }}>Industry average</th>
+                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.sage }}>With Walnutt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["Screening & filtering", "40–60 hours per role", "0 hours. Deep-signal filtered."],
+                    ["Engineering interview loops", "35–40 hours wasted", "Your team meets only pre-cleared candidates."],
+                    ["Interview-to-offer rate", "~30%", "71%"],
+                    ["Time to hire (Offer)", "2–3 months", "~6 days"],
+                  ].map(([a, b, c], i) => (
+                    <tr key={i} className="tax-row">
+                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.ink, fontWeight: 500, borderTop: `1px solid ${V.borderLight}`, width: "34%", transition: "background 200ms" }}>{a}</td>
+                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.subtitle, borderTop: `1px solid ${V.borderLight}`, width: "30%", transition: "background 200ms" }}>{b}</td>
+                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.sage, fontWeight: 600, borderTop: `1px solid ${V.borderLight}`, width: "36%", transition: "background 200ms" }}>{c}</td>
+                    </tr>
+                  ))}
+                  <tr style={{ background: V.sagePale }}>
+                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 15, color: V.ink, fontWeight: 700, borderTop: `2px solid ${V.border}` }}>Total hiring + onboarding cycle</td>
+                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 15, color: V.subtitle, fontWeight: 600, borderTop: `2px solid ${V.border}` }}>3–4 months</td>
+                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 16, color: V.sage, fontWeight: 700, borderTop: `2px solid ${V.border}` }}>Weeks</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </FadeIn>
 
-          {/* Beyond The Code — 2 cards */}
-          <FadeIn delay={200} style={{ marginTop: 48 }}>
-            <p style={{
-              fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em",
-              textTransform: "uppercase", color: V.sageMid, marginBottom: 24, textAlign: "center",
-            }}>
-              BEYOND THE CODE
-            </p>
-            <div style={{
-              display: "grid", gridTemplateColumns: "repeat(2, 1fr)",
-              gap: 16,
-            }}>
-              <LensCard num="05" title="How they'd act on your team" desc="Real engineering scenarios: conflicting PRs, production bugs, pushing back on decisions." visual={<TeamScenario />} />
-              <LensCard num="06" title="Culture & mindset" desc="How they collaborate, take feedback, and fit into a team's rhythm." visual={<CulturePulse />} />
+          <FadeIn delay={200}>
+            <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
+              <div style={{ width: 32, height: 2, background: V.sage, borderRadius: 1, margin: "0 auto 20px" }} />
+              <p style={{
+                fontFamily: font.heading, fontSize: 18, fontWeight: 500, color: V.body,
+                lineHeight: 1.6, margin: "0 0 12px", fontStyle: "italic",
+              }}>
+                “The Walnutt conversation told us we’d been hiring for the wrong thing for 2 years.”
+              </p>
+              <p style={{ fontFamily: font.mono, fontSize: 11, color: V.muted, letterSpacing: "0.08em", margin: 0 }}>
+                — FOUNDER, SERIES B STARTUP
+              </p>
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* ═══ SECTION 3: HIRE NOW PAY LATER ═══ */}
-      <section style={{ background: V.bg, padding: "100px 24px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
+      {/* ═══ CTA ═══ */}
+      <section id="company-cta" style={{ background: V.dark, padding: "120px 24px", position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", top: -120, right: -80, width: 400, height: 400, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(58,107,76,0.2) 0%, transparent 70%)", pointerEvents: "none",
+        }} />
+        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center", position: "relative" }}>
           <FadeSection>
-            <p style={{ ...eyebrow, color: V.sage }}>HIRE NOW PAY LATER</p>
-            <h2 style={{
-              fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-              letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink, margin: "0 0 28px",
-            }}>
-              We don't get paid<br />
-              unless it{" "}
-              <span style={{ fontStyle: "italic", color: V.sage }}>works</span>
-            </h2>
-            <p style={{
-              fontFamily: font.body, fontSize: "clamp(17px, 2vw, 20px)", fontWeight: 400,
-              color: V.body, lineHeight: 1.7, maxWidth: 560, margin: "0 auto",
-            }}>
-              Zero upfront fees. You pay monthly over 12 months, starting 30 days after the engineer joins. If it doesn't work out, we stop earning. Simple.
-            </p>
-          </FadeSection>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 4: CTA ═══ */}
-      <section id="company-cta" style={{ background: V.dark, padding: "120px 24px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
-          <FadeSection>
-            <p style={{
-              fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em",
-              textTransform: "uppercase", color: V.sageMid, marginBottom: 24,
-            }}>
-              WALNUTT WITH YOU FROM DAY 1 TO DAY 1000 AND BEYOND
-            </p>
             <h2 style={{
               fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(32px, 4.5vw, 52px)",
-              letterSpacing: "-0.03em", lineHeight: 1.12, color: "#fff", margin: "0 0 24px",
+              letterSpacing: "-0.03em", lineHeight: 1.12, color: "#fff", margin: "0 0 16px",
             }}>
-              For the ones building{" "}
-              <span style={{ fontStyle: "italic", color: V.sageMid }}>teams that last</span>
+              Let's plan your <span style={{ fontStyle: "italic", color: V.sageMid }}>next hire.</span>
             </h2>
             <p style={{
-              fontFamily: font.body, fontWeight: 300, fontSize: "clamp(17px, 2vw, 20px)",
+              fontFamily: font.body, fontWeight: 300, fontSize: "clamp(16px, 2vw, 18px)",
               color: "rgba(255,255,255,0.45)", lineHeight: 1.7,
-              maxWidth: 560, margin: "0 auto 44px",
+              maxWidth: 520, margin: "0 auto 44px",
             }}>
-              Great companies are built on great teams. The first five engineers set the culture. Every hire after shapes how far it goes.
+              One conversation to see what this looks like for your team.
             </p>
             <button onClick={() => { trackEvent("cta_clicked_companies_connect", { location: "companies_close" }); onOpenForm(); }} style={{
               fontFamily: font.body, fontSize: 16, fontWeight: 600, color: V.dark,

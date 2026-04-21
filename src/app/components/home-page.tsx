@@ -49,7 +49,7 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
     setMode(newMode);
     setMenuOpen(false);
     // Update URL when toggling
-    const targetPath = newMode === "companies" ? "/companies" : "/";
+    const targetPath = newMode === "companies" ? "/" : "/engineers";
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, "", targetPath);
     }
@@ -78,7 +78,7 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
           ? "You've applied everywhere. Now let companies apply to you."
           : "Stop running a hiring process. Start meeting engineers who are ready to build with you. Deep evaluation on real work, real thinking, real judgment."
         } />
-        <link rel="canonical" href={isE ? "https://walnutt.co/" : "https://walnutt.co/companies"} />
+        <link rel="canonical" href={isE ? "https://walnutt.co/engineers" : "https://walnutt.co/"} />
       </Helmet>
       <style>{globalKeyframes}</style>
 

@@ -5,7 +5,8 @@ import { TermsConditions } from "./components/terms-conditions";
 
 export const router = createBrowserRouter(
   [
-    { path: "/", Component: HomePage },
+    { path: "/", Component: CompaniesHomePage },
+    { path: "/engineers", Component: HomePage },
     { path: "/companies", Component: CompaniesHomePage },
     { path: "/privacy", Component: PrivacyPolicy },
     { path: "/terms", Component: TermsConditions },
