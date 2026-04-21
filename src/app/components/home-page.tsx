@@ -68,15 +68,15 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: "engineers
       fontFamily: isE ? font.body : "'Inter', sans-serif",
     }}>
       <Helmet>
-        <title>{isE ? "Walnutt | One conversation. The right companies find you." : "Walnutt | The hiring infrastructure your engineering team deserves"}</title>
+        <title>{isE ? "Walnutt | Outgrow the hiring audition." : "Walnutt | Outgrow the hiring cycle."}</title>
         <meta name="description" content={isE
-          ? "You've applied everywhere. Now let companies apply to you. One conversation, a verified skill profile, and companies that hire for depth find you."
-          : "Stop running a hiring process. Start meeting engineers who are ready to build with you. We evaluate how they code, think, debug, and build with AI."
+          ? "No applications. No wasted hours. One real conversation, and the right companies start finding you."
+          : "The hiring process that also onboards. Built around your actual context. Turning months into days. Hiring infrastructure for engineering teams."
         } />
-        <meta property="og:title" content={isE ? "Walnutt | One conversation. The right companies find you." : "Walnutt | The hiring infrastructure your engineering team deserves"} />
+        <meta property="og:title" content={isE ? "Walnutt | Outgrow the hiring audition." : "Walnutt | Outgrow the hiring cycle."} />
         <meta property="og:description" content={isE
-          ? "You've applied everywhere. Now let companies apply to you."
-          : "Stop running a hiring process. Start meeting engineers who are ready to build with you. Deep evaluation on real work, real thinking, real judgment."
+          ? "No applications. No wasted hours. One real conversation, and the right companies start finding you."
+          : "The hiring process that also onboards. Built around your actual context. Turning months into days."
         } />
         <link rel="canonical" href={isE ? "https://walnutt.co/engineers" : "https://walnutt.co/"} />
       </Helmet>

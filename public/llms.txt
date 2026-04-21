@@ -1,37 +1,54 @@
 # Walnutt
 
-> Walnutt is a two-sided platform that connects deeply assessed engineers with companies that hire for depth. For engineers: one conversation, a verified skill profile, and the right companies find you. For companies: the hiring infrastructure your engineering team deserves.
+> Walnutt is hiring infrastructure for engineering teams. The hiring process that also onboards — built around your actual context, turning months into days. For engineers: no applications, just one real conversation, and the right companies start finding you.
 
-## For Engineers
+## For Companies — Outgrow the hiring cycle.
 
-Walnutt replaces the broken application cycle. Engineers have one adaptive AI-powered conversation (under 30 minutes, five rounds: your story, system design, debugging, situational thinking, culture fit) and receive a detailed skill profile. Companies that hire for depth find them. No applications. No resume filters. Free, always.
+The hiring process that also onboards. Built around your actual context. Turning months into days.
+
+### The Process
+
+1. **Build the candidate persona** — A sharp picture of who you actually need, calibrated to market reality. Half the battle won before the search begins. *100x the JD.*
+2. **Find the right people** — From our pool, your pipeline, or sourced fresh. Matched on real depth — thinking, building, problem-solving. Your team only meets people worth their time. *Zero wasted interviews.*
+3. **Assess through real work. Cross-reference everything.** — Challenges built on your actual stack and domain. Claims verified against real output. You see real thinking. They absorb your world. One step, both jobs. *Onboarding starts inside the hiring process itself.*
+4. **Notice period. Ramp already running.** — They're learning your systems, conventions, and team dynamics. You see progress in real time. Connection builds before they've officially started. *Candidates are invested. Offer dropouts reduced.*
+5. **Day one. They deliver.** — Not orientation. Not "where's the wiki." Real contribution from the first morning. *Day one feels like they were already here.*
+
+### One system. Enter wherever you are.
+
+- **Role Blueprint** — You need to hire but the role isn't clear yet. Calibrated candidate persona built from real market intel. Who to look for, what the market can deliver, where expectations need adjusting.
+- **Candidate Signal Layer** — You have candidates but can't tell who's real. Deep conversations across your pipeline — thinking patterns, proof of work, domain depth, cultural wiring. Shortlist with clear reasoning for each.
+- **Full Stack Engine** — Find us someone great, ready from day one. Full cycle — sourcing, deep matching, assessment built on your context, active ramp during notice period.
+
+### The Hiring Tax — Stop paying it.
+
+| | Industry average | With Walnutt |
+|---|---|---|
+| Screening & filtering | 40–60 hours per role | 0 hours. Deep-signal filtered. |
+| Engineering interview loops | 35–40 hours wasted | Your team meets only pre-cleared candidates. |
+| Interview-to-offer rate | ~30% | 71% |
+| Time to hire (Offer) | 2–3 months | ~6 days |
+| Total hiring + onboarding cycle | 3–4 months | Weeks |
+
+## For Engineers — Outgrow the hiring audition.
+
+No applications. No wasted hours. One real conversation, and the right companies start finding you.
 
 ### How It Works
 
-1. **Have a Conversation** — Five adaptive rounds that explore how you think, not just what you know. Every follow-up is personalized to your answers.
-2. **Get Your Profile** — A full narrative of your engineering strengths, growth areas, and what to sharpen next.
-3. **Get Found** — Your verified profile goes to companies matched to your skills, style, and career goals. You decide who sees your data.
+1. **Have a real conversation** — 30 minutes about your actual work: how you think, debug, design, solve. Adaptive, not scripted. You get a detailed report on your strengths, your edges, where you stand. *100x the resume.*
+2. **Your profile starts working for you** — The conversation maps real signal. Companies with matching needs see your depth. You don't apply anywhere. *Zero application hours. Companies find you.*
+3. **Get invited to real challenges** — Companies invite you to work on problems in their real environment — their stack, their domain, their context.
+4. **Feedback that sharpens you** — Detailed. Specific. What stood out, where you can push further, what to build next.
+5. **Your profile compounds** — New domain context. Verified depth. Each engagement adds signal that makes the next match stronger.
 
-## For Companies
+### The Numbers
 
-Walnutt is the hiring infrastructure your engineering team deserves. We evaluate engineers on real work: what they've built, how they think, how they debug, how they code with AI, how they'd act on your team, and their culture and mindset. Companies stop running a hiring process and start meeting engineers who are ready to build with them.
-
-### The Walnutt Experience
-
-We go deep across six dimensions:
-1. What they've built: projects, commits, architectural choices over time
-2. How they think: system design problems with no right answer
-3. How they debug: how they narrow the search space
-4. How they code with AI: whether they use AI as a lever or a crutch
-5. How they'd act on your team: real engineering scenarios like conflicting PRs, production bugs, pushing back on decisions
-6. Culture and mindset: how they collaborate, take feedback, and fit into a team's rhythm
-
-### Skin in the Game
-
-- Zero upfront fees
-- Monthly payments over 12 months
-- First payment after 30 days in the seat
-- If the hire doesn't work out, Walnutt stops earning
+- 30 min — one conversation, that's the starting commitment
+- 71% — of candidates at final interviews get offers
+- 100% — get detailed feedback, every single engagement
+- 0 — applications to send, companies find you
+- Free — always, for engineers, no catch
 
 ## Who We Serve
 
@@ -45,8 +62,9 @@ Contact: hello@walnutt.co
 
 ## Pages
 
-- Homepage (Engineers): https://walnutt.co/
-- Homepage (Companies): https://walnutt.co/companies
+- Homepage (Companies, default): https://walnutt.co/
+- For Engineers: https://walnutt.co/engineers
+- For Companies: https://walnutt.co/companies
 - Privacy Policy: https://walnutt.co/privacy
 - Terms & Conditions: https://walnutt.co/terms
 - Engineer Assessment: https://app.walnutt.co/
