@@ -412,6 +412,7 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
                 <option>Engineering Manager</option>
                 <option>HR / Talent Acquisition</option>
                 <option>Technical Recruiter</option>
+                <option>Recruitment Agency</option>
                 <option>Hiring Manager</option>
                 <option>Other</option>
               </select>
