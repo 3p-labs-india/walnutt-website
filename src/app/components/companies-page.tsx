@@ -198,13 +198,15 @@ function Step({
 }
 
 // ═══ ENTRY CARD (glass, on dark bg) ═══
-function EntryCard({ scenario, response, product }: { scenario: string; response: string; product: string }) {
+function EntryCard({ scenario, response, bestFor, product, isBeta }: { scenario: string; response: string; bestFor?: string; product: string; isBeta?: boolean }) {
   return (
     <div style={{
+      position: "relative",
       background: "rgba(255,255,255,0.03)",
       border: "1px solid rgba(255,255,255,0.06)",
       borderRadius: 20, padding: "36px 28px 28px",
-      display: "flex", flexDirection: "column",
+      display: "flex", flexDirection: "column", alignItems: "center",
+      textAlign: "center",
       transition: "border-color 400ms, background 400ms, transform 400ms",
       cursor: "default",
     }}
@@ -219,6 +221,30 @@ function EntryCard({ scenario, response, product }: { scenario: string; response
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
+      {isBeta && (
+        <div style={{
+          position: "absolute", top: 0, right: 0,
+          width: 82, height: 82, overflow: "hidden",
+          borderTopRightRadius: 20,
+          pointerEvents: "none",
+        }}>
+          <div style={{
+            position: "absolute",
+            top: 14, right: -30,
+            width: 110,
+            transform: "rotate(45deg)",
+            textAlign: "center",
+            fontFamily: font.body, fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "#fff",
+            background: `linear-gradient(135deg, ${V.sageMid} 0%, #3A6B4C 100%)`,
+            padding: "3px 0",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+          }}>
+            Beta
+          </div>
+        </div>
+      )}
       <p style={{
         fontFamily: font.heading, fontSize: 17, fontWeight: 600, color: "#fff",
         lineHeight: 1.4, margin: "0 0 20px", minHeight: 50,
@@ -226,10 +252,47 @@ function EntryCard({ scenario, response, product }: { scenario: string; response
       <div style={{ width: 32, height: 2, background: V.sageMid, borderRadius: 1, marginBottom: 18 }} />
       <p style={{
         fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.5)",
-        lineHeight: 1.65, flex: 1, margin: "0 0 24px",
+        lineHeight: 1.65, margin: "0 0 20px",
       }}>{response}</p>
+      {bestFor && (
+        <p style={{
+          fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.42)",
+          lineHeight: 1.55, flex: 1, margin: "0 0 20px",
+        }}>
+          <span style={{ color: "rgba(255,255,255,0.72)", fontWeight: 500 }}>Best for: </span>
+          {bestFor}
+        </p>
+      )}
+      {isBeta && (
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+          padding: "12px 14px", marginBottom: 18,
+          borderRadius: 12,
+          background: "rgba(90,143,110,0.07)",
+          border: "1px solid rgba(90,143,110,0.18)",
+          width: "100%",
+        }}>
+          <div style={{ display: "flex", flexShrink: 0 }}>
+            {["#3A6B4C", "#5A8F6E", "#7BAE8E", "#A8C8B5"].map((c, i) => (
+              <span key={i} style={{
+                width: 22, height: 22, borderRadius: "50%",
+                background: c, border: `2px solid ${V.dark}`,
+                marginLeft: i === 0 ? 0 : -7,
+              }} />
+            ))}
+          </div>
+          <p style={{
+            fontFamily: font.body, fontSize: 12, color: "rgba(255,255,255,0.62)",
+            margin: 0, lineHeight: 1.45, textAlign: "left",
+          }}>
+            <span style={{ color: "#fff", fontWeight: 500 }}>Early cohort is loving it.</span>
+            {" "}Partnering with select teams before open release.
+          </p>
+        </div>
+      )}
       <div style={{
         paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)",
+        width: "100%", display: "flex", justifyContent: "center",
       }}>
         <span className="product-tag">
           <span className="product-dot" />
@@ -257,6 +320,11 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
         @keyframes pulseRing {
           0% { opacity: 0.9; transform: scale(0.85); }
           100% { opacity: 0; transform: scale(1.55); }
+        }
+        @keyframes betaPulse {
+          0% { box-shadow: 0 0 0 0 rgba(90,143,110,0.55); }
+          70% { box-shadow: 0 0 0 6px rgba(90,143,110,0); }
+          100% { box-shadow: 0 0 0 0 rgba(90,143,110,0); }
         }
         @keyframes productPulse {
           0%, 100% { box-shadow: 0 0 0 0 rgba(90,143,110,0.55), 0 0 14px rgba(90,143,110,0.35); transform: scale(1); }
@@ -389,19 +457,23 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
               display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20,
             }}>
               <EntryCard
-                scenario={"“We need to hire but the role isn’t clear yet.”"}
-                response="Calibrated candidate persona built from real market intel. Who to look for, what the market can deliver, where expectations need adjusting. The search starts right."
-                product="Role Blueprint"
-              />
-              <EntryCard
                 scenario={"“We have candidates. Can’t tell who’s real.”"}
-                response="Deep conversations across your pipeline — thinking patterns, proof of work, domain depth, cultural wiring. Shortlist with clear reasoning for each. Engineering time protected."
-                product="Candidate Signal Layer"
+                response="Deep technical and behavioral evaluation across your existing pipeline. We validate thinking, depth, proof of work, delivery ability, and fit — so your team only spends time on candidates worth meeting."
+                bestFor="Existing inbound applicants, recruiter pipelines, late-stage shortlists."
+                product="Deep Screen"
               />
               <EntryCard
-                scenario={"“Find us someone great. Ready from day one.”"}
-                response="Full cycle — sourcing, deep matching, assessment built on your context, active ramp during notice period. Candidates arrive ready to contribute from week one."
-                product="Full Stack Engine"
+                scenario={"“Find us someone great.”"}
+                response="We source, evaluate, and present high-conviction engineering talent matched to your role, team, and stage. Your team meets candidates already cleared on capability, communication, and real fit."
+                bestFor="Urgent hiring needs, niche roles, lean internal bandwidth."
+                product="Curated Hire"
+              />
+              <EntryCard
+                scenario={"“Find us someone who can deliver from week one.”"}
+                response="Everything in Curated Hire, plus assessments designed around your actual context and active ramp-up during notice period. Your hire joins already familiar with your systems, expectations, and way of working."
+                bestFor="Critical hires, teams where ramp time matters."
+                product="Pre-Onboarded Hire"
+                isBeta
               />
             </div>
           </FadeIn>
