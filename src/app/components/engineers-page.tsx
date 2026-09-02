@@ -977,7 +977,7 @@ export function EngineersPage() {
         <div style={{ maxWidth: 640, margin: "0 auto", position: "relative" }}>
           <FadeIn>
             <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: V.ink, letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
-              You've been ready{" "}<span style={{ fontStyle: "italic", color: V.sage }}>The right companies just don't know it yet</span>
+              You've been ready.{" "}<span style={{ fontStyle: "italic", color: V.sage }}>The right companies just don't know it yet.</span>
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
