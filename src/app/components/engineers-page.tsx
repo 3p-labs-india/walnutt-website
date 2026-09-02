@@ -61,7 +61,10 @@ function DarkStripTypewriter() {
   const part2End = part1End + darkStripBold.length;
 
   return (
-    <div ref={ref} style={{ background: V.sagePale, padding: "44px 48px", textAlign: "center" }}>
+    <div ref={ref} style={{
+      background: V.bg, padding: "56px 48px", textAlign: "center",
+      borderTop: `1px solid ${V.border}`, borderBottom: `1px solid ${V.border}`,
+    }}>
       <p style={{ fontFamily: font.heading, fontWeight: 400, fontSize: "clamp(17px, 2vw, 21px)", letterSpacing: "-0.01em", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
         <span style={{ color: V.body }}>{shown.slice(0, part1End)}</span>
         <span style={{ color: V.ink, fontWeight: 700 }}>{shown.slice(part1End, part2End)}</span>
