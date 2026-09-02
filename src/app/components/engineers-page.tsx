@@ -1,32 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { buildAppUrl, trackEvent } from "../../lib/analytics";
+import { V, font } from "./tokens";
 import { Briefcase, PenLine, User } from "lucide-react";
-
-// ═══ V2 DESIGN TOKENS ═══
-const V = {
-  bg: "#F4F8F5",
-  surface: "#FFFFFF",
-  sage: "#3A6B4C",
-  sageHover: "#2E5540",
-  sagePale: "#EDF4EF",
-  sageTint: "#DFF0E5",
-  sageMid: "#5A8F6E",
-  ink: "#1A2420",
-  body: "#2D3D36",
-  subtitle: "#6B7D74",
-  muted: "#A8B8B0",
-  border: "#D8E6DC",
-  dark: "#1A2420",
-  amber: "#D4803A",
-  amberLight: "#F5E6D0",
-};
-
-const font = {
-  serif: "'Fraunces', serif",
-  body: "'DM Sans', sans-serif",
-  heading: "'Bricolage Grotesque', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-};
 
 // ═══ SCROLL FADE-IN ═══
 function FadeIn({ children, className = "", delay = 0, style }: { children: React.ReactNode; className?: string; delay?: number; style?: React.CSSProperties }) {
@@ -107,7 +82,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "30%", left: "35%",
         width: 600, height: 500, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(58,107,76,0.30) 0%, rgba(58,107,76,0.08) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(60,110,78,0.30) 0%, rgba(60,110,78,0.08) 50%, transparent 70%)",
         filter: "blur(80px)",
         animation: "aurora1 18s ease-in-out infinite alternate",
       }} />
@@ -115,7 +90,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "25%", left: "55%",
         width: 500, height: 450, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(90,143,110,0.25) 0%, rgba(90,143,110,0.06) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(87,168,116,0.25) 0%, rgba(87,168,116,0.06) 50%, transparent 70%)",
         filter: "blur(70px)",
         animation: "aurora2 22s ease-in-out infinite alternate",
       }} />
@@ -123,7 +98,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "50%", left: "45%",
         width: 450, height: 400, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(14,165,165,0.12) 0%, rgba(14,165,165,0.03) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.16) 0%, rgba(147,196,164,0.04) 50%, transparent 70%)",
         filter: "blur(90px)",
         animation: "aurora3 25s ease-in-out infinite alternate",
       }} />
@@ -131,7 +106,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "35%", left: "50%", transform: "translate(-50%, -50%)",
         width: 350, height: 300, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(58,107,76,0.20) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse, rgba(60,110,78,0.20) 0%, transparent 60%)",
         filter: "blur(50px)",
         animation: "aurora4 15s ease-in-out infinite alternate",
       }} />
@@ -155,7 +130,7 @@ function SageBtn({ children, href, eventName, variant = "sage", style: extraStyl
     const t = e.currentTarget as HTMLElement;
     t.style.background = isSage ? V.sageHover : V.sageTint;
     t.style.transform = "translateY(-1px)";
-    t.style.boxShadow = isSage ? "0 4px 16px rgba(58,107,76,0.25)" : "0 4px 20px rgba(0,0,0,0.2)";
+    t.style.boxShadow = isSage ? "0 4px 16px rgba(60,110,78,0.25)" : "0 4px 20px rgba(0,0,0,0.2)";
   };
   const onLeave = (e: React.MouseEvent) => {
     const t = e.currentTarget as HTMLElement;
@@ -169,7 +144,7 @@ function SageBtn({ children, href, eventName, variant = "sage", style: extraStyl
 // ═══ FAQ ACCORDION ═══
 function FAQItem({ q, a, open, onToggle }: { q: string; a: string; open: boolean; onToggle: () => void }) {
   return (
-    <div style={{ borderBottom: "1px solid #E8F0EB" }}>
+    <div style={{ borderBottom: `1px solid ${V.sageTint}` }}>
       <button onClick={onToggle} style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>
         <span style={{ fontFamily: font.body, fontSize: 16, fontWeight: 600, color: V.ink, flex: 1, paddingRight: 16 }}>{q}</span>
         <span style={{ fontSize: 20, color: open ? V.sage : V.muted, fontWeight: 300, lineHeight: 1, transform: open ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 200ms, color 200ms", flexShrink: 0 }}>+</span>
@@ -675,7 +650,7 @@ function ReportSVG() {
       <rect x="68" y="52" width="45" height="5" rx="2.5" fill={V.sageMid} opacity="0.5" />
       {/* Growth bar */}
       <rect x="68" y="62" width="60" height="5" rx="2.5" fill={V.sageMid} opacity="0.15" />
-      <rect x="68" y="62" width="30" height="5" rx="2.5" fill="#D4803A" opacity="0.4" />
+      <rect x="68" y="62" width="30" height="5" rx="2.5" fill={V.amber} opacity="0.4" />
       {/* Sparkle */}
       <path d="M130 15 L132 11 L134 15 L138 17 L134 19 L132 23 L130 19 L126 17 Z" fill={V.sageMid} opacity="0.3" />
     </svg>
@@ -688,7 +663,7 @@ function FreeSVG() {
       {/* Price tag crossed out */}
       <rect x="40" y="30" width="50" height="30" rx="6" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
       <text x="65" y="50" fontFamily="'JetBrains Mono'" fontSize="12" fill="rgba(255,255,255,0.15)" textAnchor="middle">$$$</text>
-      <line x1="38" y1="62" x2="92" y2="28" stroke="rgba(255,100,100,0.3)" strokeWidth="1.5" />
+      <line x1="38" y1="62" x2="92" y2="28" stroke="rgba(194,94,81,0.45)" strokeWidth="1.5" />
       {/* Free / heart */}
       <circle cx="140" cy="45" r="18" stroke={V.sageMid} strokeWidth="1.5" opacity="0.35" />
       <path d="M132 42 C132 36 140 34 140 40 C140 34 148 36 148 42 C148 50 140 54 140 54 C140 54 132 50 132 42Z" fill={V.sageMid} opacity="0.3" />
@@ -740,7 +715,7 @@ function WhyCard({ visual, title, desc }: { visual: React.ReactNode; title: stri
       transition: "all 400ms cubic-bezier(0.16,1,0.3,1)", cursor: "default",
     }}
       onMouseEnter={e => {
-        e.currentTarget.style.borderColor = "rgba(90,143,110,0.25)";
+        e.currentTarget.style.borderColor = "rgba(87,168,116,0.25)";
         e.currentTarget.style.background = "rgba(255,255,255,0.05)";
         e.currentTarget.style.transform = "translateY(-4px)";
       }}
@@ -866,8 +841,8 @@ export function EngineersPage() {
         @keyframes fadeCard { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes ctaGlow {
-          0%, 100% { box-shadow: 0 0 20px rgba(90,143,110,0.0); }
-          50% { box-shadow: 0 0 50px rgba(90,143,110,0.3); }
+          0%, 100% { box-shadow: 0 0 20px rgba(87,168,116,0.0); }
+          50% { box-shadow: 0 0 50px rgba(87,168,116,0.3); }
         }
         @keyframes aurora1 {
           0% { transform: translate(0, 0) scale(1); }

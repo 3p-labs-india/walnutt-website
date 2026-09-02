@@ -1,15 +1,12 @@
 import React, { useEffect, useState, type ReactNode } from "react";
-import { C, WalnuttLogo, globalKeyframes } from "./shared";
+import { C, WalnuttLogo } from "./shared";
 
 export function LegalLayout({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap";
-    document.head.appendChild(link);
-    setTimeout(() => setLoaded(true), 100);
+    const t = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(t);
   }, []);
 
   return (
@@ -18,7 +15,6 @@ export function LegalLayout({ children }: { children: ReactNode }) {
       fontFamily: "'Inter', sans-serif",
       opacity: loaded ? 1 : 0, transition: "opacity 0.3s",
     }}>
-      <style>{globalKeyframes}</style>
 
       {/* Nav */}
       <nav style={{

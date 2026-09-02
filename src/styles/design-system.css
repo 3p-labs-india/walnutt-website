@@ -166,6 +166,11 @@ button:focus-visible {
 
 /* ── reduced motion ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    animation-play-state: paused !important;
+  }
   html { scroll-behavior: auto }
   .rv { opacity: 1; transform: none; transition: none }
   .btn, .btn-ghost, .btn .ar { transition: none }
