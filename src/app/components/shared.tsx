@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { buildAppUrl, trackEvent } from "../../lib/analytics";
 import { X, CheckCircle } from "lucide-react";
+import { V, font, HEX } from "./tokens";
 
 // ═══ DESIGN TOKENS ═══
 export const C = {
@@ -272,29 +273,29 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const sage = "#3A6B4C";
-  const fBody = "'DM Sans', sans-serif";
-  const fSerif = "'Fraunces', serif";
-  const fMono = "'JetBrains Mono', monospace";
+  const sage = V.sage;
+  const fBody = font.body;
+  const fSerif = font.heading;
+  const fMono = font.mono;
 
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "12px 16px", borderRadius: 10,
-    border: "1px solid rgba(58,107,76,0.12)", fontSize: 14, fontFamily: fBody,
-    color: "#1A2420", outline: "none", boxSizing: "border-box",
+    border: "1px solid rgba(60,110,78,0.14)", fontSize: 14, fontFamily: fBody,
+    color: V.ink, outline: "none", boxSizing: "border-box",
     background: "rgba(255,255,255,0.6)", transition: "border-color 200ms, box-shadow 200ms",
   };
 
   const labelStyle: React.CSSProperties = {
     display: "block", fontSize: 12, fontWeight: 500, marginBottom: 6,
-    color: "rgba(26,36,32,0.5)", fontFamily: fBody,
+    color: "var(--faint)", fontFamily: fBody,
   };
 
   const focusInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.currentTarget.style.borderColor = sage;
-    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(58,107,76,0.1)";
+    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(60,110,78,0.12)";
   };
   const blurInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.currentTarget.style.borderColor = "rgba(58,107,76,0.12)";
+    e.currentTarget.style.borderColor = "rgba(60,110,78,0.14)";
     e.currentTarget.style.boxShadow = "none";
   };
 
@@ -318,27 +319,27 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
         style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.3)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
         <div style={{
           width: "100%", maxWidth: 420, borderRadius: 24, padding: 48,
-          background: "rgba(237,244,239,0.72)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+          background: "rgba(242,245,243,0.78)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
           boxShadow: "0 32px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset",
           textAlign: "center",
         }}>
           <div style={{
-            width: 52, height: 52, borderRadius: "50%", background: "rgba(58,107,76,0.1)",
+            width: 52, height: 52, borderRadius: "50%", background: "rgba(60,110,78,0.12)",
             display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
           }}>
             <CheckCircle size={26} color={sage} />
           </div>
-          <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: "#1A2420", margin: "0 0 8px" }}>We've got it.</h3>
-          <p style={{ fontFamily: fBody, fontSize: 15, color: "rgba(26,36,32,0.5)", lineHeight: 1.6, margin: "0 0 28px" }}>
+          <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: V.ink, margin: "0 0 8px" }}>We've got it.</h3>
+          <p style={{ fontFamily: fBody, fontSize: 15, color: "var(--faint)", lineHeight: 1.6, margin: "0 0 28px" }}>
             Our team will review your details and get back to you within 24 hours.
           </p>
           <button onClick={onClose} style={{
             fontFamily: fBody, fontSize: 14, fontWeight: 600, color: "#fff",
-            background: "#1A2420", padding: "12px 32px", borderRadius: 30, border: "none",
+            background: V.dark, padding: "12px 32px", borderRadius: 30, border: "none",
             cursor: "pointer", transition: "all 200ms", width: "100%",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = sage; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#1A2420"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = HEX.dark; }}
           >Close</button>
         </div>
       </div>
@@ -350,7 +351,7 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
       style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(0,0,0,0.3)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", overflowY: "auto" }}>
       <div style={{
         width: "100%", maxWidth: 480, borderRadius: 24, padding: "36px 32px",
-        background: "rgba(237,244,239,0.72)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+        background: "rgba(242,245,243,0.78)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
         boxShadow: "0 32px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset",
         margin: "auto",
       }}>
@@ -358,8 +359,8 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 4 }}>
           <div>
             <p style={{ fontFamily: fMono, fontSize: 10, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: sage, marginBottom: 8, opacity: 0.6 }}>CONNECT WITH US</p>
-            <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: "#1A2420", margin: 0 }}>Let's talk.</h3>
-            <p style={{ fontFamily: fBody, fontSize: 14, color: "rgba(26,36,32,0.45)", margin: "8px 0 0", lineHeight: 1.5 }}>
+            <h3 style={{ fontFamily: fSerif, fontSize: 24, fontWeight: 600, color: V.ink, margin: 0 }}>Let's talk.</h3>
+            <p style={{ fontFamily: fBody, fontSize: 14, color: "var(--faint)", margin: "8px 0 0", lineHeight: 1.5 }}>
               Tell us who you need. We'll get back within 24 hours.
             </p>
           </div>
@@ -431,17 +432,17 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
 
           <button onClick={handleSubmit} style={{
             width: "100%", fontFamily: fBody, fontSize: 15, fontWeight: 600, color: "#fff",
-            background: "#1A2420", padding: "14px 24px", borderRadius: 30, border: "none",
+            background: V.dark, padding: "14px 24px", borderRadius: 30, border: "none",
             cursor: "pointer", transition: "all 200ms", marginTop: 4,
             opacity: loading ? 0.7 : 1,
           }}
             onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = sage; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#1A2420"; e.currentTarget.style.transform = "translateY(0)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = HEX.dark; e.currentTarget.style.transform = "translateY(0)"; }}
           >
             {loading ? "Sending..." : "Connect with us →"}
           </button>
 
-          <p style={{ fontFamily: fBody, fontSize: 12, color: "rgba(26,36,32,0.3)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
+          <p style={{ fontFamily: fBody, fontSize: 12, color: "var(--faint-2)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
             No pitch deck. Just a real conversation.
           </p>
         </div>
