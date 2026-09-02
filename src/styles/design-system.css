@@ -52,6 +52,20 @@ button:focus-visible {
 
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 48px) }
 
+/* ── hero grid ─────────────────────────────────────────────────────────────
+   Faint ruled ground shared by both heroes, masked to a soft ellipse so it
+   fades out before it reaches the edges. Centred by default; the companies
+   hero shifts its mask right (see companies.css). */
+.grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(34, 51, 42, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 51, 42, .05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 72%);
+}
+
 /* ── scroll reveal ─────────────────────────────────────────────────────── */
 .rv {
   opacity: 0;

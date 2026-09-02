@@ -103,7 +103,7 @@ function HomePageInner({ mode }: { mode: Mode }) {
                   rel="noopener noreferrer"
                   onClick={() => trackEvent("cta_clicked_nav_app", { location: "engineers_nav" })}
                 >
-                  Start your conversation <span className="ar">→</span>
+                  Start a conversation <span className="ar">→</span>
                 </a>
               </>
             ) : (
@@ -149,7 +149,7 @@ function HomePageInner({ mode }: { mode: Mode }) {
                     <li><Link to="/">For companies</Link></li>
                     <li>
                       <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer">
-                        Start your conversation
+                        Start a conversation
                       </a>
                     </li>
                   </>

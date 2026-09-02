@@ -82,7 +82,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "30%", left: "35%",
         width: 600, height: 500, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(147,196,164,0.42) 0%, rgba(147,196,164,0.12) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.26) 0%, rgba(147,196,164,0.07) 50%, transparent 70%)",
         filter: "blur(80px)",
         animation: "aurora1 18s ease-in-out infinite alternate",
       }} />
@@ -90,7 +90,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "25%", left: "55%",
         width: 500, height: 450, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(87,168,116,0.24) 0%, rgba(87,168,116,0.07) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(87,168,116,0.15) 0%, rgba(87,168,116,0.04) 50%, transparent 70%)",
         filter: "blur(70px)",
         animation: "aurora2 22s ease-in-out infinite alternate",
       }} />
@@ -98,7 +98,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "50%", left: "45%",
         width: 450, height: 400, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(147,196,164,0.26) 0%, rgba(147,196,164,0.07) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.16) 0%, rgba(147,196,164,0.04) 50%, transparent 70%)",
         filter: "blur(90px)",
         animation: "aurora3 25s ease-in-out infinite alternate",
       }} />
@@ -106,7 +106,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "35%", left: "50%", transform: "translate(-50%, -50%)",
         width: 350, height: 300, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(147,196,164,0.30) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.18) 0%, transparent 60%)",
         filter: "blur(50px)",
         animation: "aurora4 15s ease-in-out infinite alternate",
       }} />
@@ -808,7 +808,7 @@ function WhoItsFor() {
 
         <FadeIn delay={300}>
           <div style={{ textAlign: "center", marginTop: 36 }}>
-            <SageBtn href="/" eventName="cta_clicked_whosfor">Have a Conversation →</SageBtn>
+            <SageBtn href="/" eventName="cta_clicked_whosfor">Start a conversation →</SageBtn>
           </div>
         </FadeIn>
       </div>
@@ -868,6 +868,7 @@ export function EngineersPage() {
         position: "relative", overflow: "hidden",
       }}>
         <HeroVisual />
+        <div className="grid-bg" />
 
         {/* H1 */}
         <h1 style={{
@@ -889,7 +890,7 @@ export function EngineersPage() {
 
         {/* CTA */}
         <div style={{ position: "relative", ...animStyle(400) }}>
-          <SageBtn href="/" eventName="cta_clicked_hero" style={{ boxShadow: "0 10px 30px -10px rgba(47,89,64,0.45)" }}>Have a Conversation →</SageBtn>
+          <SageBtn href="/" eventName="cta_clicked_hero" style={{ boxShadow: "0 10px 30px -10px rgba(47,89,64,0.45)" }}>Start a conversation →</SageBtn>
         </div>
 
         {/* Single italic line */}
@@ -980,7 +981,7 @@ export function EngineersPage() {
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
-            <SageBtn href="/" eventName="cta_clicked_closing">Have a Conversation →</SageBtn>
+            <SageBtn href="/" eventName="cta_clicked_closing">Start a conversation →</SageBtn>
           </FadeIn>
         </div>
       </section>

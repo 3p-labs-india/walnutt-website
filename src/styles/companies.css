@@ -32,12 +32,9 @@
 @keyframes drift-a { from { transform: translate(0, 0) } to { transform: translate(-70px, 50px) } }
 @keyframes drift-b { from { transform: translate(0, 0) } to { transform: translate(60px, -40px) } }
 
-.page-companies .grid-bg {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(34, 51, 42, .05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 51, 42, .05) 1px, transparent 1px);
-  background-size: 56px 56px;
+/* base .grid-bg lives in design-system.css; the hero shifts its mask right,
+   under the K-curve, since the headline sits left */
+.page-companies .hero .grid-bg {
   -webkit-mask-image: radial-gradient(ellipse 75% 65% at 62% 42%, #000 0%, transparent 72%);
   mask-image: radial-gradient(ellipse 75% 65% at 62% 42%, #000 0%, transparent 72%);
 }
