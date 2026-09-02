@@ -4,10 +4,9 @@ import { Helmet } from "react-helmet-async";
 import { C, ContactModal, globalKeyframes } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
-import { RecruitersPage } from "./recruiters-page";
 import { buildAppUrl, trackEvent } from "../../lib/analytics";
 
-type Mode = "engineers" | "companies" | "recruiters";
+type Mode = "engineers" | "companies";
 
 // V2 tokens
 const V = {
@@ -30,13 +29,11 @@ const font = {
 
 const TABS: { id: Mode; label: string }[] = [
   { id: "companies", label: "For Companies" },
-  { id: "recruiters", label: "For Recruiters" },
   { id: "engineers", label: "For Engineers" },
 ];
 
 const MODE_TO_PATH: Record<Mode, string> = {
   companies: "/",
-  recruiters: "/recruiters",
   engineers: "/engineers",
 };
 
@@ -105,7 +102,6 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
 
   const isE = mode === "engineers";
   const isC = mode === "companies";
-  const isR = mode === "recruiters";
 
   const handleToggle = (newMode: Mode) => {
     setMode(newMode);
@@ -123,12 +119,6 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
         title: "Walnutt | Outgrow the hiring audition.",
         desc: "No applications. No wasted hours. One real conversation, and the right companies start finding you.",
         canonical: "https://walnutt.co/engineers",
-      }
-    : isR
-    ? {
-        title: "Walnutt | More engineering placements. Less of your time.",
-        desc: "AI-powered sourcing, a proprietary assessment platform, and a network of engineer interviewers. For recruitment agencies and individual recruiters.",
-        canonical: "https://walnutt.co/recruiters",
       }
     : {
         title: "Walnutt | Outgrow the hiring cycle.",
@@ -168,9 +158,7 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
         </a>
       );
     }
-    const eventLocation = isR
-      ? (mobile ? "recruiters_nav_mobile" : "recruiters_nav")
-      : (mobile ? "companies_nav_mobile" : "companies_nav");
+    const eventLocation = mobile ? "companies_nav_mobile" : "companies_nav";
     return (
       <a
         onClick={() => {
@@ -243,7 +231,6 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
       <main>
         {isE && <EngineersPage />}
         {isC && <CompaniesPage onOpenForm={() => setShowModal(true)} />}
-        {isR && <RecruitersPage onOpenForm={() => setShowModal(true)} />}
       </main>
 
       {/* ═══ FOOTER ═══ */}
@@ -256,7 +243,6 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
                 <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 12 }}>Product</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <FooterLink label="For Companies" onClick={() => handleToggle("companies")} />
-                  <FooterLink label="For Recruiters" onClick={() => handleToggle("recruiters")} />
                   <FooterLink label="For Engineers" onClick={() => handleToggle("engineers")} />
                 </div>
               </div>
@@ -284,7 +270,6 @@ function HomePageInner({ initialMode = "engineers" }: { initialMode?: Mode }) {
             <span style={{ fontFamily: font.body, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.35)" }}>
               {isE && "One conversation. Every signal that matters."}
               {isC && "Hire now. Pay later."}
-              {isR && "You own the client. We own the pipeline."}
             </span>
           </div>
         </div>
@@ -310,4 +295,3 @@ function FooterLink({ label, href, onClick }: { label: string; href?: string; on
 // Route exports
 export function HomePage() { return <HomePageInner initialMode="engineers" />; }
 export function CompaniesHomePage() { return <HomePageInner initialMode="companies" />; }
-export function RecruitersHomePage() { return <HomePageInner initialMode="recruiters" />; }

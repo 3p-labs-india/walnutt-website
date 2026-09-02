@@ -271,7 +271,6 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const sage = "#3A6B4C";
   const fBody = "'DM Sans', sans-serif";
@@ -429,10 +428,6 @@ export function ContactModal({ onClose }: { onClose: () => void }) {
               value={message} onChange={e => setMessage(e.target.value)}
               onFocus={focusInput as any} onBlur={blurInput as any} />
           </div>
-
-          {error && (
-            <p style={{ fontSize: 13, color: "#DC2626", margin: 0, textAlign: "center" }}>{error}</p>
-          )}
 
           <button onClick={handleSubmit} style={{
             width: "100%", fontFamily: fBody, fontSize: 15, fontWeight: 600, color: "#fff",

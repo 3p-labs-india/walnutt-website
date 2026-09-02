@@ -624,7 +624,7 @@ function FiveDimensionsSVG() {
       <polygon points="100,12 145,38 130,78 70,78 55,38" stroke={V.sageMid} strokeWidth="1" opacity="0.15" fill="none" />
       <polygon points="100,25 132,42 122,70 78,70 68,42" stroke={V.sageMid} strokeWidth="1" opacity="0.25" fill="none" />
       {/* Filled shape (score) */}
-      <polygon points="100,20 140,40 125,75 72,68 60,38" fill={V.sageMid} opacity="0.08" stroke={V.sageMid} strokeWidth="1.5" opacity="0.4" />
+      <polygon points="100,20 140,40 125,75 72,68 60,38" fill={V.sageMid} fillOpacity="0.08" stroke={V.sageMid} strokeWidth="1.5" strokeOpacity="0.4" />
       {/* Dimension dots */}
       <circle cx="100" cy="20" r="3" fill={V.sageMid} opacity="0.5" />
       <circle cx="140" cy="40" r="3" fill={V.sageMid} opacity="0.5" />

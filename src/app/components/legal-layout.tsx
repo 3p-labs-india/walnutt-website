@@ -71,7 +71,6 @@ export function LegalLayout({ children }: { children: ReactNode }) {
               onMouseLeave={e => (e.currentTarget.style.color = C.gray400)}>
               Terms & Conditions
             </a>
-            <span style={{ fontSize: 12, color: C.gray400 }}>© 2026 Walnutt</span>
           </div>
         </div>
       </footer>
