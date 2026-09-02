@@ -61,7 +61,7 @@ function DarkStripTypewriter() {
   const part2End = part1End + darkStripBold.length;
 
   return (
-    <div ref={ref} style={{ background: V.dark, padding: "44px 48px", textAlign: "center" }}>
+    <div ref={ref} data-nav-dark style={{ background: V.dark, padding: "44px 48px", textAlign: "center" }}>
       <p style={{ fontFamily: font.heading, fontWeight: 400, fontSize: "clamp(17px, 2vw, 21px)", letterSpacing: "-0.01em", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
         <span style={{ color: "rgba(255,255,255,0.55)" }}>{shown.slice(0, part1End)}</span>
         <span style={{ color: "#fff", fontWeight: 700 }}>{shown.slice(part1End, part2End)}</span>
@@ -684,7 +684,7 @@ const whyItems = [
 
 function WhyWalnutt() {
   return (
-    <section style={{ background: V.dark, padding: "100px 24px" }} className="md:px-12">
+    <section data-nav-dark style={{ background: V.dark, padding: "100px 24px" }} className="md:px-12">
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <FadeIn>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
@@ -863,7 +863,7 @@ export function EngineersPage() {
       `}</style>
 
       {/* ═══ HERO ═══ */}
-      <section style={{
+      <section data-nav-dark style={{
         minHeight: "100vh",
         background: V.dark,
         display: "flex", flexDirection: "column",
@@ -972,7 +972,7 @@ export function EngineersPage() {
       </section>
 
       {/* ═══ FINAL CTA ═══ */}
-      <section id="engineer-cta" style={{ background: V.dark, padding: "100px 24px", textAlign: "center", position: "relative", overflow: "hidden" }} className="md:px-12">
+      <section id="engineer-cta" data-nav-dark style={{ background: V.dark, padding: "100px 24px", textAlign: "center", position: "relative", overflow: "hidden" }} className="md:px-12">
         {/* Decorative arcs (white, faint) */}
         <div style={{ position: "absolute", top: -150, right: -150, width: 500, height: 500, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.03)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -200, left: -150, width: 600, height: 600, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.03)", pointerEvents: "none" }} />

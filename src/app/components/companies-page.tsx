@@ -232,8 +232,8 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
         <div className="wrap hero-in">
           <div>
             <h1>
-              <span className="hl">Great companies</span>
-              <span className="hl">are built on</span>
+              <span className="hl">Great companies</span>{" "}
+              <span className="hl">are built on</span>{" "}
               <span className="hl traj">great hires.</span>
             </h1>
             <div className="hero-cta">
@@ -447,7 +447,7 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
       </section>
 
       {/* ═══ THE MACHINERY ═══ */}
-      <section id="machine" ref={machineRef}>
+      <section id="machine" data-nav-dark ref={machineRef}>
         <div className="grid-bg" />
         <div className="wrap" style={{ position: "relative" }}>
           <div className="rv">

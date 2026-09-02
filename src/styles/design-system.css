@@ -116,6 +116,16 @@ button:focus-visible {
 .navlinks .eng:hover { color: var(--green) }
 .site-nav .btn { padding: 10px 18px; font-size: 13.5px; border-radius: 10px; white-space: nowrap }
 
+/* inverted treatment while the bar sits over a dark section */
+.site-nav[data-over="dark"] {
+  background: rgba(20, 31, 24, .62);
+  border-bottom-color: rgba(233, 240, 235, .1);
+  --brand-stroke: #9FD4B4;
+}
+.site-nav[data-over="dark"] .wordmark { color: #F3F8F4 }
+.site-nav[data-over="dark"] .navlinks .eng { color: rgba(233, 240, 235, .72) }
+.site-nav[data-over="dark"] .navlinks .eng:hover { color: #9FD4B4 }
+
 @media (max-width: 560px) {
   .nav-in { padding: 11px 18px; gap: 10px }
   .navlinks { gap: 14px }

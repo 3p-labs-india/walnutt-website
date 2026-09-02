@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { ContactModal } from "./shared";
@@ -21,13 +21,43 @@ const SEO: Record<Mode, { title: string; desc: string; canonical: string }> = {
   },
 };
 
+/**
+ * The nav is a fixed translucent bar, and both pages run full-bleed dark
+ * sections underneath it. Sections that need the inverted treatment carry
+ * `data-nav-dark`; this watches which one is under the bar.
+ */
+const NAV_BAND = 68;
+
+function useNavOverDark() {
+  const [overDark, setOverDark] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const hit = Array.from(document.querySelectorAll<HTMLElement>("[data-nav-dark]")).some(el => {
+        const r = el.getBoundingClientRect();
+        return r.top <= NAV_BAND * 0.5 && r.bottom >= NAV_BAND * 0.5;
+      });
+      setOverDark(hit);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  });
+
+  return overDark;
+}
+
 // ═══ BRAND MARK (hexagon + chevrons) ═══
 function BrandMark({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 80 80" fill="none" aria-hidden="true">
-      <path d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z" stroke="var(--green)" strokeWidth="4.5" fill="none" strokeLinejoin="round" />
-      <path d="M34 24 L20 40 L34 56" stroke="var(--green)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <path d="M46 24 L60 40 L46 56" stroke="var(--green)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z" stroke="var(--brand-stroke, var(--green))" strokeWidth="4.5" fill="none" strokeLinejoin="round" />
+      <path d="M34 24 L20 40 L34 56" stroke="var(--brand-stroke, var(--green))" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M46 24 L60 40 L46 56" stroke="var(--brand-stroke, var(--green))" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
     </svg>
   );
 }
@@ -44,6 +74,7 @@ function Brand({ size = 26 }: { size?: number }) {
 function HomePageInner({ mode }: { mode: Mode }) {
   const [showModal, setShowModal] = useState(false);
   const isE = mode === "engineers";
+  const overDark = useNavOverDark();
   const seo = SEO[mode];
 
   const openForm = (location: string) => {
@@ -63,7 +94,7 @@ function HomePageInner({ mode }: { mode: Mode }) {
       </Helmet>
 
       {/* ═══ NAV ═══ */}
-      <nav className="site-nav">
+      <nav className="site-nav" data-over={overDark ? "dark" : undefined}>
         <div className="nav-in">
           <Brand />
           <div className="navlinks">
