@@ -1,34 +1,30 @@
 # Walnutt
 
-> Walnutt is hiring infrastructure for engineering teams. The hiring process that also onboards — built around your actual context, turning months into days. For engineers: no applications, just one real conversation, and the right companies start finding you.
+> Walnutt is hiring infrastructure for engineering teams. Every candidate is scored on three questions — can they do it, how well do they fit, and will they join — and that score is held from the first conversation to day one. For engineers: no applications, just one real conversation, and the right companies start finding you.
 
-## For Companies — Outgrow the hiring cycle.
+## For Companies — Great companies are built on great hires.
 
-The hiring process that also onboards. Built around your actual context. Turning months into days.
+Every hire is scored on three questions, and the score is held from the first conversation to day one.
 
-### The Process
+### What makes the difference
 
-1. **Build the candidate persona** — A sharp picture of who you actually need, calibrated to market reality. Half the battle won before the search begins. *100x the JD.*
-2. **Find the right people** — From our pool, your pipeline, or sourced fresh. Matched on real depth — thinking, building, problem-solving. Your team only meets people worth their time. *Zero wasted interviews.*
-3. **Assess through real work. Cross-reference everything.** — Challenges built on your actual stack and domain. Claims verified against real output. You see real thinking. They absorb your world. One step, both jobs. *Onboarding starts inside the hiring process itself.*
-4. **Notice period. Ramp already running.** — They're learning your systems, conventions, and team dynamics. You see progress in real time. Connection builds before they've officially started. *Candidates are invested. Offer dropouts reduced.*
-5. **Day one. They deliver.** — Not orientation. Not "where's the wiki." Real contribution from the first morning. *Day one feels like they were already here.*
+1. **Capability Score — Can they do it?** Depth in the exact work this role demands, proven in what they've shipped and verified against real output. Scored across system design, debugging, code quality and judgment.
+2. **Fit Score — How well do they fit?** Six dimensions of the person — personality, consistency, integrity, cognition, growth, relationships — mapped from behaviour over time rather than a single interview.
+3. **Intent Score — Will they join?** Joining intent, measured through the last mile from offer to notice period to day one, and tracked so a shift shows up early.
 
-### One system. Enter wherever you are.
+The three converge into one Match Score, calculated for this person in this role.
 
-- **Role Blueprint** — You need to hire but the role isn't clear yet. Calibrated candidate persona built from real market intel. Who to look for, what the market can deliver, where expectations need adjusting.
-- **Candidate Signal Layer** — You have candidates but can't tell who's real. Deep conversations across your pipeline — thinking patterns, proof of work, domain depth, cultural wiring. Shortlist with clear reasoning for each.
-- **Full Stack Engine** — Find us someone great, ready from day one. Full cycle — sourcing, deep matching, assessment built on your context, active ramp during notice period.
+### The machinery behind the matching
 
-### The Hiring Tax — Stop paying it.
+- **Context Capture** — *Role Brief (AI + human).* The role from one conversation: team, product, and where the friction actually sits.
+- **Sourcing** — *Warm Network (human)*, first and second degree, high trust. *Agentic Headhunting (AI)*, finding the right shape of person even when they aren't looking. *Recruiter Network (human)*, specialist recruiters plugged into the system.
+- **Screening** — *Role-calibrated Assessments (AI)* across system design, debugging, judgment and code quality. *Tech Interviews (human)*, run live by engineers who ship in the same domain.
+- **Joining** — *Intent Tracking (AI + human)* from offer to day one, with *Early Warning* if intent shifts, so you hear it first.
 
-| | Industry average | With Walnutt |
-|---|---|---|
-| Screening & filtering | 40–60 hours per role | 0 hours. Deep-signal filtered. |
-| Engineering interview loops | 35–40 hours wasted | Your team meets only pre-cleared candidates. |
-| Interview-to-offer rate | ~30% | 71% |
-| Time to hire (Offer) | 2–3 months | ~6 days |
-| Total hiring + onboarding cycle | 3–4 months | Weeks |
+### Two ways to start
+
+- **Need the hire.** Brief us the role. The system takes it from there.
+- **The offer is out.** Know whether this candidate will join, before you plan around them.
 
 ## For Engineers — Outgrow the hiring audition.
 
