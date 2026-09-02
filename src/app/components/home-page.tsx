@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { ContactModal } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
-import { buildAppUrl, trackEvent } from "../../lib/analytics";
+import { buildAppUrl, buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
 
 type Mode = "engineers" | "companies";
 
@@ -77,11 +77,6 @@ function HomePageInner({ mode }: { mode: Mode }) {
   const overDark = useNavOverDark();
   const seo = SEO[mode];
 
-  const openForm = (location: string) => {
-    trackEvent("cta_clicked_nav_connect", { location });
-    setShowModal(true);
-  };
-
   return (
     <>
       <Helmet>
@@ -114,9 +109,15 @@ function HomePageInner({ mode }: { mode: Mode }) {
             ) : (
               <>
                 <Link className="eng" to="/engineers">For engineers</Link>
-                <button className="btn" onClick={() => openForm("companies_nav")}>
+                <a
+                  className="btn"
+                  href={buildRoleBriefUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_nav" })}
+                >
                   Start a role <span className="ar">→</span>
-                </button>
+                </a>
               </>
             )}
           </div>
@@ -154,7 +155,16 @@ function HomePageInner({ mode }: { mode: Mode }) {
                   </>
                 ) : (
                   <>
-                    <li><button onClick={() => openForm("companies_footer")}>Start a role</button></li>
+                    <li>
+                      <a
+                        href={buildRoleBriefUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_footer" })}
+                      >
+                        Start a role
+                      </a>
+                    </li>
                     <li><Link to="/engineers">For engineers</Link></li>
                   </>
                 )}

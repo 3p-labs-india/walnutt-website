@@ -4,6 +4,7 @@ import posthog from "posthog-js";
 const POSTHOG_KEY = "phc_j70UHuZRuQa2jPtfSWjc8Boc2EHBKT7Vo9X6zHL0HUn";
 const POSTHOG_HOST = "https://us.i.posthog.com";
 const APP_BASE_URL = "https://app.walnutt.co";
+const ROLE_BRIEF_URL = "https://rolebrief.walnutt.co/";
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
 const SESSION_KEY = "walnutt_utm";
 
@@ -43,12 +44,9 @@ export function getStoredUtms(): Record<string, string> {
   }
 }
 
-// ─── URL BUILDER ──────────────────────────────────────────────────────────────
-/**
- * Builds an app.walnutt.co URL with UTM params forwarded from the landing page.
- * e.g. walnutt.co?utm_source=linkedin → app.walnutt.co?utm_source=linkedin
- */
-export function buildAppUrl(path = ""): string {
+// ─── URL BUILDERS ─────────────────────────────────────────────────────────────
+/** Forwards UTMs captured on the landing page onto an outbound product URL. */
+function withUtms(base: string): string {
   const utms = getStoredUtms();
 
   // Also grab from current URL in case storeUtmParams hasn't run (SSR edge cases)
@@ -60,9 +58,23 @@ export function buildAppUrl(path = ""): string {
     }
   });
 
-  const base = `${APP_BASE_URL}${path}`;
   if (Object.keys(utms).length === 0) return base;
-  return `${base}?${new URLSearchParams(utms).toString()}`;
+  const url = new URL(base);
+  Object.entries(utms).forEach(([k, v]) => url.searchParams.set(k, v));
+  return url.toString();
+}
+
+/**
+ * app.walnutt.co — the engineer conversation.
+ * e.g. walnutt.co?utm_source=linkedin → app.walnutt.co?utm_source=linkedin
+ */
+export function buildAppUrl(path = ""): string {
+  return withUtms(`${APP_BASE_URL}${path}`);
+}
+
+/** rolebrief.walnutt.co — where a company starts a role. */
+export function buildRoleBriefUrl(): string {
+  return withUtms(ROLE_BRIEF_URL);
 }
 
 // ─── EVENT TRACKING ───────────────────────────────────────────────────────────

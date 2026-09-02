@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { trackEvent } from "../../lib/analytics";
+import { buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
 
 /**
  * For Companies — ported from the v7 draft.
@@ -237,9 +237,15 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
               <span className="hl traj">great hires.</span>
             </h1>
             <div className="hero-cta">
-              <button className="btn" onClick={cta("companies_hero")}>
+              <a
+                className="btn"
+                href={buildRoleBriefUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_hero" })}
+              >
                 Start a role <span className="ar">→</span>
-              </button>
+              </a>
               <a className="btn-ghost" href="#match">See what makes a great hire</a>
             </div>
           </div>
@@ -528,9 +534,15 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
               <h3>Need the hire.</h3>
               <p>Brief us the role. The system takes it from there.</p>
               <div className="act">
-                <button className="btn" onClick={cta("companies_door_hire")}>
+                <a
+                  className="btn"
+                  href={buildRoleBriefUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_door_hire" })}
+                >
                   Find me a great hire <span className="ar">→</span>
-                </button>
+                </a>
               </div>
             </div>
             <div className="door door-2 rv">

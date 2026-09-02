@@ -61,11 +61,11 @@ function DarkStripTypewriter() {
   const part2End = part1End + darkStripBold.length;
 
   return (
-    <div ref={ref} data-nav-dark style={{ background: V.dark, padding: "44px 48px", textAlign: "center" }}>
+    <div ref={ref} style={{ background: V.sagePale, padding: "44px 48px", textAlign: "center" }}>
       <p style={{ fontFamily: font.heading, fontWeight: 400, fontSize: "clamp(17px, 2vw, 21px)", letterSpacing: "-0.01em", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
-        <span style={{ color: "rgba(255,255,255,0.55)" }}>{shown.slice(0, part1End)}</span>
-        <span style={{ color: "#fff", fontWeight: 700 }}>{shown.slice(part1End, part2End)}</span>
-        <span style={{ color: "rgba(255,255,255,0.35)" }}>{shown.slice(part2End)}</span>
+        <span style={{ color: V.body }}>{shown.slice(0, part1End)}</span>
+        <span style={{ color: V.ink, fontWeight: 700 }}>{shown.slice(part1End, part2End)}</span>
+        <span style={{ color: V.subtitle }}>{shown.slice(part2End)}</span>
         {charCount < fullDarkText.length && (
           <span style={{ display: "inline-block", width: 2, height: 18, background: V.sage, marginLeft: 2, animation: "blink 1s step-end infinite", verticalAlign: "text-bottom" }} />
         )}
@@ -82,7 +82,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "30%", left: "35%",
         width: 600, height: 500, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(60,110,78,0.30) 0%, rgba(60,110,78,0.08) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.42) 0%, rgba(147,196,164,0.12) 50%, transparent 70%)",
         filter: "blur(80px)",
         animation: "aurora1 18s ease-in-out infinite alternate",
       }} />
@@ -90,7 +90,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "25%", left: "55%",
         width: 500, height: 450, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(87,168,116,0.25) 0%, rgba(87,168,116,0.06) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(87,168,116,0.24) 0%, rgba(87,168,116,0.07) 50%, transparent 70%)",
         filter: "blur(70px)",
         animation: "aurora2 22s ease-in-out infinite alternate",
       }} />
@@ -98,7 +98,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "50%", left: "45%",
         width: 450, height: 400, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(147,196,164,0.16) 0%, rgba(147,196,164,0.04) 50%, transparent 70%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.26) 0%, rgba(147,196,164,0.07) 50%, transparent 70%)",
         filter: "blur(90px)",
         animation: "aurora3 25s ease-in-out infinite alternate",
       }} />
@@ -106,7 +106,7 @@ function HeroVisual() {
       <div style={{
         position: "absolute", top: "35%", left: "50%", transform: "translate(-50%, -50%)",
         width: 350, height: 300, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(60,110,78,0.20) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse, rgba(147,196,164,0.30) 0%, transparent 60%)",
         filter: "blur(50px)",
         animation: "aurora4 15s ease-in-out infinite alternate",
       }} />
@@ -135,7 +135,8 @@ function SageBtn({ children, href, eventName, variant = "sage", style: extraStyl
   const onLeave = (e: React.MouseEvent) => {
     const t = e.currentTarget as HTMLElement;
     t.style.background = isSage ? V.sage : "white";
-    t.style.transform = "translateY(0)"; t.style.boxShadow = "none";
+    t.style.transform = "translateY(0)";
+    t.style.boxShadow = (extraStyle?.boxShadow as string) ?? "none";
   };
   if (href) return <a href={buildAppUrl(href)} target="_blank" rel="noopener noreferrer" style={base} onMouseEnter={onEnter} onMouseLeave={onLeave} onClick={handleClick}>{children}</a>;
   return <button style={base} onMouseEnter={onEnter} onMouseLeave={onLeave} onClick={handleClick}>{children}</button>;
@@ -840,10 +841,6 @@ export function EngineersPage() {
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes fadeCard { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes ctaGlow {
-          0%, 100% { box-shadow: 0 0 20px rgba(87,168,116,0.0); }
-          50% { box-shadow: 0 0 50px rgba(87,168,116,0.3); }
-        }
         @keyframes aurora1 {
           0% { transform: translate(0, 0) scale(1); }
           100% { transform: translate(60px, -40px) scale(1.15); }
@@ -863,9 +860,9 @@ export function EngineersPage() {
       `}</style>
 
       {/* ═══ HERO ═══ */}
-      <section data-nav-dark style={{
+      <section style={{
         minHeight: "100vh",
-        background: V.dark,
+        background: V.bg,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center", padding: "100px 24px 60px",
         position: "relative", overflow: "hidden",
@@ -876,28 +873,27 @@ export function EngineersPage() {
         <h1 style={{
           fontFamily: font.heading, fontWeight: 600, fontSize: "clamp(36px, 5vw, 64px)",
           letterSpacing: "-0.02em", lineHeight: 1.12, textAlign: "center", maxWidth: 860,
-          color: "#fff", marginBottom: 24, position: "relative", ...animStyle(100),
+          color: V.ink, marginBottom: 24, position: "relative", ...animStyle(100),
         }}>
           Outgrow the<br />
-          hiring <span style={{ color: V.sageMid, fontStyle: "italic" }}>audition.</span>
+          hiring <span style={{ color: V.sage, fontStyle: "italic" }}>audition.</span>
         </h1>
 
         {/* Subheadline */}
         <p style={{
           fontFamily: font.body, fontWeight: 300, fontSize: "clamp(16px, 1.8vw, 19px)",
-          color: "rgba(255,255,255,0.5)", maxWidth: 720, lineHeight: 1.65, textAlign: "center", marginBottom: 44, position: "relative", ...animStyle(250),
+          color: V.subtitle, maxWidth: 720, lineHeight: 1.65, textAlign: "center", marginBottom: 44, position: "relative", ...animStyle(250),
         }}>
           No applications. No wasted hours. One real conversation, and the right companies start finding you.
         </p>
 
-        {/* CTA with breathing glow */}
+        {/* CTA */}
         <div style={{ position: "relative", ...animStyle(400) }}>
-          <div style={{ position: "absolute", inset: -10, borderRadius: 38, animation: "ctaGlow 3s ease-in-out infinite", pointerEvents: "none" }} />
-          <SageBtn href="/" eventName="cta_clicked_hero">Have a Conversation →</SageBtn>
+          <SageBtn href="/" eventName="cta_clicked_hero" style={{ boxShadow: "0 10px 30px -10px rgba(47,89,64,0.45)" }}>Have a Conversation →</SageBtn>
         </div>
 
         {/* Single italic line */}
-        <p style={{ fontFamily: font.heading, fontSize: 14, fontStyle: "italic", color: "rgba(255,255,255,0.3)", marginTop: 24, position: "relative", ...animStyle(500) }}>
+        <p style={{ fontFamily: font.heading, fontSize: 14, fontStyle: "italic", color: V.muted, marginTop: 24, position: "relative", ...animStyle(500) }}>
           Unlike any interview you've ever given.
         </p>
       </section>
@@ -972,19 +968,19 @@ export function EngineersPage() {
       </section>
 
       {/* ═══ FINAL CTA ═══ */}
-      <section id="engineer-cta" data-nav-dark style={{ background: V.dark, padding: "100px 24px", textAlign: "center", position: "relative", overflow: "hidden" }} className="md:px-12">
-        {/* Decorative arcs (white, faint) */}
-        <div style={{ position: "absolute", top: -150, right: -150, width: 500, height: 500, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.03)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: -200, left: -150, width: 600, height: 600, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.03)", pointerEvents: "none" }} />
+      <section id="engineer-cta" style={{ background: V.bg, padding: "100px 24px", textAlign: "center", position: "relative", overflow: "hidden" }} className="md:px-12">
+        {/* Decorative arcs (ink, faint) */}
+        <div style={{ position: "absolute", top: -150, right: -150, width: 500, height: 500, borderRadius: "50%", border: "1px solid rgba(34,51,42,0.07)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -200, left: -150, width: 600, height: 600, borderRadius: "50%", border: "1px solid rgba(34,51,42,0.07)", pointerEvents: "none" }} />
 
         <div style={{ maxWidth: 640, margin: "0 auto", position: "relative" }}>
           <FadeIn>
-            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: "white", letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
-              You've been ready{" "}<span style={{ fontStyle: "italic", color: V.sageMid }}>The right companies just don't know it yet</span>
+            <h2 style={{ fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", color: V.ink, letterSpacing: "-0.03em", marginBottom: 36, lineHeight: 1.15 }}>
+              You've been ready{" "}<span style={{ fontStyle: "italic", color: V.sage }}>The right companies just don't know it yet</span>
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
-            <SageBtn href="/" eventName="cta_clicked_closing" variant="white">Have a Conversation →</SageBtn>
+            <SageBtn href="/" eventName="cta_clicked_closing">Have a Conversation →</SageBtn>
           </FadeIn>
         </div>
       </section>
