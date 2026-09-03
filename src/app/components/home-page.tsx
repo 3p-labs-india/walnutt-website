@@ -62,7 +62,7 @@ function BrandMark({ size = 26 }: { size?: number }) {
   );
 }
 
-function Brand({ size = 26 }: { size?: number }) {
+export function Brand({ size = 26 }: { size?: number }) {
   return (
     <Link className="brand" to="/" aria-label="Walnutt home">
       <BrandMark size={size} />
