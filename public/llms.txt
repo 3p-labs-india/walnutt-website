@@ -24,7 +24,7 @@ The three converge into one Match Score, calculated for this person in this role
 ### Two ways to start
 
 - **Need the hire.** Brief us the role. The system takes it from there.
-- **The offer is out.** Know whether this candidate will join, before you plan around them.
+- **Ready to offer.** Know whether this candidate will join, before you plan around them.
 
 ## For Engineers — Outgrow the hiring audition.
 

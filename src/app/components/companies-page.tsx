@@ -546,7 +546,7 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
               </div>
             </div>
             <div className="door door-2 rv">
-              <h3>The offer is out.</h3>
+              <h3>Ready to offer.</h3>
               <p>Know whether this candidate will join, before you plan around them.</p>
               <div className="act">
                 <button className="btn-ghost" onClick={cta("companies_door_intent")}>
