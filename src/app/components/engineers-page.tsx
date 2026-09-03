@@ -875,8 +875,10 @@ export function EngineersPage() {
 
         {/* H1 */}
         <h1 style={{
-          fontFamily: font.heading, fontWeight: 600, fontSize: "clamp(36px, 5vw, 64px)",
-          letterSpacing: "-0.02em", lineHeight: 1.12, textAlign: "center", maxWidth: 860,
+          // matches the companies hero: 800 weight, and the tighter tracking
+          // that weight needs to stay optically even
+          fontFamily: font.heading, fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)",
+          letterSpacing: "-0.034em", lineHeight: 1.12, textAlign: "center", maxWidth: 860,
           color: V.ink, marginBottom: 24, position: "relative", ...animStyle(100),
         }}>
           Outgrow the<br />
