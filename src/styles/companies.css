@@ -108,7 +108,8 @@
   width: 48px; height: 48px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(255, 255, 255, .65); border: 1px solid rgba(34, 51, 42, .1);
-  font-weight: 700; font-size: 14px; color: var(--faint); backdrop-filter: blur(6px);
+  font-weight: 700; font-size: 14px; color: var(--faint);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   position: relative; z-index: 2; transition: all .4s ease;
 }
 .page-companies .qrow.lit .qnode {
@@ -144,7 +145,7 @@
   background: rgba(255, 255, 255, .7);
   border: 1px solid rgba(255, 255, 255, .95); outline: 1px solid rgba(34, 51, 42, .08);
   box-shadow: 0 30px 70px -26px rgba(34, 51, 42, .28), 0 8px 22px -12px rgba(34, 51, 42, .12);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   display: flex; flex-direction: column; overflow: hidden;
   opacity: 0; transform: translateY(20px) scale(.97); pointer-events: none;
   transition: opacity .5s ease, transform .5s ease;
@@ -273,7 +274,8 @@
 .page-companies .read {
   background: rgba(255, 255, 255, .62);
   border: 1px solid rgba(255, 255, 255, .9); outline: 1px solid rgba(34, 51, 42, .07);
-  border-radius: 14px; padding: 14px 18px; backdrop-filter: blur(10px);
+  border-radius: 14px; padding: 14px 18px;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   box-shadow: 0 12px 30px -16px rgba(34, 51, 42, .18);
 }
 .page-companies .read .rl {
@@ -414,8 +416,8 @@
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .page-companies .door:hover { transform: translateY(-4px); box-shadow: 0 26px 60px -28px rgba(34, 51, 42, .3) }
-.page-companies .door-1 { background: linear-gradient(140deg, rgba(87, 168, 116, .16), rgba(255, 255, 255, .6) 55%); backdrop-filter: blur(10px) }
-.page-companies .door-2 { background: rgba(255, 255, 255, .5); backdrop-filter: blur(10px) }
+.page-companies .door-1 { background: linear-gradient(140deg, rgba(87, 168, 116, .16), rgba(255, 255, 255, .6) 55%); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px) }
+.page-companies .door-2 { background: rgba(255, 255, 255, .5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px) }
 .page-companies .door-2 .btn-ghost { background: rgba(87, 168, 116, .16); border-color: rgba(60, 110, 78, .34) }
 .page-companies .door-2 .btn-ghost:hover { background: rgba(87, 168, 116, .26); border-color: var(--green) }
 .page-companies .door h3 { font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 700; letter-spacing: -.025em }
