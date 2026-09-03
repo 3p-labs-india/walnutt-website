@@ -12,19 +12,19 @@
     </image:image>
   </url>
   <url>
-    <loc>https://walnutt.co/engineers</loc>
+    <loc>https://walnutt.co/engineers/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://walnutt.co/privacy</loc>
+    <loc>https://walnutt.co/privacy/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://walnutt.co/terms</loc>
+    <loc>https://walnutt.co/terms/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
