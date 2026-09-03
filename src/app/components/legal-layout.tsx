@@ -1,8 +1,10 @@
 import React, { useEffect, useState, type ReactNode } from "react";
 import { C, WalnuttLogo } from "./shared";
+import { seoFor, useSeo } from "../../lib/seo";
 
-export function LegalLayout({ children }: { children: ReactNode }) {
+export function LegalLayout({ path, children }: { path: "/privacy" | "/terms"; children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
+  useSeo(seoFor(path));
 
   useEffect(() => {
     const t = setTimeout(() => setLoaded(true), 100);

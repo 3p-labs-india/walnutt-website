@@ -1,0 +1,31 @@
+{
+  "origin": "https://walnutt.co",
+  "routes": [
+    {
+      "path": "/",
+      "title": "Walnutt | Great companies are built on great hires.",
+      "description": "Capability, fit and joining intent — scored for this person, in this role. Hiring infrastructure for engineering teams, from the first conversation to day one."
+    },
+    {
+      "path": "/engineers",
+      "title": "Walnutt | Outgrow the hiring audition.",
+      "description": "No applications. No wasted hours. One real conversation, and the right companies start finding you."
+    },
+    {
+      "path": "/companies",
+      "canonical": "/",
+      "title": "Walnutt | Great companies are built on great hires.",
+      "description": "Capability, fit and joining intent — scored for this person, in this role. Hiring infrastructure for engineering teams, from the first conversation to day one."
+    },
+    {
+      "path": "/privacy",
+      "title": "Walnutt | Privacy Policy",
+      "description": "How Walnutt collects, uses, stores and protects your data, and the choices you have over it."
+    },
+    {
+      "path": "/terms",
+      "title": "Walnutt | Terms & Conditions",
+      "description": "The terms that govern your use of Walnutt, for both companies and engineers."
+    }
+  ]
+}

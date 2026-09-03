@@ -3,7 +3,7 @@ import { C } from "./shared";
 
 export function TermsConditions() {
   return (
-    <LegalLayout>
+    <LegalLayout path="/terms">
       <div style={s.badge}>Legal</div>
       <h1 style={s.pageTitle}>Terms & Conditions</h1>
       <p style={s.meta}>

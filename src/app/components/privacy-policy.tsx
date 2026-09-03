@@ -3,7 +3,7 @@ import { C } from "./shared";
 
 export function PrivacyPolicy() {
   return (
-    <LegalLayout>
+    <LegalLayout path="/privacy">
       <div style={s.badge}>Legal</div>
       <h1 style={s.pageTitle}>Privacy Policy</h1>
       <p style={s.meta}>

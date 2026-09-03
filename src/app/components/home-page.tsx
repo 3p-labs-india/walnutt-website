@@ -1,25 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { Helmet } from "react-helmet-async";
 import { ContactModal } from "./shared";
 import { EngineersPage } from "./engineers-page";
 import { CompaniesPage } from "./companies-page";
 import { buildAppUrl, buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
+import { seoFor, useSeo } from "../../lib/seo";
 
 type Mode = "engineers" | "companies";
-
-const SEO: Record<Mode, { title: string; desc: string; canonical: string }> = {
-  companies: {
-    title: "Walnutt | Great companies are built on great hires.",
-    desc: "Capability, fit and joining intent — scored for this person, in this role. Hiring infrastructure for engineering teams, from the first conversation to day one.",
-    canonical: "https://walnutt.co/",
-  },
-  engineers: {
-    title: "Walnutt | Outgrow the hiring audition.",
-    desc: "No applications. No wasted hours. One real conversation, and the right companies start finding you.",
-    canonical: "https://walnutt.co/engineers",
-  },
-};
 
 /**
  * The nav is a fixed translucent bar, and both pages run full-bleed dark
@@ -75,19 +62,10 @@ function HomePageInner({ mode }: { mode: Mode }) {
   const [showModal, setShowModal] = useState(false);
   const isE = mode === "engineers";
   const overDark = useNavOverDark();
-  const seo = SEO[mode];
+  useSeo(seoFor(isE ? "/engineers" : "/"));
 
   return (
     <>
-      <Helmet>
-        <title>{seo.title}</title>
-        <meta name="description" content={seo.desc} />
-        <meta property="og:title" content={seo.title} />
-        <meta property="og:description" content={seo.desc} />
-        <meta property="og:url" content={seo.canonical} />
-        <link rel="canonical" href={seo.canonical} />
-      </Helmet>
-
       {/* ═══ NAV ═══ */}
       <nav className="site-nav" data-over={overDark ? "dark" : undefined}>
         <div className="nav-in">

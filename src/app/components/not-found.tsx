@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { Helmet } from "react-helmet-async";
 import { Brand } from "./home-page";
+import { useSeo } from "../../lib/seo";
 
 /**
  * Unmatched routes. GitHub Pages already answers these with a real 404 status
@@ -8,13 +8,14 @@ import { Brand } from "./home-page";
  * page a person sees — not a soft 404 to crawlers.
  */
 export function NotFound() {
+  useSeo({
+    title: "Walnutt | Page not found",
+    description: "The page you were looking for doesn't exist.",
+    noindex: true,
+  });
+
   return (
     <>
-      <Helmet>
-        <title>Walnutt | Page not found</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-
       <main style={{
         minHeight: "100svh", display: "flex", alignItems: "center", justifyContent: "center",
         padding: "80px 0", textAlign: "center",
