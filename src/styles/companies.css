@@ -77,8 +77,13 @@
 .page-companies .k-lab { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .02em }
 .page-companies .k-lab.up { fill: var(--green) }
 .page-companies .k-lab.dim { fill: rgba(34, 51, 42, .4); font-weight: 500 }
+/* Both dots rest at SVG (0,0) — outside the viewBox — until animateMotion
+   begins at 1s/1.35s, and the svg is overflow:visible, so they would otherwise
+   render as stray dots above the headline on load. Opacity is left to the SMIL
+   track on each circle (which starts at 0) plus an opacity="0" attribute for the
+   window before it begins; no CSS opacity here, or it would win over both. */
 .page-companies .cdot-up { fill: var(--signal); filter: drop-shadow(0 0 8px rgba(87, 168, 116, .8)) }
-.page-companies .cdot-dn { fill: var(--red); opacity: .85; filter: drop-shadow(0 0 6px rgba(194, 94, 81, .7)) }
+.page-companies .cdot-dn { fill: var(--red); filter: drop-shadow(0 0 6px rgba(194, 94, 81, .7)) }
 
 /* ── the ladder + sticky rail ──────────────────────────────────────────── */
 .page-companies .lgrid {

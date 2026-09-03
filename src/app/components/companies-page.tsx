@@ -258,12 +258,12 @@ export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
               <text className="k-lab dim" x="96" y="274">company growth</text>
               <text className="k-lab up" x="400" y="100">great hire</text>
               <g className="kmotion">
-                <circle className="cdot-up" r="6" cx="0" cy="0">
+                <circle className="cdot-up" r="6" cx="0" cy="0" opacity="0">
                   <animateMotion dur="4.2s" begin="1s" repeatCount="indefinite"
                     path="M96 246 L226 246 C300 246, 348 216, 470 118" />
                   <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.78;0.9;1" dur="4.2s" begin="1s" repeatCount="indefinite" />
                 </circle>
-                <circle className="cdot-dn" r="5" cx="0" cy="0">
+                <circle className="cdot-dn" r="5" cx="0" cy="0" opacity="0">
                   <animateMotion dur="4.2s" begin="1.35s" repeatCount="indefinite"
                     path="M96 246 L226 246 C300 246, 348 276, 470 366" />
                   <animate attributeName="opacity" values="0;.85;.85;0;0" keyTimes="0;0.08;0.78;0.9;1" dur="4.2s" begin="1.35s" repeatCount="indefinite" />
