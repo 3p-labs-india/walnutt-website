@@ -1,11 +1,30 @@
+# walnutt.co
 
-  # Walnutt MVP Website
+Marketing site for [Walnutt](https://walnutt.co) — a Vite + React single-page app
+deployed to GitHub Pages.
 
-  This is a code bundle for Walnutt MVP Website. The original project is available at https://www.figma.com/design/wBhzxqFkCo1l3n6C4GpnAa/Walnutt-MVP-Website.
+## Pages
 
-  ## Running the code
+| Route | Content |
+| --- | --- |
+| `/`, `/companies` | For Companies |
+| `/engineers` | For Engineers |
+| `/privacy`, `/terms` | Legal |
 
-  Run `npm i` to install the dependencies.
+## Running
 
-  Run `npm run dev` to start the development server.
-  
+```sh
+pnpm install
+pnpm dev          # dev server
+pnpm typecheck    # tsc --noEmit
+pnpm build        # production build into dist/
+pnpm preview      # serve the built dist/
+```
+
+## Deploying
+
+Pushing to `main` runs `.github/workflows/deploy.yml`, which typechecks, builds and
+publishes `dist/` to GitHub Pages. The custom domain comes from `public/CNAME`.
+
+Because Pages has no SPA rewrite, deep links are handled by `public/404.html`, which
+stashes the path in `sessionStorage` for the inline restore script in `index.html`.

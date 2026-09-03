@@ -1,0 +1,201 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Walnutt design system — ported from the v7 draft.
+
+   This file is the single source of truth for colour and type. The JS
+   mirror in src/app/components/tokens.ts resolves to these variables, so
+   a new colour goes here first and never straight into a component.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --sage: #EDF2EE;          /* page ground */
+  --cream: #F2F5F3;         /* raised surfaces, footer */
+  --ink: #22332A;           /* headings */
+  --ink-2: #3A4C41;         /* body copy */
+  --green: #3C6E4E;         /* brand, primary action */
+  --green-2: #2F5940;       /* brand, pressed / gradient end */
+  --signal: #57A874;        /* live values, positive motion */
+  --leaf: #93C4A4;          /* selection, soft glows */
+  --tint: #DFF0E5;          /* filled chips */
+  --amber: #C07A3D;         /* the one warm accent */
+  --red: #C25E51;           /* the downside path */
+  --dark: #141F18;          /* inverted sections */
+  --dark-2: #1B2A21;
+  --line: rgba(34, 51, 42, .09);
+  --faint: rgba(34, 51, 42, .55);
+  --faint-2: rgba(34, 51, 42, .38);
+
+  --sans: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --wordmark: 'DM Sans', 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box }
+html { scroll-behavior: smooth }
+
+body {
+  background: var(--sage);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--leaf); color: var(--ink) }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 48px) }
+
+/* ── hero grid ─────────────────────────────────────────────────────────────
+   Faint ruled ground shared by both heroes, masked to a soft ellipse so it
+   fades out before it reaches the edges. Centred by default; the companies
+   hero shifts its mask right (see companies.css). */
+.grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(34, 51, 42, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 51, 42, .05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 72%);
+}
+
+/* ── scroll reveal ─────────────────────────────────────────────────────── */
+.rv {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .8s cubic-bezier(.2, .6, .2, 1), transform .8s cubic-bezier(.2, .6, .2, 1);
+}
+.rv.in { opacity: 1; transform: none }
+
+/* ── buttons ───────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%);
+  color: #F6FAF7; font-family: var(--sans); font-weight: 600; font-size: 15px;
+  padding: 14px 26px; border: none; border-radius: 12px; cursor: pointer; text-decoration: none;
+  box-shadow: 0 8px 24px -8px rgba(47, 89, 64, .45), inset 0 1px 0 rgba(255, 255, 255, .14);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -8px rgba(47, 89, 64, .5), inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+.btn .ar { transition: transform .18s ease }
+.btn:hover .ar { transform: translateX(3px) }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: var(--green); font-family: var(--sans); font-weight: 600; font-size: 15px; text-decoration: none;
+  padding: 14px 24px; border: 1px solid rgba(60, 110, 78, .3); border-radius: 12px;
+  background: rgba(255, 255, 255, .4); backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--green);
+  background: rgba(255, 255, 255, .7);
+  transform: translateY(-2px);
+}
+
+/* ── site nav ──────────────────────────────────────────────────────────── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: rgba(237, 242, 238, .72);
+  border-bottom: 1px solid var(--line);
+}
+.nav-in {
+  max-width: 1180px; margin: 0 auto;
+  padding: 14px clamp(22px, 5vw, 48px);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0 }
+.brand svg { display: block }
+.wordmark {
+  font-family: var(--wordmark); font-weight: 800; font-size: 18px;
+  letter-spacing: -.02em; color: var(--ink);
+}
+.navlinks { display: flex; align-items: center; gap: 24px }
+.navlinks .eng {
+  font-size: 13.5px; font-weight: 500; color: var(--ink-2);
+  text-decoration: none; white-space: nowrap; transition: color .15s;
+}
+.navlinks .eng:hover { color: var(--green) }
+.site-nav .btn { padding: 10px 18px; font-size: 13.5px; border-radius: 10px; white-space: nowrap }
+
+/* inverted treatment while the bar sits over a dark section */
+.site-nav[data-over="dark"] {
+  background: rgba(20, 31, 24, .62);
+  border-bottom-color: rgba(233, 240, 235, .1);
+  --brand-stroke: #9FD4B4;
+}
+.site-nav[data-over="dark"] .wordmark { color: #F3F8F4 }
+.site-nav[data-over="dark"] .navlinks .eng { color: rgba(233, 240, 235, .72) }
+.site-nav[data-over="dark"] .navlinks .eng:hover { color: #9FD4B4 }
+
+@media (max-width: 560px) {
+  .nav-in { padding: 11px 18px; gap: 10px }
+  .navlinks { gap: 14px }
+  .navlinks .eng { font-size: 12.5px }
+  .site-nav .btn { padding: 9px 14px; font-size: 12.5px }
+  .wordmark { font-size: 16px }
+}
+
+/* ── site footer ───────────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+  padding: clamp(56px, 8vw, 84px) 0 36px;
+}
+.fgrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
+  gap: clamp(28px, 4vw, 56px);
+}
+.fbrand .brand .wordmark { font-size: 20px }
+.fdict {
+  margin-top: 18px; font-size: 12.5px; line-height: 1.75;
+  color: var(--faint); max-width: 32ch;
+}
+.fdict b { color: var(--ink-2); font-weight: 600 }
+.fh {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint);
+}
+.fcol ul { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 11px }
+.fcol a,
+.fcol button {
+  font-family: var(--sans); font-size: 14px; color: var(--ink-2);
+  text-decoration: none; transition: color .15s;
+  background: none; border: none; padding: 0; text-align: left; cursor: pointer;
+}
+.fcol a:hover,
+.fcol button:hover { color: var(--green) }
+.fcol .addr { font-size: 14px; color: var(--ink-2); line-height: 1.65; font-style: normal; margin-top: 16px }
+.fbase {
+  margin-top: clamp(40px, 6vw, 64px); padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-size: 12.5px; color: var(--faint);
+}
+@media (max-width: 900px) { .fgrid { grid-template-columns: 1fr 1fr } }
+@media (max-width: 520px) { .fgrid { grid-template-columns: 1fr } }
+
+/* ── reduced motion ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    animation-play-state: paused !important;
+  }
+  html { scroll-behavior: auto }
+  .rv { opacity: 1; transform: none; transition: none }
+  .btn, .btn-ghost, .btn .ar { transition: none }
+}

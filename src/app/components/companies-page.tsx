@@ -1,592 +1,560 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FadeSection } from "./shared";
-import { trackEvent } from "../../lib/analytics";
+import { useEffect, useRef, useState } from "react";
+import { buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
 
-// ═══ DESIGN TOKENS (matching engineers page) ═══
-const V = {
-  bg: "#F4F8F5",
-  surface: "#FFFFFF",
-  sage: "#3A6B4C",
-  sageHover: "#2E5540",
-  sagePale: "#EDF4EF",
-  sageTint: "#DFF0E5",
-  sageMid: "#5A8F6E",
-  ink: "#1A2420",
-  body: "#2D3D36",
-  subtitle: "#6B7D74",
-  muted: "#A8B8B0",
-  border: "#D8E6DC",
-  borderLight: "#E8F0EB",
-  dark: "#1A2420",
+/**
+ * For Companies — ported from the v7 draft.
+ *
+ * Section styling lives in src/styles/companies.css, scoped under
+ * .page-companies. The draft's four inline scripts are the hooks below.
+ */
+
+const prefersReducedMotion = () => {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
 };
 
-const font = {
-  body: "'DM Sans', sans-serif",
-  heading: "'Bricolage Grotesque', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-};
-
-// Shared styles
-const eyebrow: React.CSSProperties = {
-  fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.15em",
-  textTransform: "uppercase", marginBottom: 20, lineHeight: 1,
-};
-
-// ═══ SCROLL FADE-IN (local, matching engineers page) ═══
-function FadeIn({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+// ═══ SCROLL REVEAL ═══
+function useReveal(root: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
-    const el = ref.current;
+    const el = root.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.12 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <div ref={ref} style={{
-      opacity: visible ? 1 : 0,
-      transform: visible ? "translateY(0)" : "translateY(24px)",
-      transition: `opacity 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
-      ...style,
-    }}>
-      {children}
-    </div>
-  );
+    const targets = Array.from(el.querySelectorAll<HTMLElement>(".rv"));
+    if (!("IntersectionObserver" in window) || prefersReducedMotion()) {
+      targets.forEach(t => t.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    targets.forEach(t => io.observe(t));
+    return () => io.disconnect();
+  }, [root]);
 }
 
-// ═══ HERO AURORA ═══
-function HeroAurora() {
-  return (
-    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-      <div style={{
-        position: "absolute", top: "30%", left: "35%", width: 600, height: 500, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(58,107,76,0.25) 0%, rgba(58,107,76,0.06) 50%, transparent 70%)",
-        filter: "blur(80px)", animation: "auroraC1 18s ease-in-out infinite alternate",
-      }} />
-      <div style={{
-        position: "absolute", top: "25%", left: "55%", width: 500, height: 450, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(90,143,110,0.20) 0%, rgba(90,143,110,0.04) 50%, transparent 70%)",
-        filter: "blur(70px)", animation: "auroraC2 22s ease-in-out infinite alternate",
-      }} />
-      <div style={{
-        position: "absolute", top: "50%", left: "45%", width: 450, height: 400, borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(14,165,165,0.10) 0%, rgba(14,165,165,0.02) 50%, transparent 70%)",
-        filter: "blur(90px)", animation: "auroraC3 25s ease-in-out infinite alternate",
-      }} />
-    </div>
-  );
-}
-
-// ═══ TIMELINE STEP (centered, animated dot + progressive connector) ═══
-function Step({
-  num, title, text, tag, isFinal = false, isLast = false,
-}: {
-  num: string; title: string; text: string; tag: string; isFinal?: boolean; isLast?: boolean;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(false);
+// ═══ LADDER BEAM + STICKY VISUAL RAIL ═══
+function useLadder(
+  ladder: React.RefObject<HTMLDivElement | null>,
+  fill: React.RefObject<HTMLDivElement | null>,
+) {
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const el = ref.current;
+    const el = ladder.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setActive(true); obs.disconnect(); }
-    }, { threshold: 0.35, rootMargin: "0px 0px -60px 0px" });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
-  const DOT = 56;
-  const RAIL = 80;
+    const beam = () => {
+      const r = el.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.62 - r.top) / r.height));
+      if (fill.current) fill.current.style.height = `${p * 100}%`;
 
-  return (
-    <div ref={ref} className="step-timeline" style={{
-      position: "relative",
-      display: "grid", gridTemplateColumns: `${RAIL}px 1fr`,
-      columnGap: 24,
-      paddingBottom: isLast ? 0 : 64,
-    }}>
-      {/* Rail column — dot + connector line below */}
-      <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-        {!isLast && (
-          <div style={{
-            position: "absolute", left: "50%", top: DOT,
-            transform: "translateX(-50%)",
-            width: 2, height: `calc(100% - ${DOT}px + 16px)`,
-            background: V.border, borderRadius: 2, overflow: "hidden",
-          }}>
-            <div style={{
-              position: "absolute", top: 0, left: 0, width: "100%",
-              height: active ? "100%" : "0%",
-              background: `linear-gradient(to bottom, ${V.sage}, ${V.sageMid})`,
-              transition: "height 1400ms cubic-bezier(0.16,1,0.3,1) 350ms",
-            }} />
-          </div>
-        )}
+      const filledY = r.top + p * r.height;
+      let lit = 0;
+      el.querySelectorAll<HTMLElement>(".qrow").forEach((row, i) => {
+        const isLit = row.getBoundingClientRect().top + 60 <= filledY;
+        row.classList.toggle("lit", isLit);
+        if (isLit) lit = i;
+      });
+      setActive(lit);
+    };
 
-        <div style={{
-          position: "relative", zIndex: 2,
-          width: DOT, height: DOT, borderRadius: "50%",
-          background: active ? V.sage : V.surface,
-          border: `2px solid ${active ? V.sage : V.border}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: font.heading, fontSize: 18, fontWeight: 700,
-          color: active ? "#fff" : V.muted,
-          transition: "background 500ms cubic-bezier(0.16,1,0.3,1), border-color 500ms cubic-bezier(0.16,1,0.3,1), color 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)",
-          transform: active ? "scale(1)" : "scale(0.9)",
-          boxShadow: active ? "0 10px 28px rgba(58,107,76,0.25)" : "0 4px 12px rgba(26,36,32,0.04)",
-          flexShrink: 0,
-        }}>
-          {active && (
-            <>
-              <span style={{
-                position: "absolute", inset: -6, borderRadius: "50%",
-                border: `2px solid ${V.sage}`, opacity: 0,
-                animation: "pulseRing 1.6s cubic-bezier(0.16,1,0.3,1) 200ms 1",
-              }} />
-              <span style={{
-                position: "absolute", inset: -12, borderRadius: "50%",
-                border: `2px solid ${V.sageMid}`, opacity: 0,
-                animation: "pulseRing 1.6s cubic-bezier(0.16,1,0.3,1) 450ms 1",
-              }} />
-            </>
-          )}
-          {num}
-        </div>
-      </div>
+    window.addEventListener("scroll", beam, { passive: true });
+    window.addEventListener("resize", beam);
+    beam();
+    return () => {
+      window.removeEventListener("scroll", beam);
+      window.removeEventListener("resize", beam);
+    };
+  }, [ladder, fill]);
 
-      {/* Content column (left-aligned, beside the rail) */}
-      <div style={{
-        paddingTop: 4, paddingBottom: 4,
-        opacity: active ? 1 : 0,
-        transform: active ? "translateY(0)" : "translateY(16px)",
-        transition: "opacity 800ms cubic-bezier(0.16,1,0.3,1) 250ms, transform 800ms cubic-bezier(0.16,1,0.3,1) 250ms",
-      }}>
-        {isFinal ? (
-          <div style={{
-            background: V.sagePale, borderRadius: 20,
-            padding: "28px 32px", border: `1px solid ${V.sageTint}`,
-            boxShadow: "0 12px 40px rgba(58,107,76,0.08)",
-          }}>
-            <p style={{ fontFamily: font.heading, fontSize: 22, fontWeight: 700, color: V.ink, letterSpacing: "-0.02em", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
-            <p style={{ fontFamily: font.body, fontSize: 14.5, color: V.body, lineHeight: 1.65, margin: "0 0 16px" }}>{text}</p>
-            <span style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              fontFamily: font.body, fontSize: 13, fontWeight: 600, color: V.sage,
-            }}>
-              <span style={{ display: "inline-block", width: 16, height: 2, background: V.sage, borderRadius: 1 }} />
-              {tag}
-            </span>
-          </div>
-        ) : (
-          <>
-            <p style={{ fontFamily: font.heading, fontSize: 20, fontWeight: 700, color: V.ink, letterSpacing: "-0.02em", margin: "0 0 10px", lineHeight: 1.3 }}>{title}</p>
-            <p style={{ fontFamily: font.body, fontSize: 14.5, color: V.body, lineHeight: 1.65, margin: "0 0 14px", maxWidth: 560 }}>{text}</p>
-            <span style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              fontFamily: font.body, fontSize: 13, fontWeight: 600, color: V.sage,
-            }}>
-              <span style={{ display: "inline-block", width: 16, height: 2, background: V.sage, borderRadius: 1 }} />
-              {tag}
-            </span>
-          </>
-        )}
-      </div>
-    </div>
-  );
+  return active;
 }
 
-// ═══ ENTRY CARD (glass, on dark bg) ═══
-function EntryCard({ scenario, response, bestFor, product, isBeta }: { scenario: string; response: string; bestFor?: string; product: string; isBeta?: boolean }) {
-  return (
-    <div style={{
-      position: "relative",
-      background: "rgba(255,255,255,0.03)",
-      border: "1px solid rgba(255,255,255,0.06)",
-      borderRadius: 20, padding: "36px 28px 28px",
-      display: "flex", flexDirection: "column", alignItems: "center",
-      textAlign: "center",
-      transition: "border-color 400ms, background 400ms, transform 400ms",
-      cursor: "default",
-    }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = "rgba(90,143,110,0.25)";
-        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-        e.currentTarget.style.transform = "translateY(-4px)";
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
-      {isBeta && (
-        <div style={{
-          position: "absolute", top: 0, right: 0,
-          width: 82, height: 82, overflow: "hidden",
-          borderTopRightRadius: 20,
-          pointerEvents: "none",
-        }}>
-          <div style={{
-            position: "absolute",
-            top: 14, right: -30,
-            width: 110,
-            transform: "rotate(45deg)",
-            textAlign: "center",
-            fontFamily: font.body, fontSize: 9, fontWeight: 700,
-            letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "#fff",
-            background: `linear-gradient(135deg, ${V.sageMid} 0%, #3A6B4C 100%)`,
-            padding: "3px 0",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
-          }}>
-            Beta
-          </div>
-        </div>
-      )}
-      <p style={{
-        fontFamily: font.heading, fontSize: 17, fontWeight: 600, color: "#fff",
-        lineHeight: 1.4, margin: "0 0 20px", minHeight: 50,
-      }}>{scenario}</p>
-      <div style={{ width: 32, height: 2, background: V.sageMid, borderRadius: 1, marginBottom: 18 }} />
-      <p style={{
-        fontFamily: font.body, fontSize: 14, color: "rgba(255,255,255,0.5)",
-        lineHeight: 1.65, margin: "0 0 20px",
-      }}>{response}</p>
-      {bestFor && (
-        <p style={{
-          fontFamily: font.body, fontSize: 13, color: "rgba(255,255,255,0.42)",
-          lineHeight: 1.55, flex: 1, margin: "0 0 20px",
-        }}>
-          <span style={{ color: "rgba(255,255,255,0.72)", fontWeight: 500 }}>Best for: </span>
-          {bestFor}
-        </p>
-      )}
-      {isBeta && (
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-          padding: "12px 14px", marginBottom: 18,
-          borderRadius: 12,
-          background: "rgba(90,143,110,0.07)",
-          border: "1px solid rgba(90,143,110,0.18)",
-          width: "100%",
-        }}>
-          <div style={{ display: "flex", flexShrink: 0 }}>
-            {["#3A6B4C", "#5A8F6E", "#7BAE8E", "#A8C8B5"].map((c, i) => (
-              <span key={i} style={{
-                width: 22, height: 22, borderRadius: "50%",
-                background: c, border: `2px solid ${V.dark}`,
-                marginLeft: i === 0 ? 0 : -7,
-              }} />
-            ))}
-          </div>
-          <p style={{
-            fontFamily: font.body, fontSize: 12, color: "rgba(255,255,255,0.62)",
-            margin: 0, lineHeight: 1.45, textAlign: "left",
-          }}>
-            <span style={{ color: "#fff", fontWeight: 500 }}>Early cohort is loving it.</span>
-            {" "}Partnering with select teams before open release.
-          </p>
-        </div>
-      )}
-      <div style={{
-        paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.08)",
-        width: "100%", display: "flex", justifyContent: "center",
-      }}>
-        <span className="product-tag">
-          <span className="product-dot" />
-          <span className="product-name">{product}</span>
-        </span>
-      </div>
-    </div>
-  );
+// ═══ MATCH SCORE COUNT-UP ═══
+const FINAL_SCORE = 0.94;
+
+function useScore(section: React.RefObject<HTMLElement | null>) {
+  const [score, setScore] = useState("0.00");
+
+  useEffect(() => {
+    const el = section.current;
+    if (!el) return;
+
+    let raf = 0;
+    const run = () => {
+      el.classList.add("seen");
+      if (prefersReducedMotion()) {
+        setScore(FINAL_SCORE.toFixed(2));
+        return;
+      }
+      const t0 = performance.now();
+      const step = (ts: number) => {
+        const k = Math.min(1, (ts - t0) / 1500);
+        const eased = 1 - Math.pow(1 - k, 3);
+        setScore((FINAL_SCORE * eased).toFixed(2));
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      run();
+      return;
+    }
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) {
+        io.disconnect();
+        run();
+      }
+    }, { threshold: 0.35 });
+    io.observe(el);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [section]);
+
+  return score;
 }
 
-// ═══ COMPANIES PAGE ═══
+// ═══ MACHINERY SEQUENCER ═══
+const STAGE_POS = ["12.5%", "37.5%", "62.5%", "87.5%"];
+
+function useMachinery(root: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+
+    const cols = Array.from(el.querySelectorAll<HTMLElement>(".scol"));
+    const nodes = Array.from(el.querySelectorAll<HTMLElement>(".spine .nd"));
+    const dot = el.querySelector<HTMLElement>(".spine .sdot");
+
+    if (prefersReducedMotion()) {
+      cols.forEach(c => c.classList.add("lit"));
+      nodes.forEach(n => n.classList.add("lit"));
+      return;
+    }
+
+    // The draft loops forever; every timer is tracked so unmount can clear it.
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const later = (fn: () => void, ms: number) => {
+      const id = setTimeout(() => { timers.delete(id); fn(); }, ms);
+      timers.add(id);
+    };
+
+    let i = -1;
+    const step = () => {
+      i++;
+      if (i >= cols.length) {
+        later(() => {
+          dot?.classList.remove("go");
+          cols.forEach(c => c.classList.remove("lit"));
+          nodes.forEach(n => n.classList.remove("lit"));
+          i = -1;
+          if (dot) dot.style.left = STAGE_POS[0];
+          later(step, 800);
+        }, 2600);
+        return;
+      }
+      if (dot) { dot.classList.add("go"); dot.style.left = STAGE_POS[i]; }
+      cols[i].classList.add("lit");
+      nodes[i]?.classList.add("lit");
+      later(step, 1250);
+    };
+
+    let started = false;
+    const start = () => { if (!started) { started = true; step(); } };
+
+    let io: IntersectionObserver | undefined;
+    const scols = el.querySelector(".scols");
+    if ("IntersectionObserver" in window && scols) {
+      io = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) start();
+      }, { threshold: 0.25 });
+      io.observe(scols);
+    } else {
+      start();
+    }
+
+    return () => {
+      io?.disconnect();
+      timers.forEach(clearTimeout);
+      timers.clear();
+    };
+  }, [root]);
+}
+
+// ═══ PAGE ═══
 export function CompaniesPage({ onOpenForm }: { onOpenForm: () => void }) {
-  const scrollToHow = () => {
-    const el = document.getElementById("c-how-section");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const root = useRef<HTMLDivElement>(null);
+  const ladderRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
+  const scoreRef = useRef<HTMLElement>(null);
+  const machineRef = useRef<HTMLDivElement>(null);
+
+  useReveal(root);
+  const activeVis = useLadder(ladderRef, fillRef);
+  const score = useScore(scoreRef);
+  useMachinery(machineRef);
+
+  const cta = (location: string) => () => {
+    trackEvent("cta_clicked_connect", { location });
+    onOpenForm();
   };
 
   return (
-    <div style={{ fontFamily: font.body, color: V.ink }}>
-      <style>{`
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes auroraC1 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(50px,-30px) scale(1.12); } }
-        @keyframes auroraC2 { 0% { transform: translate(0,0) scale(1.1); } 100% { transform: translate(-60px,20px) scale(0.92); } }
-        @keyframes auroraC3 { 0% { transform: translate(0,0) scale(0.95); } 100% { transform: translate(30px,-40px) scale(1.15); } }
-        @keyframes pulseRing {
-          0% { opacity: 0.9; transform: scale(0.85); }
-          100% { opacity: 0; transform: scale(1.55); }
-        }
-        @keyframes betaPulse {
-          0% { box-shadow: 0 0 0 0 rgba(90,143,110,0.55); }
-          70% { box-shadow: 0 0 0 6px rgba(90,143,110,0); }
-          100% { box-shadow: 0 0 0 0 rgba(90,143,110,0); }
-        }
-        @keyframes productPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(90,143,110,0.55), 0 0 14px rgba(90,143,110,0.35); transform: scale(1); }
-          50% { box-shadow: 0 0 0 7px rgba(90,143,110,0), 0 0 20px rgba(90,143,110,0.65); transform: scale(1.02); }
-        }
-        @keyframes productDot {
-          0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(90,143,110,0.6), 0 0 8px rgba(90,143,110,0.6); }
-          50% { opacity: 0.85; box-shadow: 0 0 0 6px rgba(90,143,110,0), 0 0 14px rgba(90,143,110,0.9); }
-        }
-        .product-tag {
-          display: inline-flex; align-items: center; gap: 8px;
-          padding: 8px 14px; border-radius: 100px;
-          background: rgba(90,143,110,0.12);
-          border: 1px solid rgba(90,143,110,0.4);
-          animation: productPulse 2.4s ease-in-out infinite;
-        }
-        .product-tag .product-dot {
-          width: 7px; height: 7px; border-radius: 50%;
-          background: #7FBF94;
-          animation: productDot 1.6s ease-in-out infinite;
-        }
-        .product-tag .product-name {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px; font-weight: 600;
-          color: #B8E0C6; letter-spacing: 0.08em; text-transform: uppercase;
-        }
-        .tax-row:hover td { background: rgba(246,250,247,0.6); }
-        @media (max-width: 900px) {
-          .entry-grid { grid-template-columns: 1fr !important; }
-          .tax-table th, .tax-table td { padding: 14px 18px !important; font-size: 13px !important; }
-        }
-      `}</style>
+    <div className="page-companies" ref={root}>
+      {/* gradient defs referenced by the gauge and the intent area fill */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+        <defs>
+          <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#3C6E4E" /><stop offset="1" stopColor="#57A874" />
+          </linearGradient>
+          <linearGradient id="joinFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="rgba(87,168,116,.28)" /><stop offset="1" stopColor="rgba(87,168,116,0)" />
+          </linearGradient>
+        </defs>
+      </svg>
 
       {/* ═══ HERO ═══ */}
-      <section style={{
-        minHeight: "100vh", background: V.dark,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        padding: "120px 24px 80px", position: "relative", overflow: "hidden",
-      }}>
-        <HeroAurora />
-        <div style={{ position: "relative", maxWidth: 780, textAlign: "center" }}>
-          <p style={{
-            ...eyebrow, color: V.sageMid, marginBottom: 32,
-            animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 100ms both",
-          }}>
-            HIRING INFRASTRUCTURE FOR ENGINEERING TEAMS
-          </p>
-          <h1 style={{
-            fontFamily: font.heading, fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)",
-            letterSpacing: "-0.03em", lineHeight: 1.12, color: "#fff", margin: "0 0 28px",
-            animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 200ms both",
-          }}>
-            Outgrow the<br />
-            hiring <span style={{ color: V.sageMid, fontStyle: "italic" }}>cycle.</span>
-          </h1>
-          <p style={{
-            fontFamily: font.body, fontWeight: 400, fontSize: "clamp(17px, 2vw, 20px)",
-            lineHeight: 1.7, color: "rgba(255,255,255,0.5)", maxWidth: 580, margin: "0 auto 40px",
-            animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 400ms both",
-          }}>
-            The hiring process that also onboards. Built around your actual context. Turning months into days.
-          </p>
-          <div style={{ animation: "fadeInUp 800ms cubic-bezier(0.16,1,0.3,1) 500ms both" }}>
-            <button onClick={scrollToHow} style={{
-              fontFamily: font.body, fontSize: 15, fontWeight: 600, color: "#fff",
-              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
-              padding: "14px 28px", borderRadius: 30, cursor: "pointer",
-              display: "inline-flex", alignItems: "center", gap: 10, transition: "all 200ms",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(90,143,110,0.2)"; e.currentTarget.style.borderColor = V.sageMid; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
-            >
-              See how it works
-              <span style={{ fontSize: 16 }}>↓</span>
-            </button>
+      <header className="hero" id="hero">
+        <div className="glow glow-a" />
+        <div className="glow glow-b" />
+        <div className="grid-bg" />
+        <div className="wrap hero-in">
+          <div>
+            <h1>
+              <span className="hl">Great companies</span>{" "}
+              <span className="hl">are built on</span>{" "}
+              <span className="hl traj">great hires.</span>
+            </h1>
+            <div className="hero-cta">
+              <a
+                className="btn"
+                href={buildRoleBriefUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_hero" })}
+              >
+                Start a role <span className="ar">→</span>
+              </a>
+              <a className="btn-ghost" href="#match">See what makes a great hire</a>
+            </div>
+          </div>
+          <div className="kcurve" aria-hidden="true">
+            <svg viewBox="70 70 440 340">
+              <path className="k-in" d="M96 246 L226 246" />
+              <path className="k-dn" d="M226 246 C300 246, 348 276, 470 366" />
+              <path className="k-up" d="M226 246 C300 246, 348 216, 470 118" />
+              <circle className="k-node" cx="226" cy="246" r="4.5" />
+              <text className="k-lab dim" x="96" y="274">company growth</text>
+              <text className="k-lab up" x="400" y="100">great hire</text>
+              <g className="kmotion">
+                <circle className="cdot-up" r="6" cx="0" cy="0" opacity="0">
+                  <animateMotion dur="4.2s" begin="1s" repeatCount="indefinite"
+                    path="M96 246 L226 246 C300 246, 348 216, 470 118" />
+                  <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.78;0.9;1" dur="4.2s" begin="1s" repeatCount="indefinite" />
+                </circle>
+                <circle className="cdot-dn" r="5" cx="0" cy="0" opacity="0">
+                  <animateMotion dur="4.2s" begin="1.35s" repeatCount="indefinite"
+                    path="M96 246 L226 246 C300 246, 348 276, 470 366" />
+                  <animate attributeName="opacity" values="0;.85;.85;0;0" keyTimes="0;0.08;0.78;0.9;1" dur="4.2s" begin="1.35s" repeatCount="indefinite" />
+                </circle>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      {/* ═══ THE THREE QUESTIONS ═══ */}
+      <section id="match">
+        <div className="wrap">
+          <div className="rv"><h2>What makes the difference.</h2></div>
+          <div className="lgrid">
+            <div className="ladder" ref={ladderRef}>
+              <div className="track"><div className="fill" ref={fillRef} /></div>
+
+              <div className="qrow">
+                <div className="qnode">01</div>
+                <div>
+                  <span className="slabel">Capability Score</span>
+                  <h3>Can they do it?</h3>
+                  <p className="qs">Depth in the exact work this role demands, proven in what they've shipped.</p>
+                </div>
+              </div>
+              <div className="qrow">
+                <div className="qnode">02</div>
+                <div>
+                  <span className="slabel">Fit Score</span>
+                  <h3>How well they fit?</h3>
+                  <p className="qs">Six dimensions of the person, mapped from behaviour over time.</p>
+                </div>
+              </div>
+              <div className="qrow">
+                <div className="qnode">03</div>
+                <div>
+                  <span className="slabel">Intent Score</span>
+                  <h3>Will they join?</h3>
+                  <p className="qs">Joining intent, measured through the last mile and held to day one.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rail">
+              <div className="rail-stick">
+                {/* 01 — capability */}
+                <div className={`vis${activeVis === 0 ? " on" : ""}`}>
+                  <div className="chrome">
+                    <span className="dots"><i /><i /><i /></span>
+                    <span className="ct">Capability Score</span>
+                    <span className="vtag">Role calibrated</span>
+                  </div>
+                  <div className="vbody">
+                    <div className="meta-row">
+                      <span className="mchip">Candidate 0142</span>
+                      <span className="mchip">Backend platform</span>
+                      <span className="mchip">L5</span>
+                    </div>
+                    <div className="cap">
+                      {([["System design", "0.94", "94%"], ["Debugging", "0.91", "91%"], ["Code quality", "0.96", "96%"], ["Judgment", "0.92", "92%"]] as const).map(([label, v, w]) => (
+                        <div className="cr" key={label}>
+                          <div className="cl"><span>{label}</span><span className="v">{v}</span></div>
+                          <div className="tr"><div className="fl" style={{ "--w": w } as React.CSSProperties} /></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="vfoot"><span className="ok">Verified against shipped work</span><span>Capability 0.96</span></div>
+                </div>
+
+                {/* 02 — fit */}
+                <div className={`vis${activeVis === 1 ? " on" : ""}`}>
+                  <div className="chrome">
+                    <span className="dots"><i /><i /><i /></span>
+                    <span className="ct">Fit Score</span>
+                    <span className="vtag">Six dimensions</span>
+                  </div>
+                  <div className="vbody">
+                    <div className="fitwrap">
+                      <div className="radar">
+                        <svg viewBox="-62 -18 324 238" aria-label="Six dimension map">
+                          <polygon className="web" points="100,20 169.3,60 169.3,140 100,180 30.7,140 30.7,60" />
+                          <polygon className="web" points="100,45 147.6,72.5 147.6,127.5 100,155 52.4,127.5 52.4,72.5" />
+                          <polygon className="web" points="100,70 126,85 126,115 100,130 74,115 74,85" />
+                          <line className="spoke" x1="100" y1="100" x2="100" y2="20" />
+                          <line className="spoke" x1="100" y1="100" x2="169.3" y2="60" />
+                          <line className="spoke" x1="100" y1="100" x2="169.3" y2="140" />
+                          <line className="spoke" x1="100" y1="100" x2="100" y2="180" />
+                          <line className="spoke" x1="100" y1="100" x2="30.7" y2="140" />
+                          <line className="spoke" x1="100" y1="100" x2="30.7" y2="60" />
+                          <polygon className="data" points="100,25.6 159.6,65.6 166.5,138.4 100,170.4 36.9,136.4 41.8,66.4" />
+                          <circle className="dot" cx="100" cy="25.6" r="3" /><circle className="dot" cx="159.6" cy="65.6" r="3" />
+                          <circle className="dot" cx="166.5" cy="138.4" r="3" /><circle className="dot" cx="100" cy="170.4" r="3" />
+                          <circle className="dot" cx="36.9" cy="136.4" r="3" /><circle className="dot" cx="41.8" cy="66.4" r="3" />
+                          <text x="100" y="8" textAnchor="middle">personality</text>
+                          <text x="176" y="52" textAnchor="start">consistency</text>
+                          <text x="176" y="152" textAnchor="start">integrity</text>
+                          <text x="100" y="198" textAnchor="middle">cognition</text>
+                          <text x="24" y="152" textAnchor="end">growth</text>
+                          <text x="24" y="52" textAnchor="end">relationships</text>
+                        </svg>
+                      </div>
+                      <div className="dimlist">
+                        {([["Integrity", "0.96"], ["Growth", "0.91"], ["Cognition", "0.88"], ["Consistency", "0.86"]] as const).map(([label, v]) => (
+                          <div className="d" key={label}><span>{label}</span><span className="v">{v}</span></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="vfoot"><span className="ok">Behaviour over time</span><span>Fit 0.93</span></div>
+                </div>
+
+                {/* 03 — intent */}
+                <div className={`vis${activeVis === 2 ? " on" : ""}`}>
+                  <div className="chrome">
+                    <span className="dots"><i /><i /><i /></span>
+                    <span className="ct">Intent Score</span>
+                    <span className="vtag">The last mile</span>
+                  </div>
+                  <div className="vbody">
+                    <div className="join">
+                      <div className="big">
+                        <span className="num">0.91</span>
+                        <span className="lab">Joining intent</span>
+                        <span className="status">Intent holding</span>
+                      </div>
+                      <svg viewBox="0 0 360 122">
+                        <line className="base" x1="0" y1="108" x2="360" y2="108" />
+                        <path className="area" d="M6 88 C90 84, 150 70, 210 50 C260 36, 310 26, 352 20 L352 108 L6 108 Z" />
+                        <path className="sig" d="M6 88 C90 84, 150 70, 210 50 C260 36, 310 26, 352 20" />
+                        <circle className="mk" cx="6" cy="88" r="4" />
+                        <circle className="mk" cx="180" cy="59" r="4" />
+                        <circle className="mk" cx="352" cy="20" r="5" />
+                      </svg>
+                      <div className="steps">
+                        <span className="st done">Offer</span>
+                        <span className="st done">Notice period</span>
+                        <span className="st now">Day one</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="vfoot"><span className="ok">Tracked to day one</span><span>Intent 0.91</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ HOW IT WORKS — CENTERED TIMELINE ═══ */}
-      <section id="c-how-section" style={{ background: V.bg, padding: "100px 24px 120px" }}>
-        <div style={{ maxWidth: 780, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ textAlign: "center", marginBottom: 16 }}>
-              <p style={{ ...eyebrow, color: V.sage }}>THE PROCESS</p>
+      {/* ═══ ONE SCORE ═══ */}
+      <section id="score" ref={scoreRef}>
+        <div className="wrap">
+          <div className="shead rv"><h2>The answers meet in one score.</h2></div>
+          <div className="converge rv">
+            <div className="reads">
+              {([["Capability Score", "0.96", "96%"], ["Fit Score", "0.93", "93%"], ["Intent Score", "0.91", "91%"]] as const).map(([label, v, w]) => (
+                <div className="read" key={label}>
+                  <div className="rl"><span>{label}</span><span className="v">{v}</span></div>
+                  <div className="tr"><div className="fl" style={{ "--w": w } as React.CSSProperties} /></div>
+                </div>
+              ))}
             </div>
-          </FadeIn>
-          <FadeIn delay={100}>
-            <h2 style={{
-              fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-              letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink,
-              margin: "0 auto 72px", textAlign: "center", maxWidth: 560,
-            }}>
-              The best hires arrive ready.{" "}
-              <span style={{ fontStyle: "italic", color: V.sage }}>Here's how.</span>
-            </h2>
-          </FadeIn>
+            <div className="clines" aria-hidden="true">
+              <svg viewBox="0 0 150 320">
+                <path d="M0 55 C60 55, 90 160, 148 160" />
+                <path d="M0 160 L148 160" />
+                <path d="M0 265 C60 265, 90 160, 148 160" />
+                <path className="pulse" d="M0 55 C60 55, 90 160, 148 160" />
+                <path className="pulse" style={{ animationDelay: ".7s" }} d="M0 160 L148 160" />
+                <path className="pulse" style={{ animationDelay: "1.4s" }} d="M0 265 C60 265, 90 160, 148 160" />
+              </svg>
+            </div>
+            <div className="hexgauge">
+              <svg viewBox="-120 -120 240 240" aria-hidden="true">
+                <path className="hex-bg" d="M0 -100 L86.6 -50 L86.6 50 L0 100 L-86.6 50 L-86.6 -50 Z" />
+                <path className="hex-fg" d="M0 -100 L86.6 -50 L86.6 50 L0 100 L-86.6 50 L-86.6 -50 Z" />
+              </svg>
+              <div className="hexval">
+                <span className="num">{score}</span>
+                <span className="lab">Match Score</span>
+              </div>
+            </div>
+          </div>
+          <p className="scap rv">Scored for this person, in this role.</p>
+        </div>
+      </section>
 
-          <div style={{ position: "relative" }}>
-            <Step num="01" title="Build the candidate persona." text="A sharp picture of who you actually need — calibrated to market reality. Half the battle won before the search begins." tag="100x the JD." />
-            <Step num="02" title="Find the right people." text="From our pool, your pipeline, or sourced fresh. Matched on real depth — thinking, building, problem-solving. Your team only meets people worth their time." tag="Zero wasted interviews." />
-            <Step num="03" title="Assess through real work. Cross-reference everything." text="Challenges built on your actual stack and domain. Claims verified against real output. You see real thinking. They absorb your world. One step, both jobs." tag="Onboarding starts inside the hiring process itself." />
-            <Step num="04" title="Notice period. Ramp already running." text="They're learning your systems, conventions, and team dynamics. You see progress in real time. Connection builds before they've officially started." tag="Candidates are invested. Offer dropouts reduced." />
-            <Step num="05" title="Day one. They deliver." text={"Not orientation. Not “where’s the wiki.” Real contribution from the first morning."} tag="Day one feels like they were already here." isFinal isLast />
+      {/* ═══ THE MACHINERY ═══ */}
+      <section id="machine" data-nav-dark ref={machineRef}>
+        <div className="grid-bg" />
+        <div className="wrap" style={{ position: "relative" }}>
+          <div className="rv">
+            <h2>The machinery behind the matching.</h2>
+            <p className="lede">From the first conversation to day one.</p>
+          </div>
+          <div className="spine rv" aria-hidden="true">
+            {STAGE_POS.map(left => <span className="nd" key={left} style={{ left }} />)}
+            <span className="sdot" />
+          </div>
+          <div className="scols rv">
+            <div className="scol">
+              <div className="shead2">
+                <span className="lt">A</span>
+                <span><span className="sn">Context Capture</span><span className="ss">the role, understood</span></span>
+              </div>
+              <div className="sitem">
+                <div className="in1">Role Brief <span className="tag">AI + Human</span></div>
+                <p>The role from one conversation: team, product, where the friction sits.</p>
+              </div>
+            </div>
+            <div className="scol">
+              <div className="shead2">
+                <span className="lt">B</span>
+                <span><span className="sn">Sourcing</span><span className="ss">the right people, found</span></span>
+              </div>
+              <div className="sitem">
+                <div className="in1">Warm Network <span className="tag">Human</span></div>
+                <p>First degree and second degree. High trust.</p>
+              </div>
+              <div className="sitem">
+                <div className="in1">Agentic Headhunting <span className="tag">AI</span></div>
+                <p>The right shape of person, found even when they're not looking.</p>
+              </div>
+              <div className="sitem">
+                <div className="in1">Recruiter Network <span className="tag">Human</span></div>
+                <p>Specialist recruiters, plugged into the system.</p>
+              </div>
+            </div>
+            <div className="scol">
+              <div className="shead2">
+                <span className="lt">C</span>
+                <span><span className="sn">Screening</span><span className="ss">the person, assessed</span></span>
+              </div>
+              <div className="sitem">
+                <div className="in1">Role-calibrated Assessments <span className="tag">AI</span></div>
+                <p>System design, debugging, judgment, code quality.</p>
+              </div>
+              <div className="sitem">
+                <div className="in1">Tech Interviews <span className="tag">Human</span></div>
+                <p>Run live by engineers who ship in the same domain.</p>
+              </div>
+            </div>
+            <div className="scol">
+              <div className="shead2">
+                <span className="lt">D</span>
+                <span><span className="sn">Joining</span><span className="ss">the last mile, held</span></span>
+              </div>
+              <div className="sitem">
+                <div className="in1">Intent Tracking <span className="tag">AI + Human</span></div>
+                <p>Joining intent, tracked from offer to day one.</p>
+              </div>
+              <div className="sitem">
+                <div className="in1">Early Warning <span className="tag">AI + Human</span></div>
+                <p>If intent shifts, you know first.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ ENTRY POINTS ═══ */}
-      <section style={{ background: V.dark, padding: "100px 24px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ textAlign: "center", marginBottom: 20 }}>
-              <p style={{ ...eyebrow, color: V.sageMid }}>ENTRY POINTS</p>
+      {/* ═══ THE TWO DOORS ═══ */}
+      <section id="begin">
+        <div className="wrap">
+          <div className="rv" style={{ textAlign: "center" }}><h2>Get Started.</h2></div>
+          <div className="doors">
+            <div className="door door-1 rv">
+              <h3>Need the hire.</h3>
+              <p>Brief us the role. The system takes it from there.</p>
+              <div className="act">
+                <a
+                  className="btn"
+                  href={buildRoleBriefUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_door_hire" })}
+                >
+                  Find me a great hire <span className="ar">→</span>
+                </a>
+              </div>
             </div>
-          </FadeIn>
-          <FadeIn delay={100}>
-            <h2 style={{
-              fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-              letterSpacing: "-0.03em", lineHeight: 1.15, color: "#fff",
-              margin: "0 auto 56px", textAlign: "center", maxWidth: 520,
-            }}>
-              One system.<br />
-              <span style={{ fontStyle: "italic", color: V.sageMid }}>Enter wherever you are.</span>
-            </h2>
-          </FadeIn>
-
-          <FadeIn delay={200}>
-            <div className="entry-grid" style={{
-              display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20,
-            }}>
-              <EntryCard
-                scenario={"“We have candidates. Can’t tell who’s real.”"}
-                response="Deep technical and behavioral evaluation across your existing pipeline. We validate thinking, depth, proof of work, delivery ability, and fit — so your team only spends time on candidates worth meeting."
-                bestFor="Existing inbound applicants, recruiter pipelines, late-stage shortlists."
-                product="Deep Screen"
-              />
-              <EntryCard
-                scenario={"“Find us someone great.”"}
-                response="We source, evaluate, and present high-conviction engineering talent matched to your role, team, and stage. Your team meets candidates already cleared on capability, communication, and real fit."
-                bestFor="Urgent hiring needs, niche roles, lean internal bandwidth."
-                product="Curated Hire"
-              />
-              <EntryCard
-                scenario={"“Find us someone who can deliver from week one.”"}
-                response="Everything in Curated Hire, plus assessments designed around your actual context and active ramp-up during notice period. Your hire joins already familiar with your systems, expectations, and way of working."
-                bestFor="Critical hires, teams where ramp time matters."
-                product="Pre-Onboarded Hire"
-                isBeta
-              />
+            <div className="door door-2 rv">
+              <h3>The offer is out.</h3>
+              <p>Know whether this candidate will join, before you plan around them.</p>
+              <div className="act">
+                <button className="btn-ghost" onClick={cta("companies_door_intent")}>
+                  Will they join? <span className="ar">→</span>
+                </button>
+              </div>
             </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ═══ HIRING TAX ═══ */}
-      <section style={{ background: V.bg, padding: "100px 24px" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ textAlign: "center", marginBottom: 56 }}>
-              <p style={{ ...eyebrow, color: V.sage }}>THE HIRING TAX</p>
-              <h2 style={{
-                fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)",
-                letterSpacing: "-0.03em", lineHeight: 1.15, color: V.ink, margin: "0 0 16px",
-              }}>
-                Stop <span style={{ fontStyle: "italic", color: V.sage }}>paying it.</span>
-              </h2>
-              <p style={{
-                fontFamily: font.body, fontSize: 14, color: V.subtitle,
-                maxWidth: 420, lineHeight: 1.55, margin: "0 auto",
-              }}>
-                Every engineering hire carries a hidden cost. Here's what changes.
-              </p>
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={100}>
-            <div style={{
-              background: V.surface, border: `1px solid ${V.border}`, borderRadius: 16,
-              overflow: "hidden", marginBottom: 56,
-              boxShadow: "0 4px 24px rgba(26,36,32,0.04)",
-            }}>
-              <table className="tax-table" style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead style={{ background: V.sagePale }}>
-                  <tr>
-                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.subtitle }}></th>
-                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.muted }}>Industry average</th>
-                    <th style={{ textAlign: "left", fontFamily: font.mono, fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "18px 32px", color: V.sage }}>With Walnutt</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["Screening & filtering", "40–60 hours per role", "0 hours. Deep-signal filtered."],
-                    ["Engineering interview loops", "35–40 hours wasted", "Your team meets only pre-cleared candidates."],
-                    ["Interview-to-offer rate", "~30%", "71%"],
-                    ["Time to hire (Offer)", "2–3 months", "~6 days"],
-                  ].map(([a, b, c], i) => (
-                    <tr key={i} className="tax-row">
-                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.ink, fontWeight: 500, borderTop: `1px solid ${V.borderLight}`, width: "34%", transition: "background 200ms" }}>{a}</td>
-                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.subtitle, borderTop: `1px solid ${V.borderLight}`, width: "30%", transition: "background 200ms" }}>{b}</td>
-                      <td style={{ padding: "18px 32px", fontFamily: font.body, fontSize: 14, color: V.sage, fontWeight: 600, borderTop: `1px solid ${V.borderLight}`, width: "36%", transition: "background 200ms" }}>{c}</td>
-                    </tr>
-                  ))}
-                  <tr style={{ background: V.sagePale }}>
-                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 15, color: V.ink, fontWeight: 700, borderTop: `2px solid ${V.border}` }}>Total hiring + onboarding cycle</td>
-                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 15, color: V.subtitle, fontWeight: 600, borderTop: `2px solid ${V.border}` }}>3–4 months</td>
-                    <td style={{ padding: "22px 32px", fontFamily: font.body, fontSize: 16, color: V.sage, fontWeight: 700, borderTop: `2px solid ${V.border}` }}>Weeks</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={200}>
-            <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
-              <div style={{ width: 32, height: 2, background: V.sage, borderRadius: 1, margin: "0 auto 20px" }} />
-              <p style={{
-                fontFamily: font.heading, fontSize: 18, fontWeight: 500, color: V.body,
-                lineHeight: 1.6, margin: "0 0 12px", fontStyle: "italic",
-              }}>
-                “The Walnutt conversation told us we’d been hiring for the wrong thing for 2 years.”
-              </p>
-              <p style={{ fontFamily: font.mono, fontSize: 11, color: V.muted, letterSpacing: "0.08em", margin: 0 }}>
-                — FOUNDER, SERIES B STARTUP
-              </p>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ═══ CTA ═══ */}
-      <section id="company-cta" style={{ background: V.dark, padding: "120px 24px", position: "relative", overflow: "hidden" }}>
-        <div style={{
-          position: "absolute", top: -120, right: -80, width: 400, height: 400, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(58,107,76,0.2) 0%, transparent 70%)", pointerEvents: "none",
-        }} />
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center", position: "relative" }}>
-          <FadeSection>
-            <h2 style={{
-              fontFamily: font.heading, fontWeight: 700, fontSize: "clamp(32px, 4.5vw, 52px)",
-              letterSpacing: "-0.03em", lineHeight: 1.12, color: "#fff", margin: "0 0 16px",
-            }}>
-              Let's plan your <span style={{ fontStyle: "italic", color: V.sageMid }}>next hire.</span>
-            </h2>
-            <p style={{
-              fontFamily: font.body, fontWeight: 300, fontSize: "clamp(16px, 2vw, 18px)",
-              color: "rgba(255,255,255,0.45)", lineHeight: 1.7,
-              maxWidth: 520, margin: "0 auto 44px",
-            }}>
-              One conversation to see what this looks like for your team.
-            </p>
-            <button onClick={() => { trackEvent("cta_clicked_companies_connect", { location: "companies_close" }); onOpenForm(); }} style={{
-              fontFamily: font.body, fontSize: 16, fontWeight: 600, color: V.dark,
-              background: "#fff", padding: "16px 40px", borderRadius: 30, border: "none",
-              cursor: "pointer", transition: "all 200ms",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = V.sagePale; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,255,255,0.15)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
-            >
-              Connect with us →
-            </button>
-          </FadeSection>
+          </div>
         </div>
       </section>
     </div>
