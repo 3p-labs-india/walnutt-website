@@ -153,10 +153,17 @@ button:focus-visible {
   /* on phones the nav brand is the mark alone; the footer keeps the name */
   .site-nav .wordmark { display: none }
 }
-/* three items don't fit beside the brand on a small phone; the secondary
-   link goes first and stays reachable from the footer */
+/* cross-link label: "For companies" on wide screens, "Companies" on phones,
+   which is what leaves room for Spotlight beside it */
+.navlinks .eng .cap { display: none }
 @media (max-width: 480px) {
-  .navlinks .minor { display: none }
+  .navlinks .eng .for { display: none }
+  .navlinks .eng .cap { display: inline }
+}
+/* the smallest phones can't fit Spotlight beside "Start a conversation";
+   it stays in the footer there. "Start a role" is short enough to keep it. */
+@media (max-width: 360px) {
+  .navlinks.engineers .minor { display: none }
 }
 /* "Start a conversation" plus a cross-link still crowds a 320px phone */
 @media (max-width: 420px) {

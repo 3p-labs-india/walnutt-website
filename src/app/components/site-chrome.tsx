@@ -67,12 +67,13 @@ export function SiteNav({ mode }: { mode: Mode }) {
     <nav className="site-nav" data-over={overDark ? "dark" : undefined}>
       <div className="nav-in">
         <Brand />
-        <div className="navlinks">
-          {/* secondary: sits beside the cross-link, drops off on small phones */}
+        <div className={`navlinks ${mode}`}>
+          {/* secondary: sits beside the cross-link; on phones the cross-link
+              sheds its "For" to make room (see design-system.css) */}
           <NavLink className="eng minor" to="/spotlight">Spotlight</NavLink>
           {isE ? (
             <>
-              <Link className="eng" to="/">For companies</Link>
+              <Link className="eng" to="/"><span className="for">For c</span><span className="cap">C</span>ompanies</Link>
               <a
                 className="btn"
                 href={buildAppUrl("/")}
@@ -85,7 +86,7 @@ export function SiteNav({ mode }: { mode: Mode }) {
             </>
           ) : (
             <>
-              <Link className="eng" to="/engineers">For engineers</Link>
+              <Link className="eng" to="/engineers"><span className="for">For e</span><span className="cap">E</span>ngineers</Link>
               <a
                 className="btn"
                 href={buildRoleBriefUrl()}
