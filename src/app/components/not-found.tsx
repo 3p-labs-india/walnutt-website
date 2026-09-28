@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Brand } from "./home-page";
+import { Brand } from "./site-chrome";
 import { useSeo } from "../../lib/seo";
 
 /**

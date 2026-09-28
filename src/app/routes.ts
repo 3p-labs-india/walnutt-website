@@ -3,12 +3,14 @@ import { HomePage, CompaniesHomePage } from "./components/home-page";
 import { PrivacyPolicy } from "./components/privacy-policy";
 import { TermsConditions } from "./components/terms-conditions";
 import { NotFound } from "./components/not-found";
+import { SpotlightPage } from "./components/spotlight-page";
 
 export const router = createBrowserRouter(
   [
     { path: "/", Component: CompaniesHomePage },
     { path: "/engineers", Component: HomePage },
     { path: "/companies", Component: CompaniesHomePage },
+    { path: "/spotlight", Component: SpotlightPage },
     // For Recruiters was retired — keep old links working.
     { path: "/recruiters", loader: () => redirect("/") },
     { path: "/privacy", Component: PrivacyPolicy },

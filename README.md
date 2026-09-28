@@ -9,6 +9,7 @@ deployed to GitHub Pages.
 | --- | --- |
 | `/`, `/companies` | For Companies |
 | `/engineers` | For Engineers |
+| `/spotlight` | Spotlight — live weekly count, see `src/lib/spotlight.ts` |
 | `/privacy`, `/terms` | Legal |
 
 ## Running

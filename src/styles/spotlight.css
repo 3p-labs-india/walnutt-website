@@ -1,0 +1,242 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Spotlight — ported from the Spotlight draft artifact onto the site's
+   design system: Inter throughout, the green/dark palette, and the same
+   dark-section treatment as the companies "machinery" band.
+
+   Scoped under .page-spotlight, like .page-companies.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.page-spotlight {
+  --beam: 159, 212, 180;              /* #9FD4B4, the site's on-dark green */
+  --on-dark: #F3F8F4;
+  --on-dark-2: rgba(233, 240, 235, .6);
+  padding: 96px 0 clamp(72px, 10vw, 112px);
+}
+.page-spotlight h1,
+.page-spotlight h2,
+.page-spotlight h3 { text-wrap: balance }
+
+/* ── 1 · stage ─────────────────────────────────────────────────────────── */
+.page-spotlight .stage {
+  --light: 1;
+  position: relative; isolation: isolate; overflow: hidden;
+  border-radius: 28px; text-align: center;
+  padding: 0 24px clamp(40px, 6vw, 56px);
+  color: var(--on-dark);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(87, 168, 116, .14), transparent 70%),
+    linear-gradient(180deg, var(--dark-2), var(--dark));
+  box-shadow: 0 30px 70px -34px rgba(20, 31, 24, .55);
+}
+.page-spotlight .stage.off { --light: 0 }
+
+.page-spotlight .beam {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(var(--beam), .30), rgba(var(--beam), .08) 62%, rgba(var(--beam), 0));
+  clip-path: polygon(46% 0, 54% 0, 94% 100%, 6% 100%);
+  opacity: var(--light); transition: opacity .35s ease;
+}
+.page-spotlight .pool {
+  position: absolute; left: 50%; bottom: -90px; z-index: -1; pointer-events: none;
+  width: min(900px, 90%); height: 220px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(var(--beam), .24), rgba(var(--beam), 0) 68%);
+  opacity: var(--light); transition: opacity .35s ease;
+}
+
+.page-spotlight .lamp {
+  display: block; width: 120px; margin: 0 auto; padding: 0;
+  background: none; border: 0; cursor: pointer;
+}
+.page-spotlight .lamp svg { display: block; width: 120px; height: auto; overflow: visible }
+.page-spotlight .cord { stroke: rgba(233, 240, 235, .35); stroke-width: 1.5 }
+.page-spotlight .shade { fill: #24392C; stroke: #3E5E4A; stroke-width: 1 }
+.page-spotlight .bulb { fill: #F4F1DF; opacity: calc(.25 + .75 * var(--light)); transition: opacity .25s }
+.page-spotlight .halo { fill: rgba(var(--beam), .9); filter: blur(10px); opacity: var(--light); transition: opacity .35s }
+
+.page-spotlight .stage.flicker .beam,
+.page-spotlight .stage.flicker .pool,
+.page-spotlight .stage.flicker .halo,
+.page-spotlight .stage.flicker .bulb,
+.page-spotlight .stage.flicker .lit { animation: sp-flick 1.5s steps(1, end) both }
+@keyframes sp-flick {
+  0% { opacity: .08 } 18% { opacity: .9 } 24% { opacity: .1 }
+  38% { opacity: 1 } 44% { opacity: .35 } 52%, 100% { opacity: 1 }
+}
+
+.page-spotlight .switch {
+  margin-top: 6px; padding: 5px 11px; border-radius: 999px; cursor: pointer;
+  background: none; border: 1px solid rgba(var(--beam), .3); color: var(--on-dark-2);
+  font: 500 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  transition: color .15s, border-color .15s;
+}
+.page-spotlight .switch:hover { color: var(--on-dark); border-color: rgba(var(--beam), .6) }
+
+.page-spotlight .lit { opacity: var(--light); transition: opacity .4s }
+.page-spotlight .stage h1 {
+  margin-top: 30px; color: var(--on-dark);
+  font-size: clamp(2.2rem, 4.8vw, 3.6rem); font-weight: 800; letter-spacing: -.034em; line-height: 1.1;
+}
+
+.page-spotlight .count {
+  display: flex; justify-content: center; align-items: baseline;
+  margin-top: 14px; line-height: 1; font-variant-numeric: tabular-nums;
+  transition: opacity .3s ease;
+}
+.page-spotlight .count.pending { opacity: 0 }
+.page-spotlight .count .n {
+  font-size: clamp(96px, 16vw, 180px); font-weight: 800; letter-spacing: -.03em;
+  color: #CFF2DC; text-shadow: 0 0 44px rgba(87, 168, 116, .45);
+}
+/* Inter at this weight is far denser than the draft's serif; the slash needs
+   real air on both sides or the three parts read as one glyph run */
+.page-spotlight .count .s {
+  margin: 0 .2em 0 .3em;
+  font-size: clamp(38px, 5.6vw, 60px); font-weight: 400; color: rgba(var(--beam), .4);
+}
+.page-spotlight .count .t { font-size: clamp(42px, 6.4vw, 72px); font-weight: 600; letter-spacing: -.01em; color: rgba(var(--beam), .55) }
+
+.page-spotlight .track {
+  width: min(360px, 70%); height: 3px; margin: 18px auto 0; border-radius: 2px; overflow: hidden;
+  background: rgba(var(--beam), .16);
+}
+.page-spotlight .track i {
+  display: block; height: 100%; border-radius: 2px;
+  background: var(--signal); box-shadow: 0 0 10px rgba(87, 168, 116, .8);
+  transition: width 1.4s cubic-bezier(.2, .7, .2, 1) .35s;
+}
+.page-spotlight .label {
+  margin-top: 14px; color: var(--on-dark-2);
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+}
+.page-spotlight .week {
+  margin-top: 5px; color: rgba(var(--beam), .6);
+  font: 500 12px var(--mono); letter-spacing: .08em;
+}
+
+.page-spotlight .down {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
+  margin-top: 34px; font-size: 13.5px; font-weight: 500;
+  color: var(--on-dark-2); text-decoration: none; transition: color .15s;
+}
+.page-spotlight .down:hover { color: #9FD4B4 }
+.page-spotlight .down svg {
+  width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5;
+  animation: sp-bob 1.8s ease-in-out infinite;
+}
+@keyframes sp-bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(4px) } }
+
+/* ── 2 · what ──────────────────────────────────────────────────────────── */
+.page-spotlight .what { display: flex; justify-content: center; padding-top: clamp(64px, 9vw, 96px); scroll-margin-top: 80px }
+.page-spotlight .what .card {
+  width: 100%; max-width: 760px; text-align: center;
+  padding: clamp(26px, 4vw, 38px) clamp(22px, 4vw, 42px);
+  border-radius: 22px; border: 1px solid rgba(34, 51, 42, .08);
+  background: rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 26px 60px -34px rgba(34, 51, 42, .3);
+}
+.page-spotlight .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--green);
+}
+.page-spotlight .what p {
+  margin-top: 14px; color: var(--ink-2);
+  font-size: clamp(18px, 2.2vw, 22px); font-weight: 500; letter-spacing: -.012em; line-height: 1.5;
+}
+.page-spotlight .what p b { font-weight: 700; color: var(--green) }
+
+/* ── 3 · pillars ───────────────────────────────────────────────────────── */
+.page-spotlight .pillars {
+  max-width: 760px; margin: 0 auto; padding-top: clamp(56px, 8vw, 80px);
+  display: grid; gap: 12px;
+}
+.page-spotlight .pl {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: 96px 1fr; gap: 22px; align-items: center;
+  padding: 22px 26px; border-radius: 18px;
+  background: linear-gradient(180deg, var(--dark-2), var(--dark));
+  border: 1px solid rgba(233, 240, 235, .06);
+  color: var(--on-dark);
+}
+.page-spotlight .pl::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 180px; z-index: -1;
+  background: linear-gradient(90deg, rgba(var(--beam), .18), rgba(var(--beam), 0));
+  clip-path: polygon(0 38%, 0 62%, 100% 100%, 100% 0);
+}
+.page-spotlight .pl .mark { display: flex; justify-content: center }
+.page-spotlight .pl .mark svg { width: 80px; height: 80px; overflow: visible }
+.page-spotlight .pl h3 { font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2 }
+.page-spotlight .pl p { margin-top: 6px; font-size: 15px; line-height: 1.55; color: var(--on-dark-2) }
+
+.page-spotlight .mark .cone { fill: rgba(var(--beam), .14) }
+.page-spotlight .mark .hi { fill: #CFF2DC }
+.page-spotlight .mark .mid { fill: rgba(var(--beam), .5) }
+.page-spotlight .mark .dim { fill: rgba(var(--beam), .28) }
+.page-spotlight .mark .ring { fill: none; stroke: #CFF2DC; stroke-opacity: .35 }
+.page-spotlight .mark .link { stroke: rgba(var(--beam), .3) }
+.page-spotlight .mark .tick { fill: none; stroke: #CFF2DC; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+.page-spotlight .mark .bulb { opacity: 1 }
+.page-spotlight .mark .num { fill: #CFF2DC; font-family: var(--sans); font-size: 38px; font-weight: 800; letter-spacing: -2px }
+.page-spotlight .dot { animation: sp-pulse 2.2s ease-in-out infinite }
+@keyframes sp-pulse { 0%, 100% { opacity: .55 } 50% { opacity: 1 } }
+
+@media (max-width: 480px) {
+  .page-spotlight .pl { grid-template-columns: 64px 1fr; gap: 14px; padding: 18px }
+  .page-spotlight .pl .mark svg { width: 56px; height: 56px }
+  .page-spotlight .pl h3 { font-size: 19px }
+}
+
+/* ── 4 · invite ────────────────────────────────────────────────────────── */
+.page-spotlight .invite {
+  max-width: 760px; margin: 0 auto; padding-top: clamp(72px, 10vw, 104px);
+  display: grid; gap: 36px;
+}
+.page-spotlight .tag {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--green);
+}
+.page-spotlight .tag i {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--signal); box-shadow: 0 0 0 4px var(--tint);
+}
+.page-spotlight .invite h2 {
+  margin-top: 16px;
+  font-size: clamp(1.9rem, 3.9vw, 2.85rem); font-weight: 700; letter-spacing: -.028em; line-height: 1.1;
+}
+.page-spotlight .invite h2 .hl { color: var(--green) }
+.page-spotlight .invite .lead { margin-top: 18px; font-size: 17px; color: var(--faint) }
+.page-spotlight .invite .lead b { color: var(--ink); font-weight: 700 }
+
+.page-spotlight .special {
+  padding: clamp(24px, 4vw, 34px);
+  border-radius: 22px; border: 1px solid rgba(34, 51, 42, .08);
+  background: linear-gradient(140deg, rgba(87, 168, 116, .14), rgba(255, 255, 255, .6) 55%);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.page-spotlight .special h3 { font-size: clamp(1.3rem, 2.4vw, 1.6rem); font-weight: 700; letter-spacing: -.022em }
+.page-spotlight .special p { margin-top: 10px; font-size: 15px; color: var(--faint); max-width: 52ch }
+.page-spotlight .addr { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px }
+.page-spotlight .addr code {
+  font: 500 15px var(--mono); color: var(--ink);
+  background: var(--tint); padding: 9px 13px; border-radius: 10px; user-select: all;
+}
+.page-spotlight .addr button {
+  font: 600 13px var(--sans); color: var(--green); cursor: pointer;
+  padding: 9px 14px; border-radius: 10px;
+  background: rgba(255, 255, 255, .5); border: 1px solid rgba(60, 110, 78, .3);
+  transition: border-color .15s, background .15s;
+}
+.page-spotlight .addr button:hover { border-color: var(--green); background: rgba(255, 255, 255, .8) }
+.page-spotlight .special small { display: block; margin-top: 16px; font-size: 13px; color: var(--faint-2) }
+.page-spotlight .special small a { color: var(--green); font-weight: 600 }
+
+/* ── reduced motion ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .page-spotlight .stage.flicker .beam,
+  .page-spotlight .stage.flicker .pool,
+  .page-spotlight .stage.flicker .halo,
+  .page-spotlight .stage.flicker .bulb,
+  .page-spotlight .stage.flicker .lit,
+  .page-spotlight .down svg,
+  .page-spotlight .dot { animation: none }
+  .page-spotlight .track i { transition: none }
+}

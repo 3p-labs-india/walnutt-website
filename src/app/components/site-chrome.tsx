@@ -1,0 +1,182 @@
+import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router";
+import { buildAppUrl, buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
+
+/**
+ * Nav and footer shared by every marketing page. `mode` picks which side of
+ * the site the page speaks to: it decides the nav CTA and the cross-link.
+ */
+export type Mode = "engineers" | "companies";
+
+/**
+ * The nav is a fixed translucent bar, and both pages run full-bleed dark
+ * sections underneath it. Sections that need the inverted treatment carry
+ * `data-nav-dark`; this watches which one is under the bar.
+ */
+const NAV_BAND = 68;
+
+function useNavOverDark() {
+  const [overDark, setOverDark] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const hit = Array.from(document.querySelectorAll<HTMLElement>("[data-nav-dark]")).some(el => {
+        const r = el.getBoundingClientRect();
+        return r.top <= NAV_BAND * 0.5 && r.bottom >= NAV_BAND * 0.5;
+      });
+      setOverDark(hit);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  });
+
+  return overDark;
+}
+
+// ═══ BRAND MARK (hexagon + chevrons) ═══
+function BrandMark({ size = 26 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none" aria-hidden="true">
+      <path d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z" stroke="var(--brand-stroke, var(--green))" strokeWidth="4.5" fill="none" strokeLinejoin="round" />
+      <path d="M34 24 L20 40 L34 56" stroke="var(--brand-stroke, var(--green))" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M46 24 L60 40 L46 56" stroke="var(--brand-stroke, var(--green))" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+
+export function Brand({ size = 26 }: { size?: number }) {
+  return (
+    <Link className="brand" to="/" aria-label="Walnutt home">
+      <BrandMark size={size} />
+      <span className="wordmark">Walnutt</span>
+    </Link>
+  );
+}
+
+// ═══ NAV ═══
+export function SiteNav({ mode }: { mode: Mode }) {
+  const overDark = useNavOverDark();
+  const isE = mode === "engineers";
+
+  return (
+    <nav className="site-nav" data-over={overDark ? "dark" : undefined}>
+      <div className="nav-in">
+        <Brand />
+        <div className="navlinks">
+          {/* secondary: sits beside the cross-link, drops off on small phones */}
+          <NavLink className="eng minor" to="/spotlight">Spotlight</NavLink>
+          {isE ? (
+            <>
+              <Link className="eng" to="/">For companies</Link>
+              <a
+                className="btn"
+                href={buildAppUrl("/")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_clicked_nav_app", { location: "engineers_nav" })}
+              >
+                Start a conversation <span className="ar">→</span>
+              </a>
+            </>
+          ) : (
+            <>
+              <Link className="eng" to="/engineers">For engineers</Link>
+              <a
+                className="btn"
+                href={buildRoleBriefUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_nav" })}
+              >
+                Start a role <span className="ar">→</span>
+              </a>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ═══ FOOTER ═══
+export function SiteFooter({ mode }: { mode: Mode }) {
+  const isE = mode === "engineers";
+
+  return (
+    <footer className="site-footer">
+      <div className="wrap">
+        <div className="fgrid">
+          <div className="fbrand">
+            <Brand size={28} />
+            <p className="fdict">
+              <b>Wal·nutt</b> /ˈwɔːl-nʌt/ (n.) · walnut + talent<br />
+              1. A nut shaped like a brain.<br />
+              2. A company fluent in understanding talent.
+            </p>
+          </div>
+          <div className="fcol">
+            <div className="fh">Company</div>
+            <ul>
+              {isE ? (
+                <>
+                  <li><Link to="/">For companies</Link></li>
+                  <li>
+                    <a href={buildAppUrl("/")} target="_blank" rel="noopener noreferrer">
+                      Start a conversation
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <a
+                      href={buildRoleBriefUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackEvent("cta_clicked_role_brief", { location: "companies_footer" })}
+                    >
+                      Start a role
+                    </a>
+                  </li>
+                  <li><Link to="/engineers">For engineers</Link></li>
+                </>
+              )}
+              <li><Link to="/spotlight">Spotlight</Link></li>
+            </ul>
+          </div>
+          <div className="fcol">
+            <div className="fh">Contact</div>
+            <ul>
+              <li><a href="mailto:hello@walnutt.co">hello@walnutt.co</a></li>
+              <li><a href="tel:+919620333620">+91 96203 33620</a></li>
+            </ul>
+          </div>
+          <div className="fcol">
+            <div className="fh">Legal</div>
+            <ul>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms</a></li>
+            </ul>
+          </div>
+          <div className="fcol">
+            <div className="fh">Visit</div>
+            <address className="addr">
+              Indiqube Orion, 1st Floor<br />
+              HSR Layout, Bengaluru<br />
+              Karnataka, India
+            </address>
+          </div>
+        </div>
+        <div className="fbase">
+          <span>© 2026 Walnutt</span>
+          <span>Bengaluru, IN</span>
+        </div>
+      </div>
+    </footer>
+  );
+}

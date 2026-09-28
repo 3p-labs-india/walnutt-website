@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
+import { prefersReducedMotion, useReveal } from "./reveal";
 
 /**
  * For Companies — ported from the v7 draft.
@@ -7,37 +8,6 @@ import { buildRoleBriefUrl, trackEvent } from "../../lib/analytics";
  * Section styling lives in src/styles/companies.css, scoped under
  * .page-companies. The draft's four inline scripts are the hooks below.
  */
-
-const prefersReducedMotion = () => {
-  try {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  } catch {
-    return false;
-  }
-};
-
-// ═══ SCROLL REVEAL ═══
-function useReveal(root: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const targets = Array.from(el.querySelectorAll<HTMLElement>(".rv"));
-    if (!("IntersectionObserver" in window) || prefersReducedMotion()) {
-      targets.forEach(t => t.classList.add("in"));
-      return;
-    }
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    targets.forEach(t => io.observe(t));
-    return () => io.disconnect();
-  }, [root]);
-}
 
 // ═══ LADDER BEAM + STICKY VISUAL RAIL ═══
 function useLadder(
