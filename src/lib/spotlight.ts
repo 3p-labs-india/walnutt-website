@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
  *
  * Left empty, the page skips the fetch and shows the cap on its own.
  */
-export const SPOTLIGHT_URL = "";
+export const SPOTLIGHT_URL = "https://script.google.com/macros/s/AKfycbwS1fJKfWey5ZwGe5dhUUiBYLjvCq0YnvEmCuOmcDmWb5dKcBUolTpi0Uz45l53f_K6Sw/exec";
 
 /** Spotlights per week, across every company and role. */
 export const DEFAULT_CAP = 40;

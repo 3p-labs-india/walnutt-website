@@ -1,4 +1,6 @@
 /**
+ * @OnlyCurrentDoc
+ *
  * Spotlight weekly count — Google Apps Script web app.
  *
  * Temporary source for walnutt.co/spotlight until learning-engine serves
@@ -14,6 +16,9 @@
  *
  * week_start is that week's Monday (IST). A week with no row yet answers
  * sent 0 at the default cap, so the page never breaks on a Monday morning.
+ *
+ * @OnlyCurrentDoc (above) narrows the authorisation prompt from "all your
+ * Google Sheets" to just this sheet — getActive() is all the script uses.
  *
  * Deploy: in the sheet, Extensions → Apps Script, paste this file, then
  * Deploy → New deployment → Web app, Execute as: Me, Who has access: Anyone.
