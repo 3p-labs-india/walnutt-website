@@ -51,8 +51,10 @@ function isCount(v: unknown): v is number {
   return typeof v === "number" && Number.isInteger(v) && v >= 0;
 }
 
+type Ready = Extract<SpotlightState, { status: "ready" }>;
+
 /** Anything off-contract is treated as no data, never shown as a number. */
-function parse(body: unknown): SpotlightState | null {
+function parse(body: unknown): Ready | null {
   if (!body || typeof body !== "object") return null;
   const { sent, cap, week_start } = body as Partial<SpotlightWeek>;
   if (!isCount(sent)) return null;
@@ -63,32 +65,74 @@ function parse(body: unknown): SpotlightState | null {
   return { status: "ready", sent, cap: safeCap, weekStart };
 }
 
+// ── last-seen count ─────────────────────────────────────────────────────────
+// Apps Script answers in 1.3–2.5s, most of it Google spinning the script up.
+// A returning visitor gets the count they last saw straight away, and the
+// fresh one replaces it when it lands. Only this week's count is reused —
+// last week's number is not "this week" on a Monday.
+const STORAGE_KEY = "walnutt_spotlight_week";
+
+function readLastSeen(): Ready | null {
+  try {
+    const hit = parse(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null"));
+    return hit && hit.weekStart === currentWeekStartIST() ? hit : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeLastSeen(week: Ready) {
+  try {
+    const body: SpotlightWeek = { sent: week.sent, cap: week.cap, week_start: week.weekStart };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(body));
+  } catch {
+    /* private mode or storage blocked: the page just waits for the fetch */
+  }
+}
+
+// ── the request ─────────────────────────────────────────────────────────────
+let inflight: Promise<Ready | null> | null = null;
+
+/**
+ * Starts the request (once per page load) and returns it. main.tsx calls this
+ * before React renders when the URL is /spotlight, so the wait overlaps with
+ * boot rather than following it; the hook below picks up the same promise.
+ */
+export function prefetchSpotlight(): Promise<Ready | null> {
+  if (!SPOTLIGHT_URL) return Promise.resolve(null);
+  inflight ??= (async () => {
+    const ctrl = new AbortController();
+    // Apps Script cold starts can take a few seconds; past this, give up.
+    const timeout = setTimeout(() => ctrl.abort(), 8000);
+    try {
+      const r = await fetch(SPOTLIGHT_URL, { signal: ctrl.signal });
+      const week = r.ok ? parse(await r.json()) : null;
+      if (week) writeLastSeen(week);
+      return week;
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timeout);
+    }
+  })();
+  return inflight;
+}
+
 export function useSpotlightWeek(): SpotlightState {
-  const [state, setState] = useState<SpotlightState>(
-    SPOTLIGHT_URL ? { status: "loading", cap: DEFAULT_CAP } : { status: "unavailable", cap: DEFAULT_CAP },
-  );
+  const [state, setState] = useState<SpotlightState>(() => {
+    if (!SPOTLIGHT_URL) return { status: "unavailable", cap: DEFAULT_CAP };
+    return readLastSeen() ?? { status: "loading", cap: DEFAULT_CAP };
+  });
 
   useEffect(() => {
     if (!SPOTLIGHT_URL) return;
     let unmounted = false;
-    const ctrl = new AbortController();
-    // Apps Script cold starts can take a few seconds; past this, give up.
-    const timeout = setTimeout(() => ctrl.abort(), 8000);
-
-    fetch(SPOTLIGHT_URL, { signal: ctrl.signal })
-      .then(r => (r.ok ? r.json() : null))
-      .then(body => parse(body))
-      .catch(() => null)
-      .then(next => {
-        clearTimeout(timeout);
-        if (!unmounted) setState(next ?? { status: "unavailable", cap: DEFAULT_CAP });
-      });
-
-    return () => {
-      unmounted = true;
-      clearTimeout(timeout);
-      ctrl.abort();
-    };
+    prefetchSpotlight().then(fresh => {
+      if (unmounted) return;
+      // a failed refresh keeps a last-seen count rather than dropping it
+      setState(prev => fresh ?? (prev.status === "ready" ? prev : { status: "unavailable", cap: DEFAULT_CAP }));
+    });
+    return () => { unmounted = true; };
   }, []);
 
   return state;

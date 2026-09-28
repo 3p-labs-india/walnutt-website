@@ -17,26 +17,37 @@ import { SiteFooter, SiteNav } from "./site-chrome";
 const EMAIL = "hello@walnutt.co";
 
 // ═══ COUNT-UP ═══
+/**
+ * Counts up to `target`. When the target changes after that — a last-seen
+ * count replaced by the fresh one — it moves from where it stands instead of
+ * restarting at 0, and without the opening delay.
+ */
 function useCountUp(target: number | null, delay = 350, duration = 1100) {
   const [value, setValue] = useState(0);
+  const current = useRef(0);
+  const started = useRef(false);
 
   useEffect(() => {
     if (target === null) return;
+    const set = (v: number) => { current.current = v; setValue(v); };
     if (prefersReducedMotion()) {
-      setValue(target);
+      set(target);
       return;
     }
+    const from = current.current;
+    const wait = started.current ? 0 : delay;
+    started.current = true;
     let raf = 0;
     const timer = setTimeout(() => {
       let start: number | null = null;
       const step = (t: number) => {
         start ??= t;
         const p = Math.min(1, (t - start) / duration);
-        setValue(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        set(Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3))));
         if (p < 1) raf = requestAnimationFrame(step);
       };
       raf = requestAnimationFrame(step);
-    }, delay);
+    }, wait);
     return () => {
       clearTimeout(timer);
       cancelAnimationFrame(raf);
@@ -105,9 +116,9 @@ function Stage({ week }: { week: SpotlightState }) {
           </>
         ) : (
           <>
-            {/* hidden while loading: holds its height, never flashes 0 */}
+            {/* while loading: a pulsing dash against the cap, never a false 0 */}
             <p className={`count${ready ? "" : " pending"}`} aria-hidden="true">
-              <span className="n">{shown}</span>
+              <span className="n">{ready ? shown : "–"}</span>
               <span className="s">/</span>
               <span className="t">{week.cap}</span>
             </p>

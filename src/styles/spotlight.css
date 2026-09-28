@@ -82,7 +82,8 @@
   margin-top: 14px; line-height: 1; font-variant-numeric: tabular-nums;
   transition: opacity .3s ease;
 }
-.page-spotlight .count.pending { opacity: 0 }
+.page-spotlight .count.pending .n { animation: sp-wait 1.6s ease-in-out infinite }
+@keyframes sp-wait { 0%, 100% { opacity: .3 } 50% { opacity: .75 } }
 .page-spotlight .count .n {
   font-size: clamp(96px, 16vw, 180px); font-weight: 800; letter-spacing: -.03em;
   color: #CFF2DC; text-shadow: 0 0 44px rgba(87, 168, 116, .45);
@@ -237,6 +238,7 @@
   .page-spotlight .stage.flicker .bulb,
   .page-spotlight .stage.flicker .lit,
   .page-spotlight .down svg,
+  .page-spotlight .count.pending .n,
   .page-spotlight .dot { animation: none }
   .page-spotlight .track i { transition: none }
 }

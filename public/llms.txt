@@ -46,6 +46,17 @@ No applications. No wasted hours. One real conversation, and the right companies
 - 0 — applications to send, companies find you
 - Free — always, for engineers, no catch
 
+## Spotlight
+
+A Spotlight is what Walnutt puts together and sends to a hiring team when it sees a strong fit between an engineer and an open role. It is only sent when Walnutt is confident enough to put its name on it.
+
+- **Hand-picked** — one engineer per role, picked against what the role asks for.
+- **Walnutt's name on it** — nobody is sent until Walnutt has screened them.
+- **Capped at 40** — across all companies and all roles, every week. The page shows this week's live count.
+- **Live status** — the engineer sees where their Spotlight stands: sent, opened, in conversation.
+
+Spotlights are invite-only. Each week Walnutt runs matches across open public roles and picks the 40 where a Walnutt engineer is the strongest fit. An engineer who is certain they're the best person for a specific role can write to hello@walnutt.co with the role link and one line on why; a completed Walnutt profile is required.
+
 ## Who We Serve
 
 - **Engineers**: Backend, Full-Stack, Applied AI. Freshers to experienced. Anyone who'd rather show what they can do than list it on a resume.
@@ -61,6 +72,7 @@ Contact: hello@walnutt.co
 - Homepage (Companies, default): https://walnutt.co/
 - For Engineers: https://walnutt.co/engineers
 - For Companies: https://walnutt.co/companies
+- Spotlight: https://walnutt.co/spotlight
 - Privacy Policy: https://walnutt.co/privacy
 - Terms & Conditions: https://walnutt.co/terms
 - Engineer Assessment: https://app.walnutt.co/
