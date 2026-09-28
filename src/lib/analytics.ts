@@ -1,7 +1,8 @@
 import posthog from "posthog-js";
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
-const POSTHOG_KEY = "phc_j70UHuZRuQa2jPtfSWjc8Boc2EHBKT7Vo9X6zHL0HUn";
+// The "Walnutt" project, shared with app.walnutt.co — filter by $host to split them.
+const POSTHOG_KEY = "phc_y85Wjz5N4Nou1tuLXCdpflG8TFkZ9uGOWlA1YcK722W";
 const POSTHOG_HOST = "https://us.i.posthog.com";
 const APP_BASE_URL = "https://app.walnutt.co";
 const ROLE_BRIEF_URL = "https://rolebrief.walnutt.co/";
